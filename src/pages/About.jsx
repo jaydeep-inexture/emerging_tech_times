@@ -1,0 +1,159 @@
+// ContactUs.jsx
+import React from "react";
+import {
+  Container,
+  Grid,
+  Typography,
+  TextField,
+  Button,
+  Box,
+  FormControlLabel,
+  Checkbox,
+  Card,
+  CardActionArea,
+  CardMedia,
+  CardContent,
+} from "@mui/material";
+// import ContactUs from "../assets/ContactUs.png";
+import Aboutus from "../assets/Aboutus.json";
+import Lottie from "lottie-react";
+const About = () => {
+  return (
+    <Container maxWidth="xl" sx={{ marginBottom: "5%" }}>
+      <Grid
+        container
+        spacing={4}
+        style={{ minHeight: "45vh", marginBottom: "50px" }}
+      >
+        {/* First Part with Image */}
+        <Grid
+          item
+          xs={12}
+          md={6}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Box>
+            <Typography variant="h3" gutterBottom sx={{ fontWeight: 800 }}>
+              About Us
+            </Typography>
+            <Typography variant="h5" gutterBottom>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus,
+              perferendis. Vel odit officia hic neque qui eum eos consequatur
+              fugit suscipit in, illum atque! Dolor ratione labore eaque
+              provident quibusdam?
+            </Typography>
+            <Typography variant="h5" gutterBottom>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus,
+              perferendis. Vel odit officia hic neque qui eum eos consequatur
+              fugit suscipit in, illum atque! Dolor ratione labore eaque
+              provident quibusdam?
+            </Typography>
+          </Box>
+        </Grid>
+
+        {/* Second Part with Form */}
+
+        <Grid
+          item
+          xs={12}
+          md={6}
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Lottie animationData={Aboutus} />
+        </Grid>
+      </Grid>
+      {/* <Typography
+        variant="h6"
+        sx={{
+          color: "orange",
+          fontWeight: "900",
+          marginBottom: "20px",
+          letterSpacing: "3px",
+          textTransform: "uppercase",
+          fontStyle: "italic",
+        }}
+        gutterBottom
+      >
+        Our Team
+      </Typography>
+      <Box display={"flex"} justifyContent={"space-between"}>
+        <Card sx={{ maxWidth: 400 }}>
+          <CardActionArea>
+            <CardMedia
+              component="img"
+              height="200"
+              width="200"
+              image="https://png.pngtree.com/png-clipart/20190924/original/pngtree-business-user-profile-vector-png-image_4830519.jpg"
+              alt="Dummy Image"
+              style={{ objectFit: "fill" }}
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                Dummy Data
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Voluptatum, iusto commodi. Nihil minima porro dolorum,
+                voluptates aliquam ea
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+        <Card sx={{ maxWidth: 400 }}>
+          <CardActionArea>
+            <CardMedia
+              component="img"
+              height="200"
+              width="200"
+              image="https://png.pngtree.com/png-clipart/20190924/original/pngtree-business-user-profile-vector-png-image_4830519.jpg "
+              alt="green iguana"
+              style={{ objectFit: "fill" }}
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                Dummy Data
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Voluptatum, iusto commodi. Nihil minima porro dolorum,
+                voluptates aliquam ea
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+        <Card sx={{ maxWidth: 400 }}>
+          <CardActionArea>
+            <CardMedia
+              component="img"
+              height="200"
+              width="200"
+              image="https://png.pngtree.com/png-clipart/20190924/original/pngtree-business-user-profile-vector-png-image_4830519.jpg "
+              alt="green iguana"
+              style={{ objectFit: "fill" }}
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                Dummy Data
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Voluptatum, iusto commodi. Nihil minima porro dolorum,
+                voluptates aliquam ea
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+      </Box> */}
+    </Container>
+  );
+};
+
+export default About;
