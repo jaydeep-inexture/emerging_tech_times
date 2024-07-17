@@ -1,12 +1,14 @@
-const jwt = require('jsonwebtoken');
 const {validationResult} = require('express-validator');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const User = require('../models/User');
-const {generateRefreshToken, generateAccessToken} = require('../lib/tokens');
-const CONSTANTS = require('../lib/constants');
+const {
+  generateRefreshToken,
+  generateAccessToken,
+} = require('../helpers/tokens');
 
-exports.getLoggedInUser = async (req, res) => {
+exports.getLoggedInUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.user).select('-password');
     if (!user) {
@@ -14,19 +16,18 @@ exports.getLoggedInUser = async (req, res) => {
     }
     res.status(200).json(user);
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
+    next(err);
   }
 };
 
-exports.registerUser = async (req, res) => {
+exports.registerUser = async (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
     return res.status(400).json({errors: errors.array()});
   }
 
-  const {email, password, confirmPassword} = req.body;
+  const {email, password, confirmPassword, isAdmin} = req.body;
 
   if (password !== confirmPassword) {
     return res.status(400).json({
@@ -49,6 +50,7 @@ exports.registerUser = async (req, res) => {
     user = new User({
       email,
       password: hashedPassword,
+      isAdmin,
     });
 
     await user.save();
@@ -65,12 +67,11 @@ exports.registerUser = async (req, res) => {
       refreshToken,
     });
   } catch (error) {
-    console.error(error.message);
-    res.status(500).send('Server error');
+    next(error);
   }
 };
 
-exports.loginUser = async (req, res) => {
+exports.loginUser = async (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -107,12 +108,11 @@ exports.loginUser = async (req, res) => {
       refreshToken,
     });
   } catch (error) {
-    console.error(error.message);
-    res.status(500).send('Server error');
+    next(error);
   }
 };
 
-exports.refreshToken = async (req, res) => {
+exports.refreshToken = async (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -140,7 +140,6 @@ exports.refreshToken = async (req, res) => {
       refreshToken: newRefreshToken,
     });
   } catch (err) {
-    console.error(err.message);
-    res.status(403).json({msg: 'Invalid or expired refresh token'});
+    next(err);
   }
 };

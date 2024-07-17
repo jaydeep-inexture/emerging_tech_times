@@ -2,7 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
-const connectDB = require('./lib/db');
+const connectDB = require('./helpers/db');
+const errorHandler = require('./middleware/error');
 require('dotenv').config();
 
 const app = express();
@@ -17,6 +18,9 @@ app.use(cors());
 
 // define routes
 app.use('/api/users', require('./routes/api/users'));
+app.use('/api/posts', require('./routes/api/posts'));
+
+app.use(errorHandler);
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, 'client/build')));
