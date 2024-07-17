@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Box,
@@ -11,22 +11,19 @@ import {
   List,
   ListItem,
   ListItemText,
-  useMediaQuery,
 } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
-import MenuIcon from "@mui/icons-material/Menu";
-import SearchIcon from "@mui/icons-material/Search";
-import Logo from "../assets/Logo.png";
-import Login from "./Login";
 import Close from "@mui/icons-material/Close";
+import MenuIcon from "@mui/icons-material/Menu";
+import Login from "./Login";
 import { useMobile } from "../context/isMobileContext";
+import Emerging_Tech_Times_Logo from "../assets/Emerging_Tech_Times_Logo.png";
 
 const Nav = () => {
   const [language, setLanguage] = useState("ENG");
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [flag, setFlag] = useState(false);
   const isMobile = useMobile();
-
-
+  const [userName, setUserName] = useState("");
   const toggleDrawer = (open) => (event) => {
     if (
       event.type === "keydown" &&
@@ -37,34 +34,68 @@ const Nav = () => {
     setDrawerOpen(open);
   };
 
+  useEffect(() => {
+    if (flag) {
+      setDrawerOpen(false);
+    }
+  }, [flag]);
+
   const drawerList = (
-    <Box
-      sx={{ width: 320, height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
-      role="presentation"
-      onClick={toggleDrawer(false)}
-      onKeyDown={toggleDrawer(false)}
-    >
-      <Box px={2}>
-        <Close sx={{ position: 'absolute', right: 10, top: 10 }} onClick={toggleDrawer(false)} />
-        <List sx={{ mt: 4, color: 'black', textTransform: 'uppercase' }}>
-          <ListItem component={Link} to="/">
-            <ListItemText primary="Home" />
-          </ListItem>
-          <ListItem component={Link} to="/about">
-            <ListItemText primary="About Us" />
-          </ListItem>
-          <ListItem component={Link} to="/news">
-            <ListItemText primary="News" />
-          </ListItem>
-          <ListItem component={Link} to="/contact">
-            <ListItemText primary="Contact" />
-          </ListItem>
-        </List>
+    <>
+      <Box
+        sx={{
+          width: 320,
+          height: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+        }}
+      >
+        <Box>
+          <Close
+            sx={{ position: "absolute", right: 10, top: 10 }}
+            onClick={toggleDrawer(false)}
+          />
+          <List sx={{ mt: 4, textTransform: "uppercase" }}>
+            <ListItem
+              component={Link}
+              to="/"
+              sx={{ fontStyle: "italic", color: "#0F172A", fontSize: "20px" }}
+              onClick={toggleDrawer(false)} // Ensure the drawer closes on navigation
+            >
+              <ListItemText primary="Home" />
+            </ListItem>
+            <ListItem
+              component={Link}
+              to="/about"
+              sx={{ fontStyle: "italic", color: "#0F172A", fontSize: "20px" }}
+              onClick={toggleDrawer(false)} // Ensure the drawer closes on navigation
+            >
+              <ListItemText primary="About Us" />
+            </ListItem>
+            <ListItem
+              component={Link}
+              to="/news"
+              sx={{ fontStyle: "italic", color: "#0F172A", fontSize: "20px" }}
+              onClick={toggleDrawer(false)} // Ensure the drawer closes on navigation
+            >
+              <ListItemText primary="News" />
+            </ListItem>
+            <ListItem
+              component={Link}
+              to="/contact"
+              sx={{ fontStyle: "italic", color: "#0F172A", fontSize: "20px" }}
+              onClick={toggleDrawer(false)} // Ensure the drawer closes on navigation
+            >
+              <ListItemText primary="Contact" />
+            </ListItem>
+          </List>
+        </Box>
+        <Box>
+          <Login setFlag={setFlag} userName={userName} setUserName={setUserName} /> {/* Pass setFlag to Login */}
+        </Box>
       </Box>
-      <Box sx={{ padding: 2 }}>
-        <Login  />
-      </Box>
-    </Box>
+    </>
   );
 
   return (
@@ -74,22 +105,22 @@ const Nav = () => {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: isMobile ? "10px 7% 10px 0%" : "10px 10%",
+          padding: isMobile ? "10px 7% 10px 5%" : "20px 10%",
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Link to="/">
             {isMobile ? (
               <img
-                src={Logo}
-                alt="Logo"
-                style={{ width: "100px", height: "100px" }}
+                src={Emerging_Tech_Times_Logo}
+                alt="Emerging_Tech_Times_Logo"
+                style={{ width: "130px", height: "50px", margin: "10px" }}
               />
             ) : (
               <img
-                src={Logo}
-                alt="Logo"
-                style={{ width: "200px", height: "130px" }}
+                src={Emerging_Tech_Times_Logo}
+                alt="Emerging_Tech_Times_Logo"
+                style={{ width: "150px", height: "50px" }}
               />
             )}
           </Link>
@@ -126,7 +157,6 @@ const Nav = () => {
           sx={{
             display: "flex",
             alignItems: "center",
-            
           }}
         >
           {!isMobile && (
@@ -142,7 +172,7 @@ const Nav = () => {
                   <MenuItem value={"HIN"}>HIN</MenuItem>
                 </Select>
               </FormControl>
-              <Login />
+              <Login setFlag={setFlag} userName={userName} setUserName={setUserName} />
             </>
           )}
           {isMobile && (

@@ -9,8 +9,8 @@ import {
   IconButton,
 } from "@mui/material";
 import { Facebook, Twitter, Instagram, Telegram } from "@mui/icons-material";
-import FooterLogo from "../assets/FooterLogo.png";
 import { useMobile } from "../context/isMobileContext";
+import White_Logo from "../assets/White_Logo.png";
 
 const Footer = () => {
   const isMobile = useMobile();
@@ -106,7 +106,7 @@ const Footer = () => {
         >
           <Grid item xs={12} sm={3} display="flex" justifyContent="center">
             <img
-              src={FooterLogo}
+              src={White_Logo}
               alt="Logo"
               style={{
                 width: "200px",
@@ -124,56 +124,56 @@ const Footer = () => {
             flexDirection="column"
             alignItems="center"
           >
-            <Typography variant="h6" fontWeight={800} marginBottom={"20px"}>
+            <Typography variant={isMobile ? "p": "h6"} fontWeight={800} fontSize={isMobile && 20} marginBottom={'10px'} >
               About Us
             </Typography>
             <Typography variant="body2" lineHeight={1.5} textAlign="center">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis
-              praesentium qui quam obcaecati eos, optio a temporibus, doloremque
-              autem facere similique, odit illum nisi natus? Cupiditate debitis
-              suscipit tenetur odit.
+              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsa dolorem libero minima sapiente laudantium odit sit at veritatis distinctio veniam, neque maxime provident hic nihil reiciendis modi vitae sint corporis.
             </Typography>
           </Grid>
-          <Grid
-            item
-            xs={12}
-            sm={3}
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-          >
-            <Typography variant="h6" fontWeight={800}>
-              Connect
-            </Typography>
-            <Link
-              href="/about"
-              color="inherit"
-              sx={{ textDecoration: "none", mt: 2, mb: 1 }}
+          {!isMobile && (
+            <Grid
+              item
+              xs={12}
+              sm={3}
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
             >
-              About Us
-            </Link>
-            <Link
-              href="/subscribe"
-              color="inherit"
-              sx={{ textDecoration: "none", mb: 1 }}
-            >
-              Subscribe
-            </Link>
-            <Link
-              href="/news"
-              color="inherit"
-              sx={{ textDecoration: "none", mb: 1 }}
-            >
-              News
-            </Link>
-            <Link
-              href="/contact"
-              color="inherit"
-              sx={{ textDecoration: "none", mb: 1 }}
-            >
-              Contact Us
-            </Link>
-          </Grid>
+              <Typography variant="h6" fontWeight={800}>
+                Connect
+              </Typography>
+              <Link
+                href="/about"
+                color="inherit"
+                sx={{ textDecoration: "none", mt: 2, mb: 1 }}
+              >
+                About Us
+              </Link>
+              <Link
+                href="/subscribe"
+                color="inherit"
+                sx={{ textDecoration: "none", mb: 1 }}
+              >
+                Subscribe
+              </Link>
+              <Link
+                href="/news"
+                color="inherit"
+                sx={{ textDecoration: "none", mb: 1 }}
+              >
+                News
+              </Link>
+              <Link
+                href="/contact"
+                color="inherit"
+                sx={{ textDecoration: "none", mb: 1 }}
+              >
+                Contact Us
+              </Link>
+            </Grid>
+          )}
+
           <Grid
             item
             xs={12}
@@ -185,7 +185,7 @@ const Footer = () => {
             <Typography variant="h6" fontWeight={800} marginBottom={"20px"}>
               Follow Us
             </Typography>
-            <Box>
+            <Box sx={{ display: "flex" }}>
               <IconButton href="https://facebook.com" color="inherit">
                 <Facebook sx={{ fontSize: 30 }} />
               </IconButton>

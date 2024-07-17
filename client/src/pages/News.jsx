@@ -12,13 +12,21 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import NewsData from "./NewsData";
+import { useMobile } from "../context/isMobileContext";
 
 const News = () => {
   const [tabValue, setTabValue] = useState("1");
-
+  const isMobile = useMobile()
   return (
     <>
-      <Box sx={{ width: "100%", typography: "body1", paddingY: "20px" }}>
+    {
+      isMobile ? (
+        <>
+        <NewsData title={"Latest News"} />
+        </>
+      ) : (
+        <>
+           <Box sx={{ width: "100%", typography: "body1", paddingY: "20px" }}>
         <TabContext value={tabValue}>
           <Box
             sx={{
@@ -72,6 +80,10 @@ const News = () => {
           </TabPanel>
         </TabContext>
       </Box>
+        </>
+      )
+    }
+     
     </>
   );
 };
