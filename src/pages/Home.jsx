@@ -22,7 +22,7 @@ const Home = () => {
       <Box
         sx={{
           width: "100%",
-          height: isMobile ? " 450px" : "400px",
+          height: isMobile ? " 500px" : "400px",
           backgroundColor: "lightblue",
           position: "relative",
         }}
@@ -54,7 +54,10 @@ const Home = () => {
                 direction="column"
                 spacing={2}
                 alignItems="center"
-                sx={{ marginTop: "5%" }}
+                sx={{
+                  marginTop: "13%",
+                  
+                }}
               >
                 <TextField
                   label="Email Address"
@@ -401,12 +404,16 @@ const Home = () => {
             mt: 4,
           }}
         >
-          <Typography variant={isMobile ? "h6" :"h4"} fontWeight={800}>
+          <Typography variant={isMobile ? "h6" : "h4"} fontWeight={800}>
             Trending News
           </Typography>
           <Link to="/news">
             <Button
-              sx={{ textTransform: "capitalize", color: "gray", fontSize: isMobile ? 16 :20 }}
+              sx={{
+                textTransform: "capitalize",
+                color: "gray",
+                fontSize: isMobile ? 16 : 20,
+              }}
             >
               More <KeyboardArrowRightIcon />
             </Button>

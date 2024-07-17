@@ -1,19 +1,25 @@
 import React, { useState } from "react";
-import { Box, Button, Dialog, DialogContent, DialogTitle, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
-import DialogLogo from "../assets/DialogLogo.png";
 import { useMobile } from "../context/isMobileContext";
-
-const Login = () => {
+import Emerging_Tech_Times_Logo from "../assets/Emerging_Tech_Times_Logo.png";
+const Login = ({ setFlag,userName,setUserName }) => {
   const isMobile = useMobile();
   const [loginBtnOpen, setLoginBtnOpen] = useState(false);
   const [signupBtnOpen, setSignupBtnOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [userName, setUserName] = useState("");
-
-  console.log({loginBtnOpen,signupBtnOpen})
-
+ 
   const [signUpFormData, setSignUpFormData] = useState({
     username: "",
     email: "",
@@ -33,10 +39,12 @@ const Login = () => {
 
   const handleLoginOpen = () => {
     setLoginBtnOpen(true);
+    setFlag(true)
   };
 
   const handleSignupClick = () => {
     setSignupBtnOpen(true);
+    setFlag(true)
   };
 
   const handleSignUpClose = () => {
@@ -100,7 +108,7 @@ const Login = () => {
             color: "white",
             fontSize: "15px",
             fontWeight: 800,
-            marginLeft:'20px',
+            marginLeft: "20px",
             ":hover": { background: "#ff851b" },
           }}
         >
@@ -110,19 +118,21 @@ const Login = () => {
         <Box
           sx={{
             display: "flex",
-            width: '100%',
+            width: "100%",
             flexDirection: "column",
-            position: 'absolute',
-            bottom: 0
+            position: "absolute",
+            bottom: 10,
+            alignItems: "center",
           }}
         >
           <Button
             sx={{
-              width: "100%",
+              width: "90%",
               background: "#0F172A",
               padding: "15px",
               borderRadius: "8px",
               color: "white",
+              height: "55px",
               fontWeight: 800,
               ":hover": { background: "#0F172A" },
             }}
@@ -133,10 +143,12 @@ const Login = () => {
 
           <Button
             sx={{
-              width: "100%",
+              width: "90%",
+              marginTop: 1,
               padding: "15px",
               borderRadius: "8px",
               color: "#0F172A",
+              height: "55px",
               fontWeight: 800,
               border: "1px solid #0F172A",
               ":hover": { background: "white" },
@@ -153,7 +165,7 @@ const Login = () => {
               width: "100px",
               background: "#0F172A",
               padding: "15px",
-              marginLeft:'10px',
+              marginLeft: "10px",
               borderRadius: "8px",
               color: "white",
               fontWeight: 800,
@@ -168,7 +180,7 @@ const Login = () => {
             sx={{
               width: "100px",
               padding: "15px",
-              marginLeft:'10px',
+              marginLeft: "10px",
               borderRadius: "8px",
               color: "#0F172A",
               fontWeight: 800,
@@ -198,9 +210,9 @@ const Login = () => {
           <Box
             sx={{
               position: "relative",
-              padding: "16px",
+              padding: !isMobile && "16px",
               width: isMobile ? "100%" : "490px",
-              height: "460px",
+              height: "480px",
               borderRadius: "10px",
               background: "#FFFFFF ",
             }}
@@ -224,9 +236,9 @@ const Login = () => {
                 }}
               >
                 <img
-                  src={DialogLogo}
-                  alt="VROBOTS"
-                  style={{ width: "200px", marginRight: "8px" }}
+                  src={Emerging_Tech_Times_Logo}
+                  alt="Emerging_Tech_Times_Logo"
+                  style={{ width: "130px", height: "50px", marginTop: 10 }}
                 />
               </Box>
             </DialogTitle>
@@ -236,6 +248,7 @@ const Login = () => {
                 variant="outlined"
                 fullWidth
                 label="Username"
+                autoComplete="off"
                 placeholder="Enter Your User Name"
                 type="text"
                 name="username"
@@ -243,7 +256,7 @@ const Login = () => {
                 value={loginFormData.username}
                 onChange={handleLoginFormChange}
                 sx={{
-                  marginTop: "25px",
+                  marginTop: "10px",
                   borderRadius: "8px",
                   background: "#F6F5F5",
                   "& .MuiOutlinedInput-root": {
@@ -277,10 +290,11 @@ const Login = () => {
                 variant="outlined"
                 fullWidth
                 label="Email Address"
+                autoComplete="off"
                 placeholder="Enter Your Email Address"
                 type="email"
                 name="email"
-                autoComplete="email"
+                
                 value={loginFormData.email}
                 onChange={handleLoginFormChange}
                 sx={{
@@ -322,6 +336,7 @@ const Login = () => {
                 placeholder="Enter Your Password"
                 label="Password"
                 name="password"
+                autoComplete="off"
                 value={loginFormData.password}
                 onChange={handleLoginFormChange}
                 InputProps={{
@@ -422,9 +437,9 @@ const Login = () => {
           <Box
             sx={{
               position: "relative",
-              padding: "16px",
+              padding: !isMobile && "16px",
               width: isMobile ? "100%" : "490px",
-              height: "600px",
+              height: "530px",
               borderRadius: "10px",
               background: "#FFFFFF ",
             }}
@@ -448,9 +463,9 @@ const Login = () => {
                 }}
               >
                 <img
-                  src={DialogLogo}
-                  alt="VROBOTS"
-                  style={{ width: "200px", marginRight: "8px" }}
+                  src={Emerging_Tech_Times_Logo}
+                  alt="Emerging_Tech_Times_Logo"
+                  style={{ width: "130px", height: "50px", marginTop: 10 }}
                 />
               </Box>
             </DialogTitle>
@@ -463,11 +478,12 @@ const Login = () => {
                 placeholder="Enter Your User Name"
                 type="text"
                 name="username"
+                autoComplete="off"
                 autoFocus
                 value={signUpFormData.username}
                 onChange={handleSignupFormChange}
                 sx={{
-                  marginTop: "25px",
+                  marginTop: "10px",
                   borderRadius: "8px",
                   background: "#F6F5F5",
                   "& .MuiOutlinedInput-root": {
@@ -504,7 +520,7 @@ const Login = () => {
                 placeholder="Enter Your Email Address"
                 type="email"
                 name="email"
-                autoComplete="email"
+                autoComplete="off"
                 value={signUpFormData.email}
                 onChange={handleSignupFormChange}
                 sx={{
@@ -546,6 +562,7 @@ const Login = () => {
                 placeholder="Enter Your Password"
                 label="Password"
                 name="password"
+                autoComplete="off"
                 value={signUpFormData.password}
                 onChange={handleSignupFormChange}
                 InputProps={{
@@ -600,6 +617,7 @@ const Login = () => {
                 placeholder="Confirm Your Password"
                 label="Confirm Password"
                 name="cpassword"
+                autoComplete="off"
                 value={signUpFormData.cpassword}
                 onChange={handleSignupFormChange}
                 InputProps={{
@@ -685,5 +703,5 @@ const Login = () => {
       </Dialog>
     </>
   );
-}
-export default Login
+};
+export default Login;

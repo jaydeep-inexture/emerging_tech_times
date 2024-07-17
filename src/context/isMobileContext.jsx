@@ -5,7 +5,7 @@ const MobileContext = createContext();
 
 export const MobileProvider = ({ children }) => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
 
   return (
     <MobileContext.Provider value={isMobile}>

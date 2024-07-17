@@ -17,9 +17,11 @@ import {
 // import ContactUs from "../assets/ContactUs.png";
 import Aboutus from "../assets/Aboutus.json";
 import Lottie from "lottie-react";
+import { useMobile } from "../context/isMobileContext";
 const About = () => {
+  const isMobile = useMobile();
   return (
-    <Container maxWidth="xl" sx={{ marginBottom: "5%" }}>
+    <Container maxWidth="xl" sx={{ marginBottom:isMobile&& "5%",marginY:!isMobile && "4%" }}>
       <Grid
         container
         spacing={4}
@@ -37,16 +39,25 @@ const About = () => {
           }}
         >
           <Box>
-            <Typography variant="h3" gutterBottom sx={{ fontWeight: 800 }}>
+            <Typography
+              variant={isMobile ? "h5" : "h3"}
+              gutterBottom
+              sx={{
+                fontWeight: 800,
+                textTransform: "uppercase",
+                fontStyle: "italic",
+                color:'#FC6A03'
+              }}
+            >
               About Us
             </Typography>
-            <Typography variant="h5" gutterBottom>
+            <Typography variant={isMobile ? "h6" : "h5"} gutterBottom>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus,
               perferendis. Vel odit officia hic neque qui eum eos consequatur
               fugit suscipit in, illum atque! Dolor ratione labore eaque
               provident quibusdam?
             </Typography>
-            <Typography variant="h5" gutterBottom>
+            <Typography variant={isMobile ? "h6" : "h5"} gutterBottom>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus,
               perferendis. Vel odit officia hic neque qui eum eos consequatur
               fugit suscipit in, illum atque! Dolor ratione labore eaque
@@ -70,88 +81,6 @@ const About = () => {
           <Lottie animationData={Aboutus} />
         </Grid>
       </Grid>
-      {/* <Typography
-        variant="h6"
-        sx={{
-          color: "orange",
-          fontWeight: "900",
-          marginBottom: "20px",
-          letterSpacing: "3px",
-          textTransform: "uppercase",
-          fontStyle: "italic",
-        }}
-        gutterBottom
-      >
-        Our Team
-      </Typography>
-      <Box display={"flex"} justifyContent={"space-between"}>
-        <Card sx={{ maxWidth: 400 }}>
-          <CardActionArea>
-            <CardMedia
-              component="img"
-              height="200"
-              width="200"
-              image="https://png.pngtree.com/png-clipart/20190924/original/pngtree-business-user-profile-vector-png-image_4830519.jpg"
-              alt="Dummy Image"
-              style={{ objectFit: "fill" }}
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                Dummy Data
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Voluptatum, iusto commodi. Nihil minima porro dolorum,
-                voluptates aliquam ea
-              </Typography>
-            </CardContent>
-          </CardActionArea>
-        </Card>
-        <Card sx={{ maxWidth: 400 }}>
-          <CardActionArea>
-            <CardMedia
-              component="img"
-              height="200"
-              width="200"
-              image="https://png.pngtree.com/png-clipart/20190924/original/pngtree-business-user-profile-vector-png-image_4830519.jpg "
-              alt="green iguana"
-              style={{ objectFit: "fill" }}
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                Dummy Data
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Voluptatum, iusto commodi. Nihil minima porro dolorum,
-                voluptates aliquam ea
-              </Typography>
-            </CardContent>
-          </CardActionArea>
-        </Card>
-        <Card sx={{ maxWidth: 400 }}>
-          <CardActionArea>
-            <CardMedia
-              component="img"
-              height="200"
-              width="200"
-              image="https://png.pngtree.com/png-clipart/20190924/original/pngtree-business-user-profile-vector-png-image_4830519.jpg "
-              alt="green iguana"
-              style={{ objectFit: "fill" }}
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                Dummy Data
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Voluptatum, iusto commodi. Nihil minima porro dolorum,
-                voluptates aliquam ea
-              </Typography>
-            </CardContent>
-          </CardActionArea>
-        </Card>
-      </Box> */}
     </Container>
   );
 };

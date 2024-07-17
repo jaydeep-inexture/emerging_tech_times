@@ -10,6 +10,7 @@ import {
   Tab,
   Typography,
 } from "@mui/material";
+import { useMobile } from "../context/isMobileContext";
 
 const NewsData = ({ title }) => {
   const [data, setData] = useState([]);
@@ -40,11 +41,11 @@ const NewsData = ({ title }) => {
   };
 
   const displayedData = data.slice(0, visibleItems);
-
+  const isMobile= useMobile()
   return (
     <>
       <Box sx={{paddingX:"5%"}}>
-        <Typography variant="h2" gutterBottom fontWeight={800}>
+        <Typography variant={isMobile?"h4" :"h2"} gutterBottom fontWeight={800} fontStyle={'italic'} >
           {title}
         </Typography>
         <Grid container spacing={4}>

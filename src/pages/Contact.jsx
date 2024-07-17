@@ -11,13 +11,15 @@ import {
   Checkbox,
 } from "@mui/material";
 import ContactUs from "../assets/ContactUs.png";
+import { useMobile } from "../context/isMobileContext";
 const Contact = () => {
+  const isMobile = useMobile()
   return (
     <Container maxWidth="xl" >
       <Grid
         container
         spacing={4}
-        style={{ minHeight: "45vh", marginBottom: "100px" }}
+        style={{ minHeight: "51vh", marginBottom: isMobile ? "30px" : "100px" }}
       >
         {/* First Part with Image */}
         <Grid
@@ -49,7 +51,7 @@ const Contact = () => {
           }}
         >
           <Box>
-            <Typography variant="h3" gutterBottom sx={{ fontWeight: 800 }}>
+            <Typography variant={isMobile ? "h4" : "h3"} gutterBottom sx={{ fontWeight: 800 }}>
               Get in Touch
             </Typography>
             <form noValidate autoComplete="off">
