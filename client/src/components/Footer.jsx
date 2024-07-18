@@ -17,75 +17,129 @@ const Footer = () => {
   return (
     <>
       {!isMobile && (
+        // <Box
+        //   sx={{
+        //     position: "relative",
+        //     display: "flex",
+        //     flexDirection: "row",
+        //     justifyContent: "center",
+        //     alignItems: "center",
+        //   }}
+        // >
+        //   <Box
+        //     sx={{
+        //       display: "flex",
+        //       flexDirection: "row",
+        //       justifyContent: "center",
+        //       alignItems: "center",
+        //       background: "#ff851b",
+        //       p: 4,
+        //       width: "50%",
+        //       margin: "auto",
+        //       borderRadius: "30px",
+        //       position: "absolute",
+        //     }}
+        //   >
+        //     <Typography
+        //       sx={{
+        //         color: "#F6D9BE",
+        //         fontSize: "24px",
+        //         fontWeight: "bold",
+        //         textAlign: "center",
+
+        //         width: "220px",
+        //       }}
+        //     >
+        //       Subscribe Us
+        //     </Typography>
+
+        //     <Box
+        //       sx={{
+        //         display: "flex",
+        //         justifyContent: "center",
+        //         alignItems: "center",
+        //         width: "100%",
+        //       }}
+        //     >
+        //       <TextField
+        //         id="email"
+        //         placeholder="Enter Your Email Address"
+        //         variant="outlined"
+        //         sx={{
+        //           mr: 2,
+        //           flexGrow: 1,
+        //           background: "#fff",
+        //           borderRadius: "8px",
+        //           border: "0.5px solid black",
+        //         }}
+        //       />
+        //       <Button
+        //         sx={{
+        //           background: "#0F172A",
+        //           padding: "15px",
+        //           borderRadius: "8px",
+        //           color: "white",
+        //           fontWeight: 800,
+        //           ":hover": { background: "#0F172A" },
+        //         }}
+        //       >
+        //         Subscribe
+        //       </Button>
+        //     </Box>
+        //   </Box>
+        // </Box>
         <Box
           sx={{
-            position: "relative",
             display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
+            flexDirection: "column",
             alignItems: "center",
+            justifyContent: "center",
+            minHeight: "32vh",
+            backgroundColor: "#0A1128", // Dark blue background
+            color: "#fff",
+            textAlign: "center",
+            padding: 4,
+            backgroundImage:
+              "url('https://t3.ftcdn.net/jpg/05/08/74/68/360_F_508746888_tl2EUHrIm1NpPBcwLufaAzbMqNO2kqwR.jpg')",
+            backgroundRepeat: "round",
           }}
         >
+          <Typography variant="h4" fontWeight={900} gutterBottom>
+            Sign Up For Our Newsletter
+          </Typography>
+          <Typography variant="body1" gutterBottom my={2}>
+            Don't miss out on this opportunity to join our community of
+            like-minded individuals
+          </Typography>
           <Box
+            component="form"
             sx={{
+              mt: 2,
               display: "flex",
-              flexDirection: "row",
-              justifyContent: "center",
+              flexDirection: "column",
               alignItems: "center",
-              background: "#ff851b",
-              p: 4,
-              width: "50%",
-              margin: "auto",
-              borderRadius: "30px",
-              position: "absolute",
+              width: "100%",
+              maxWidth: 400,
             }}
+            noValidate
+            autoComplete="off"
           >
-            <Typography
-              sx={{
-                color: "#F6D9BE",
-                fontSize: "24px",
-                fontWeight: "bold",
-                textAlign: "center",
-
-                width: "220px",
-              }}
+            <TextField
+              variant="outlined"
+              placeholder="Your email"
+              type="email"
+              fullWidth
+              sx={{ mb: 2, backgroundColor: "#fff", borderRadius: 1 }}
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              size="large"
+              fullWidth
+              sx={{ backgroundColor: "#FF6600" }}
             >
-              Subscribe Us
-            </Typography>
-
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                width: "100%",
-              }}
-            >
-              <TextField
-                id="email"
-                placeholder="Enter Your Email Address"
-                variant="outlined"
-                sx={{
-                  mr: 2,
-                  flexGrow: 1,
-                  background: "#fff",
-                  borderRadius: "8px",
-                  border: "0.5px solid black",
-                }}
-              />
-              <Button
-                sx={{
-                  background: "#0F172A",
-                  padding: "15px",
-                  borderRadius: "8px",
-                  color: "white",
-                  fontWeight: 800,
-                  ":hover": { background: "#0F172A" },
-                }}
-              >
-                Subscribe
-              </Button>
-            </Box>
+              Subscribe Now
+            </Button>
           </Box>
         </Box>
       )}
@@ -124,11 +178,19 @@ const Footer = () => {
             flexDirection="column"
             alignItems="center"
           >
-            <Typography variant={isMobile ? "p": "h6"} fontWeight={800} fontSize={isMobile && 20} marginBottom={'10px'} >
+            <Typography
+              variant={isMobile ? "p" : "h6"}
+              fontWeight={800}
+              fontSize={isMobile && 20}
+              marginBottom={"10px"}
+            >
               About Us
             </Typography>
             <Typography variant="body2" lineHeight={1.5} textAlign="center">
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsa dolorem libero minima sapiente laudantium odit sit at veritatis distinctio veniam, neque maxime provident hic nihil reiciendis modi vitae sint corporis.
+              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsa
+              dolorem libero minima sapiente
+              {!isMobile &&
+                "laudantium odit sit at veritatis distinctio veniam, neque maxime provident hic nihil reiciendismodi vitae sint corporis."}
             </Typography>
           </Grid>
           {!isMobile && (
