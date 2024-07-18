@@ -114,13 +114,13 @@ const Nav = () => {
               <img
                 src={Emerging_Tech_Times_Logo}
                 alt="Emerging_Tech_Times_Logo"
-                style={{ width: "130px", height: "50px", margin: "10px" }}
+                style={{ width: "170px", height: "auto", margin: "10px" }}
               />
             ) : (
               <img
                 src={Emerging_Tech_Times_Logo}
                 alt="Emerging_Tech_Times_Logo"
-                style={{ width: "150px", height: "50px" }}
+                style={{ width: "200px", height: "auto" }}
               />
             )}
           </Link>

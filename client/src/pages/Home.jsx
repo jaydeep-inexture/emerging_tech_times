@@ -8,15 +8,50 @@ import {
   Button,
   TextField,
   Stack,
+  Chip,
 } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import PersonIcon from "@mui/icons-material/Person";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { useMobile } from "../context/isMobileContext";
+import ArticleCard from "./ArticleCard";
 const Home = () => {
   const isMobile = useMobile();
+  const articles = [
+    {
+      image:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFtEPwKHXE0w36wxAe838uaGFBJUzQ3Nup4w&s",
+      title: "Have You Met the Next Generation of AutoGPT?",
+      author: "Vishal Shah",
+      date: "July 16, 2024",
+      description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem quos nulla doloribus ratione amet fuga delectus facilis, architecto hic dolore!",
+       
+      category: "AI NEWS",
+    },
+    {
+      image:
+        "https://www.livemint.com/lm-img/img/2024/07/08/600x338/PTI07-08-2024-000210B-0_1720443963570_1720443995911.jpg",
+      title: "AI Advances in Healthcare",
+      author: "Dharmesh Patel",
+      date: "July 15, 2024",
+      description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem quos nulla doloribus ratione amet fuga delectus facilis, architecto hic dolore!",
+      category: "HEALTHCARE",
+    },
 
+    {
+      image:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFtEPwKHXE0w36wxAe838uaGFBJUzQ3Nup4w&s",
+      title: "AI and the Future of Work",
+      author: "Dhruv Patel",
+      date: "July 12, 2024",
+      description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem quos nulla doloribus ratione amet fuga delectus facilis, architecto hic dolore!",
+      category: "BUSINESS",
+    },
+  ];
   return (
     <>
       <Box
@@ -56,7 +91,6 @@ const Home = () => {
                 alignItems="center"
                 sx={{
                   marginTop: "13%",
-                  
                 }}
               >
                 <TextField
@@ -109,7 +143,7 @@ const Home = () => {
         </Box>
       </Box>
 
-      <Box sx={{ paddingX: "12%", marginTop: 4, marginBottom: 12 }}>
+      <Box sx={{ paddingX: isMobile ? "10%" :"12%", marginTop: 4, marginBottom: 5 }}>
         <Box
           sx={{
             display: "flex",
@@ -118,8 +152,145 @@ const Home = () => {
             alignItems: "center",
           }}
         >
-          <Typography variant={isMobile ? "h6" : "h4"} fontWeight={800}>
+          <Typography
+            variant={isMobile ? "h6" : "h4"}
+            fontWeight={800}
+            textTransform={"uppercase"}
+          >
             Latest News
+          </Typography>
+          <Link to="/news">
+            <Button
+              sx={{
+                textTransform: "capitalize",
+                color: "gray",
+                fontSize: isMobile ? 16 : 20,
+              }}
+            >
+              More <KeyboardArrowRightIcon />
+            </Button>
+          </Link>
+        </Box>
+
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={6}>
+              <Card
+                sx={{
+                  display: "flex",
+                  flexDirection: "column" ,
+                  height: "100%",
+                  marginTop: 3,
+                  boxShadow: "none",
+                }}
+              >
+                <CardMedia
+                  component="img"
+                  sx={{ width: "100%" ,height:'100%' }}
+                  image={articles[0].image}
+                  alt={articles[0].title}
+                />
+                <Box sx={{ display: "flex", flexDirection: "column", flex: 1 }}>
+                  <CardContent sx={{ flexGrow: 1 }}>
+                    <Typography
+                      component="div"
+                      variant="h5"
+                      fontWeight={900}
+                      textTransform={"capitalize"}
+                    >
+                      {articles[0].title}
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      color="text.secondary"
+                      component="div"
+                    >
+                      {articles[0].author} - {articles[0].date}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{ mt: 1.5 }}
+                    >
+                      {articles[0].description}
+                    </Typography>
+                  </CardContent>
+                  <Box sx={{ p: 1 }}>
+                    <Chip label={articles[0].category} variant="outlined" />
+                  </Box>
+                </Box>
+              </Card>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              {articles.map((article, index) => (
+                <ArticleCard key={index} {...article} />
+              ))}
+            </Grid>
+          </Grid>
+        </Box>
+
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            textAlign: "center",
+            alignItems: "center",
+            mt: 4,
+          }}
+        >
+          <Typography
+            variant={isMobile ? "h6" : "h4"}
+            fontWeight={800}
+            textTransform={"uppercase"}
+          >
+            Top News
+          </Typography>
+          <Link to="/news">
+            <Button
+              sx={{
+                textTransform: "capitalize",
+                color: "gray",
+                fontSize: isMobile ? 16 : 20,
+              }}
+            >
+              More <KeyboardArrowRightIcon />
+            </Button>
+          </Link>
+        </Box>
+
+        
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+          }}
+        >
+          <Grid>
+            {articles.map((article, index) => (
+              <ArticleCard {...article} />
+            ))}
+          </Grid>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            textAlign: "",
+            alignItems: "center",
+            mt: 4,
+          }}
+        >
+          <Typography
+            variant={isMobile ? "h6" : "h4"}
+            fontWeight={800}
+            textTransform={"uppercase"}
+          >
+            Trending News
           </Typography>
           <Link to="/news">
             <Button
@@ -140,401 +311,14 @@ const Home = () => {
             flexDirection: "row",
           }}
         >
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={8}>
-              <Card sx={{ margin: "auto", mt: 4 }}>
-                <CardMedia
-                  component="img"
-                  height={isMobile ? "170" : "550"}
-                  image="https://static.toiimg.com/thumb/imgsize-23456,msid-111644636,width-375,resizemode-4/111644636.jpg"
-                  alt="news2"
-                  sx={{ objectFit: "cover" }}
-                />
-                <CardContent>
-                  <Typography variant="body1" color="text.secondary">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Fugiat voluptatibus dolorem illum nulla molestiae autem,
-                    vero pariatur sit sequi voluptate nesciunt ad iusto
-                    exercitationem totam eligendi est porro minima vitae?
-                  </Typography>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      textAlign: "center",
-                      mt: 2,
-                    }}
-                  >
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                      <PersonIcon sx={{ mr: 1, color: "text.primary" }} />
-                      <Typography variant="body2" color="text.secondary">
-                        by, Vishal Shah
-                      </Typography>
-                    </Box>
-                    <Typography variant="body2" color="text.secondary">
-                      2024-07-11 11:11
-                    </Typography>
-                  </Box>
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <Card sx={{ margin: "auto", mt: 4 }}>
-                <CardMedia
-                  component="img"
-                  height="170"
-                  image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFtEPwKHXE0w36wxAe838uaGFBJUzQ3Nup4w&s"
-                  alt="news2"
-                  sx={{ objectFit: "fill" }}
-                />
-                <CardContent>
-                  <Typography variant="body1" color="text.secondary">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Fugiat voluptatibus dolorem illum nulla molestiae autem,
-                    vero pariatur sit sequi
-                  </Typography>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      textAlign: "center",
-                      mt: 2,
-                    }}
-                  >
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                      <PersonIcon sx={{ mr: 1, color: "text.primary" }} />
-                      <Typography variant="body2" color="text.secondary">
-                        by, Vishal Shah
-                      </Typography>
-                    </Box>
-                    <Typography variant="body2" color="text.secondary">
-                      2024-07-11 11:11
-                    </Typography>
-                  </Box>
-                </CardContent>
-              </Card>
-              <Card sx={{ margin: "auto", mt: 4 }}>
-                <CardMedia
-                  component="img"
-                  height="170"
-                  image="https://www.livemint.com/lm-img/img/2024/07/08/600x338/PTI07-08-2024-000210B-0_1720443963570_1720443995911.jpg"
-                  alt="news2"
-                  sx={{ objectFit: "fill" }}
-                />
-                <CardContent>
-                  <Typography variant="body1" color="text.secondary">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Fugiat voluptatibus dolorem illum nulla molestiae autem,
-                    vero pariatur sit sequi
-                  </Typography>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      textAlign: "center",
-                      mt: 2,
-                    }}
-                  >
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                      <PersonIcon sx={{ mr: 1, color: "text.primary" }} />
-                      <Typography variant="body2" color="text.secondary">
-                        by, Vishal Shah
-                      </Typography>
-                    </Box>
-                    <Typography variant="body2" color="text.secondary">
-                      2024-07-11 11:11
-                    </Typography>
-                  </Box>
-                </CardContent>
-              </Card>
-            </Grid>
+          <Grid>
+            {articles.reverse().map((article, index) => (
+              // <Grid item key={index} xs={12} sm={6}>
+              <ArticleCard {...article} />
+              // </Grid>
+            ))}
           </Grid>
         </Box>
-
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            textAlign: "center",
-            alignItems: "center",
-            mt: 4,
-          }}
-        >
-          <Typography variant={isMobile ? "h6" : "h4"} fontWeight={800}>
-            Top News
-          </Typography>
-          <Link to="/news">
-            <Button
-              sx={{
-                textTransform: "capitalize",
-                color: "gray",
-                fontSize: isMobile ? 16 : 20,
-              }}
-            >
-              More <KeyboardArrowRightIcon />
-            </Button>
-          </Link>
-        </Box>
-
-        <Grid container spacing={2}>
-          {/* First Card */}
-          <Grid item xs={12} sm={6} md={4}>
-            <Card sx={{ margin: "auto", mt: 4 }}>
-              <CardMedia
-                component="img"
-                height="200"
-                image="https://sc0.blr1.cdn.digitaloceanspaces.com/book/201826-uaficpcydh-1719816029.jpg"
-                alt="news1"
-                sx={{ objectFit: "cover" }}
-              />
-              <CardContent>
-                <Typography variant="body1" color="text.secondary">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Fugiat voluptatibus dolorem illum nulla molestiae autem, vero
-                  pariatur sit sequi
-                </Typography>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    mt: 2,
-                  }}
-                >
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <PersonIcon sx={{ mr: 1, color: "text.primary" }} />
-                    <Typography variant="body2" color="text.secondary">
-                      by, Vishal Shah
-                    </Typography>
-                  </Box>
-                  <Typography variant="body2" color="text.secondary">
-                    2024-07-11 11:11
-                  </Typography>
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          {/* Second Card */}
-          <Grid item xs={12} sm={6} md={4}>
-            <Card sx={{ margin: "auto", mt: 4 }}>
-              <CardMedia
-                component="img"
-                height="200"
-                image="https://image.cnbcfm.com/api/v1/image/108004119-240710_cw_thumbnail.jpg?v=1720637051&w=750&h=422&vtcrop=y"
-                alt="news2"
-                sx={{ objectFit: "fill" }}
-              />
-              <CardContent>
-                <Typography variant="body1" color="text.secondary">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Fugiat voluptatibus dolorem illum nulla molestiae autem, vero
-                  pariatur sit sequi
-                </Typography>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    mt: 2,
-                  }}
-                >
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <PersonIcon sx={{ mr: 1, color: "text.primary" }} />
-                    <Typography variant="body2" color="text.secondary">
-                      by, Vishal Shah
-                    </Typography>
-                  </Box>
-                  <Typography variant="body2" color="text.secondary">
-                    2024-07-11 11:11
-                  </Typography>
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          {/* Third Card */}
-          <Grid item xs={12} sm={6} md={4}>
-            <Card sx={{ margin: "auto", mt: 4 }}>
-              <CardMedia
-                component="img"
-                height="200"
-                image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPcqivCB4luDYB7D4HaMk6GRgXGDcaG_fGiw&s"
-                alt="news3"
-                sx={{ objectFit: "fill" }}
-              />
-              <CardContent>
-                <Typography variant="body1" color="text.secondary">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Fugiat voluptatibus dolorem illum nulla molestiae autem, vero
-                  pariatur sit sequi
-                </Typography>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    mt: 2,
-                  }}
-                >
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <PersonIcon sx={{ mr: 1, color: "text.primary" }} />
-                    <Typography variant="body2" color="text.secondary">
-                      by, Vishal Shah
-                    </Typography>
-                  </Box>
-                  <Typography variant="body2" color="text.secondary">
-                    2024-07-11 11:11
-                  </Typography>
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            textAlign: "center",
-            alignItems: "center",
-            mt: 4,
-          }}
-        >
-          <Typography variant={isMobile ? "h6" : "h4"} fontWeight={800}>
-            Trending News
-          </Typography>
-          <Link to="/news">
-            <Button
-              sx={{
-                textTransform: "capitalize",
-                color: "gray",
-                fontSize: isMobile ? 16 : 20,
-              }}
-            >
-              More <KeyboardArrowRightIcon />
-            </Button>
-          </Link>
-        </Box>
-
-        <Grid container spacing={2}>
-          {/* First Card */}
-          <Grid item xs={12} sm={6} md={4}>
-            <Card sx={{ margin: "auto", mt: 4 }}>
-              <CardMedia
-                component="img"
-                height="200"
-                image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQb6GBo9-NJtYpKVS3sHtaT2uh5dATxORlyyA&s"
-                alt="news1"
-                sx={{ objectFit: "cover" }}
-              />
-              <CardContent>
-                <Typography variant="body1" color="text.secondary">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Fugiat voluptatibus dolorem illum nulla molestiae autem, vero
-                  pariatur sit sequi
-                </Typography>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    mt: 2,
-                  }}
-                >
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <PersonIcon sx={{ mr: 1, color: "text.primary" }} />
-                    <Typography variant="body2" color="text.secondary">
-                      by, Vishal Shah
-                    </Typography>
-                  </Box>
-                  <Typography variant="body2" color="text.secondary">
-                    2024-07-11 11:11
-                  </Typography>
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          {/* Second Card */}
-          <Grid item xs={12} sm={6} md={4}>
-            <Card sx={{ margin: "auto", mt: 4 }}>
-              <CardMedia
-                component="img"
-                height="200"
-                image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhv8LFLmO4-Q-Td7Ovw7R4IzOcmFmBF5vFOg&s"
-                alt="news2"
-                sx={{ objectFit: "fill" }}
-              />
-              <CardContent>
-                <Typography variant="body1" color="text.secondary">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Fugiat voluptatibus dolorem illum nulla molestiae autem, vero
-                  pariatur sit sequi
-                </Typography>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    mt: 2,
-                  }}
-                >
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <PersonIcon sx={{ mr: 1, color: "text.primary" }} />
-                    <Typography variant="body2" color="text.secondary">
-                      by, Vishal Shah
-                    </Typography>
-                  </Box>
-                  <Typography variant="body2" color="text.secondary">
-                    2024-07-11 11:11
-                  </Typography>
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          {/* Third Card */}
-          <Grid item xs={12} sm={6} md={4}>
-            <Card sx={{ margin: "auto", mt: 4 }}>
-              <CardMedia
-                component="img"
-                height="200"
-                image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFtEPwKHXE0w36wxAe838uaGFBJUzQ3Nup4w&s"
-                alt="news3"
-                sx={{ objectFit: "fill" }}
-              />
-              <CardContent>
-                <Typography variant="body1" color="text.secondary">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Fugiat voluptatibus dolorem illum nulla molestiae autem, vero
-                  pariatur sit sequi
-                </Typography>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    mt: 2,
-                  }}
-                >
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <PersonIcon sx={{ mr: 1, color: "text.primary" }} />
-                    <Typography variant="body2" color="text.secondary">
-                      by, Vishal Shah
-                    </Typography>
-                  </Box>
-                  <Typography variant="body2" color="text.secondary">
-                    2024-07-11 11:11
-                  </Typography>
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
       </Box>
     </>
   );

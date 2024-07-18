@@ -8,6 +8,7 @@ import Contact from "./pages/Contact";
 import News from "./pages/News";
 import Footer from "./components/Footer";
 import { MobileProvider } from "./context/isMobileContext";
+import ArticleDetails from "./pages/ArticleDetails";
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
           <Route path="/news" element={<News />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/article/:title" element={<ArticleDetails />} />
         </Routes>
       </Router>
       <Footer />

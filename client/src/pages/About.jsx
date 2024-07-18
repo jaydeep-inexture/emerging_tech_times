@@ -21,17 +21,17 @@ import { useMobile } from "../context/isMobileContext";
 const About = () => {
   const isMobile = useMobile();
   return (
-    <Container maxWidth="xl" sx={{ marginBottom:isMobile&& "5%",marginY:!isMobile && "4%" }}>
+    <Container maxWidth="xl" sx={{ marginBottom:isMobile&& "5%",marginY:!isMobile && "2%" }}>
       <Grid
         container
-        spacing={4}
-        style={{ minHeight: "45vh", marginBottom: "50px" }}
+        style={{ minHeight: "45vh", marginBottom: "50px",marginLeft:0 }}
       >
         {/* First Part with Image */}
         <Grid
           item
           xs={12}
           md={6}
+          ml={2}
           sx={{
             display: "flex",
             justifyContent: "center",
