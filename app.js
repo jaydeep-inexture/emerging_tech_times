@@ -29,7 +29,7 @@ const imageFileFilter = (req, file, cb) => {
   if (allowedMimeTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(null, false);
+    cb(new Error('Invalid file type'));
   }
 };
 

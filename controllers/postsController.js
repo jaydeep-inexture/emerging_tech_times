@@ -39,9 +39,17 @@ exports.createPost = async (req, res, next) => {
   const image = req.file;
 
   try {
-    const existingPost = await Post.findOne({title});
-    if (existingPost) {
+    const isDuplicateTitle = await Post.findOne({title});
+
+    if (isDuplicateTitle) {
       throw new Error('Title must be unique');
+    }
+
+    if (seoSlug) {
+      const isDuplicateSeoSlug = await Post.findOne({['seo.slug']: seoSlug});
+      if (isDuplicateSeoSlug) {
+        throw new Error('Seo slug must be unique');
+      }
     }
 
     const payload = {
