@@ -9,6 +9,18 @@ const PostSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  seo: {
+    title: {
+      type: String,
+    },
+    description: {
+      type: String,
+    },
+    slug: {
+      type: String,
+      unique: true,
+    },
+  },
   author: {
     name: {
       type: String,

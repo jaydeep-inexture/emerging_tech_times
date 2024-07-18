@@ -1,5 +1,3 @@
-// controllers/postsController.js
-
 const {validationResult} = require('express-validator');
 const Post = require('../models/Post');
 const mongoose = require('mongoose');
@@ -24,7 +22,18 @@ exports.createPost = async (req, res, next) => {
     return res.status(400).json({errors: errors.array()});
   }
 
-  const {title, description, author} = req.body;
+  const {
+    title,
+    description,
+    authorName,
+    authorDescription,
+    twitter,
+    instagram,
+    linkedin,
+    seoTitle,
+    seoDescription,
+    seoSlug,
+  } = req.body;
 
   try {
     const existingPost = await Post.findOne({title});
@@ -37,13 +46,18 @@ exports.createPost = async (req, res, next) => {
       title,
       description,
       author: {
-        name: author.name,
-        description: author.description ?? '',
+        name: authorName,
+        description: authorDescription ?? '',
         socials: {
-          twitter: author.twitter ?? '',
-          instagram: author.instagram ?? '',
-          linkedin: author.linkedin ?? '',
+          twitter: twitter ?? '',
+          instagram: instagram ?? '',
+          linkedin: linkedin ?? '',
         },
+      },
+      seo: {
+        title: seoTitle ?? '',
+        description: seoDescription ?? '',
+        slug: seoSlug ?? '',
       },
     });
 
@@ -56,7 +70,18 @@ exports.createPost = async (req, res, next) => {
 
 // update a post
 exports.updatePost = async (req, res, next) => {
-  const {title, description, author} = req.body;
+  const {
+    title,
+    description,
+    authorName,
+    authorDescription,
+    twitter,
+    instagram,
+    linkedin,
+    seoTitle,
+    seoDescription,
+    seoSlug,
+  } = req.body;
 
   try {
     if (!mongoose.isValidObjectId(req.params.postId)) {
@@ -71,15 +96,17 @@ exports.updatePost = async (req, res, next) => {
     // Update post fields
     if (title) post.title = title;
     if (description) post.description = description;
-    if (author?.name) post.author.name = author.name;
-    if (author?.description !== undefined)
-      post.author.description = author.description;
-    if (author?.twitter !== undefined)
-      post.author.socials.twitter = author.twitter;
-    if (author?.instagram !== undefined)
-      post.author.socials.instagram = author.instagram;
-    if (author?.linkedin !== undefined)
-      post.author.socials.linkedin = author.linkedin;
+    if (authorName) post.author.name = authorName;
+    if (authorDescription !== undefined)
+      post.author.description = authorDescription;
+
+    if (twitter !== undefined) post.author.socials.twitter = twitter;
+    if (instagram !== undefined) post.author.socials.instagram = instagram;
+    if (linkedin !== undefined) post.author.socials.linkedin = linkedin;
+
+    if (seoTitle !== undefined) post.seo.title = seoTitle;
+    if (seoDescription !== undefined) post.seo.description = seoDescription;
+    if (seoSlug !== undefined) post.seo.slug = seoSlug;
 
     const updatedPost = await post.save();
     res.json({msg: 'Post updated successfully', data: updatedPost});

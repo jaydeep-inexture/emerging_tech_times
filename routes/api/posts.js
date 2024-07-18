@@ -20,7 +20,7 @@ router.post(
   [
     check('title', 'Title is required').notEmpty(),
     check('description', 'Description is required').notEmpty(),
-    check('author.name', 'Author name is required').notEmpty(),
+    check('authorName', 'Author name is required').notEmpty(),
   ],
   auth,
   isAdmin,

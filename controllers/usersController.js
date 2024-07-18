@@ -6,7 +6,7 @@ const User = require('../models/User');
 const {
   generateRefreshToken,
   generateAccessToken,
-} = require('../helpers/tokens');
+} = require('../helpers/utils');
 
 exports.getLoggedInUser = async (req, res, next) => {
   try {
