@@ -13,46 +13,42 @@ import {
 import ContactUs from "../assets/ContactUs.png";
 import { useMobile } from "../context/isMobileContext";
 const Contact = () => {
-  const isMobile = useMobile()
+  const isMobile = useMobile();
   return (
-    <Container maxWidth="xl" >
+    <Container
+      maxWidth="xl"
+      sx={{ marginBottom: isMobile && "5%", marginY: !isMobile && "2%" }}
+    >
       <Grid
         container
         spacing={4}
-        style={{ minHeight: "51vh", marginBottom: isMobile ? "30px" : "100px" }}
+        style={{
+          marginBottom: isMobile ? "30px" : "70px",
+          flexWrap: isMobile ? "wrap" : "nowrap",
+        }}
       >
-        {/* First Part with Image */}
-        <Grid
-          item
-          xs={12}
-          md={6}
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <img
-            src={ContactUs}
-            alt="Contact Us"
-            style={{ maxWidth: "100%", height: "auto" }}
-          />
-        </Grid>
-
-        {/* Second Part with Form */}
         <Grid
           item
           xs={12}
           md={6}
           sx={{
-            mx:2,
+            mx: 2,
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
           }}
         >
           <Box>
-            <Typography variant={isMobile ? "h4" : "h3"} gutterBottom sx={{ fontWeight: 800 }}>
+            <Typography
+              variant={isMobile ? "h5" : "h3"}
+              gutterBottom
+              sx={{
+                fontWeight: 800,
+                textTransform: "uppercase",
+                fontStyle: "italic",
+                color: "#FC6A03",
+              }}
+            >
               Get in Touch
             </Typography>
             <form noValidate autoComplete="off">
@@ -109,6 +105,23 @@ const Contact = () => {
               </Grid>
             </form>
           </Box>
+        </Grid>
+
+        <Grid
+          item
+          xs={12}
+          md={6}
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <img
+            src={ContactUs}
+            alt="Contact Us"
+            style={{ maxWidth: "100%", height: "auto" }}
+          />
         </Grid>
       </Grid>
     </Container>

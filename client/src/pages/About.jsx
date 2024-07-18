@@ -24,7 +24,7 @@ const About = () => {
     <Container maxWidth="xl" sx={{ marginBottom:isMobile&& "5%",marginY:!isMobile && "2%" }}>
       <Grid
         container
-        style={{ minHeight: "45vh", marginBottom: "50px",marginLeft:0 }}
+        style={{ flexWrap:isMobile ? "wrap" :'nowrap' }}
       >
         {/* First Part with Image */}
         <Grid
