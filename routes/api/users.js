@@ -10,7 +10,7 @@ const auth = require('../../middleware/auth');
 // @access  Private
 router.get('/me', auth, userController.getLoggedInUser);
 
-// @route   POST api/users/register
+// @route   POST /api/users/register
 // @desc    Register the users
 // @access  Public
 router.post(
