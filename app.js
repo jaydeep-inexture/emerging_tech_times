@@ -2,20 +2,12 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
-const AWS = require('aws-sdk');
 const multer = require('multer');
 
 const connectDB = require('./helpers/db');
 const errorHandler = require('./middleware/error');
 
 require('dotenv').config();
-
-// Configurations for AWS SDK
-AWS.config.update({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  region: 'us-east-1',
-});
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -52,10 +44,10 @@ app.use('/api/message', require('./routes/api/message'));
 app.use(errorHandler);
 
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, 'client/build')));
+  app.use(express.static(path.join(__dirname, 'client/dist')));
 
   app.get('*', (_, res) => {
-    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+    res.sendFile(path.join(__dirname, 'client/dist', 'index.html'));
   });
 }
 

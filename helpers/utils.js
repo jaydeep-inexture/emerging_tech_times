@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const CONSTANTS = require('./constants');
-const AWS = require('aws-sdk');
+const { S3Client, PutObjectCommand, DeleteObjectCommand } = require('@aws-sdk/client-s3');
 
 const ACCESS_TOKEN_EXPIRY = CONSTANTS.ACCESS_TOKEN_EXPIRY;
 const REFRESH_TOKEN_EXPIRY = {expiresIn: CONSTANTS.REFRESH_TOKEN_EXPIRY};
@@ -17,9 +17,15 @@ const generateRefreshToken = (userId) => {
 
 // *********** File upload *************//
 
-const s3 = new AWS.S3();
+const s3Client = new S3Client({
+  region: process.env.AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  },
+});
 
-const uploadImageToS3 = (image) => {
+const uploadImageToS3 = async (image) => {
   const imageName = `${Date.now()}.${image.originalname.split('.').pop()}`;
   const params = {
     Bucket: process.env.AWS_BUCKET_NAME,
@@ -30,10 +36,12 @@ const uploadImageToS3 = (image) => {
   };
 
   // Upload the image to S3 bucket
-  return s3.upload(params).promise();
+  const command = new PutObjectCommand(params);
+  const data = await s3Client.send(command);
+  return { Location: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${imageName}` };
 };
 
-const deleteImageFromS3 = (imageUrl) => {
+const deleteImageFromS3 = async (imageUrl) => {
   const key = imageUrl.split('/').pop();
 
   const params = {
@@ -41,7 +49,8 @@ const deleteImageFromS3 = (imageUrl) => {
     Key: key,
   };
 
-  return s3.deleteObject(params).promise();
+  const command = new DeleteObjectCommand(params);
+  return s3Client.send(command);
 };
 
 module.exports = {
