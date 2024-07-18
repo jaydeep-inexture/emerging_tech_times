@@ -1,6 +1,8 @@
 const {validationResult} = require('express-validator');
-const Post = require('../models/Post');
 const mongoose = require('mongoose');
+
+const Post = require('../models/Post');
+const {uploadImageToS3, deleteImageFromS3} = require('../helpers/utils');
 
 // get all posts
 exports.getAllPosts = async (req, res, next) => {
@@ -34,6 +36,7 @@ exports.createPost = async (req, res, next) => {
     seoDescription,
     seoSlug,
   } = req.body;
+  const image = req.file;
 
   try {
     const existingPost = await Post.findOne({title});
@@ -41,7 +44,7 @@ exports.createPost = async (req, res, next) => {
       throw new Error('Title must be unique');
     }
 
-    const newPost = new Post({
+    const payload = {
       userId: req.user,
       title,
       description,
@@ -59,9 +62,18 @@ exports.createPost = async (req, res, next) => {
         description: seoDescription ?? '',
         slug: seoSlug ?? '',
       },
-    });
+    };
+
+    // upload image if it exists
+    if (image) {
+      const uploadedFile = await uploadImageToS3(image);
+      payload.imageUrl = uploadedFile.Location;
+    }
+
+    const newPost = new Post(payload);
 
     const post = await newPost.save();
+
     res.status(201).json({msg: 'Post created successfully', data: post});
   } catch (err) {
     next(err);
@@ -82,16 +94,24 @@ exports.updatePost = async (req, res, next) => {
     seoDescription,
     seoSlug,
   } = req.body;
+  const image = req.file;
 
   try {
     if (!mongoose.isValidObjectId(req.params.postId)) {
       throw new Error('Invalid post ID.');
     }
 
-    let post = await Post.findById(req.params.postId);
-    if (!post) {
+    let post;
+    let oldImageUrl;
+
+    const foundPost = await Post.findById(req.params.postId);
+
+    if (!foundPost) {
       return res.status(404).json({msg: 'Post not found'});
     }
+
+    post = foundPost;
+    oldImageUrl = foundPost.imageUrl;
 
     // Update post fields
     if (title) post.title = title;
@@ -108,7 +128,17 @@ exports.updatePost = async (req, res, next) => {
     if (seoDescription !== undefined) post.seo.description = seoDescription;
     if (seoSlug !== undefined) post.seo.slug = seoSlug;
 
+    if (image) {
+      const uploadedFile = await uploadImageToS3(image);
+      post.imageUrl = uploadedFile.Location;
+    }
+
     const updatedPost = await post.save();
+
+    if (updatedPost) {
+      await deleteImageFromS3(oldImageUrl);
+    }
+
     res.json({msg: 'Post updated successfully', data: updatedPost});
   } catch (err) {
     next(err);
@@ -127,7 +157,10 @@ exports.deletePost = async (req, res, next) => {
       return res.status(404).json({msg: 'Post not found.'});
     }
 
+    await deleteImageFromS3(post.imageUrl);
+
     await post.deleteOne();
+
     res.status(200).json({msg: 'Post removed.'});
   } catch (err) {
     next(err);

@@ -9,6 +9,9 @@ const PostSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  imageUrl: {
+    type: String,
+  },
   seo: {
     title: {
       type: String,
