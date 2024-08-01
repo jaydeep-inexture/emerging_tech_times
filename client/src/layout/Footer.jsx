@@ -1,4 +1,4 @@
-import {Facebook, Instagram, Telegram, Twitter} from '@mui/icons-material';
+import { Facebook, Instagram, Telegram, Twitter } from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -8,86 +8,16 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import React from 'react';
+
 import White_Logo from '../assets/White_Logo.png';
-import {useMobile} from '../context/isMobileContext';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 const Footer = () => {
-  const isMobile = useMobile();
+  const {isMobile} = useIsMobile();
+
   return (
     <>
       {!isMobile && (
-        // <Box
-        //   sx={{
-        //     position: "relative",
-        //     display: "flex",
-        //     flexDirection: "row",
-        //     justifyContent: "center",
-        //     alignItems: "center",
-        //   }}
-        // >
-        //   <Box
-        //     sx={{
-        //       display: "flex",
-        //       flexDirection: "row",
-        //       justifyContent: "center",
-        //       alignItems: "center",
-        //       background: "#ff851b",
-        //       p: 4,
-        //       width: "50%",
-        //       margin: "auto",
-        //       borderRadius: "30px",
-        //       position: "absolute",
-        //     }}
-        //   >
-        //     <Typography
-        //       sx={{
-        //         color: "#F6D9BE",
-        //         fontSize: "24px",
-        //         fontWeight: "bold",
-        //         textAlign: "center",
-
-        //         width: "220px",
-        //       }}
-        //     >
-        //       Subscribe Us
-        //     </Typography>
-
-        //     <Box
-        //       sx={{
-        //         display: "flex",
-        //         justifyContent: "center",
-        //         alignItems: "center",
-        //         width: "100%",
-        //       }}
-        //     >
-        //       <TextField
-        //         id="email"
-        //         placeholder="Enter Your Email Address"
-        //         variant="outlined"
-        //         sx={{
-        //           mr: 2,
-        //           flexGrow: 1,
-        //           background: "#fff",
-        //           borderRadius: "8px",
-        //           border: "0.5px solid black",
-        //         }}
-        //       />
-        //       <Button
-        //         sx={{
-        //           background: "#0F172A",
-        //           padding: "15px",
-        //           borderRadius: "8px",
-        //           color: "white",
-        //           fontWeight: 800,
-        //           ":hover": { background: "#0F172A" },
-        //         }}
-        //       >
-        //         Subscribe
-        //       </Button>
-        //     </Box>
-        //   </Box>
-        // </Box>
         <Box
           sx={{
             display: 'flex',

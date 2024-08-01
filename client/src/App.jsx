@@ -1,6 +1,6 @@
 import {createTheme, ThemeProvider} from '@mui/material';
 import {Route, BrowserRouter as Router, Routes} from 'react-router-dom';
-import {MobileProvider} from './context/isMobileContext';
+
 import AdminLayout from './layout/AdminLayout';
 import MainLayout from './layout/MainLayout';
 import About from './pages/About';
@@ -21,23 +21,21 @@ const App = () => {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <MobileProvider>
-          <Router>
-            <Routes>
-              <Route element={<MainLayout />}>
-                <Route path='/' element={<Home />} />
-                <Route path='/news' element={<News />} />
-                <Route path='/about' element={<About />} />
-                <Route path='/contact' element={<Contact />} />
-                <Route path='/article/:title' element={<ArticleDetails />} />
-              </Route>
+        <Router>
+          <Routes>
+            <Route element={<MainLayout />}>
+              <Route path='/' element={<Home />} />
+              <Route path='/news' element={<News />} />
+              <Route path='/about' element={<About />} />
+              <Route path='/contact' element={<Contact />} />
+              <Route path='/article/:title' element={<ArticleDetails />} />
+            </Route>
 
-              <Route element={<AdminLayout />}>
-                <Route path='/admin' element={<AdminDashboard />} />
-              </Route>
-            </Routes>
-          </Router>
-        </MobileProvider>
+            <Route element={<AdminLayout />}>
+              <Route path='/admin' element={<AdminDashboard />} />
+            </Route>
+          </Routes>
+        </Router>
       </ThemeProvider>
     </>
   );

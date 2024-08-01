@@ -1,31 +1,17 @@
-// ContactUs.jsx
-import React from "react";
-import {
-  Container,
-  Grid,
-  Typography,
-  TextField,
-  Button,
-  Box,
-  FormControlLabel,
-  Checkbox,
-  Card,
-  CardActionArea,
-  CardMedia,
-  CardContent,
-} from "@mui/material";
-// import ContactUs from "../assets/ContactUs.png";
-import Aboutus from "../assets/Aboutus.json";
-import Lottie from "lottie-react";
-import { useMobile } from "../context/isMobileContext";
+import {Box, Container, Grid, Typography} from '@mui/material';
+import Lottie from 'lottie-react';
+
+import Aboutus from '../assets/Aboutus.json';
+import {useIsMobile} from '../hooks/useIsMobile';
+
 const About = () => {
-  const isMobile = useMobile();
+  const {isMobile} = useIsMobile();
   return (
-    <Container maxWidth="xl" sx={{ marginBottom:isMobile&& "5%",marginY:!isMobile && "2%" }}>
-      <Grid
-        container
-        style={{ flexWrap:isMobile ? "wrap" :'nowrap' }}
-      >
+    <Container
+      maxWidth='xl'
+      sx={{marginBottom: isMobile && '5%', marginY: !isMobile && '2%'}}
+    >
+      <Grid container style={{flexWrap: isMobile ? 'wrap' : 'nowrap'}}>
         {/* First Part with Image */}
         <Grid
           item
@@ -33,31 +19,31 @@ const About = () => {
           md={6}
           ml={2}
           sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
         >
           <Box>
             <Typography
-              variant={isMobile ? "h5" : "h3"}
+              variant={isMobile ? 'h5' : 'h3'}
               gutterBottom
               sx={{
                 fontWeight: 800,
-                textTransform: "uppercase",
-                fontStyle: "italic",
-                color:'#FC6A03'
+                textTransform: 'uppercase',
+                fontStyle: 'italic',
+                color: '#FC6A03',
               }}
             >
               About Us
             </Typography>
-            <Typography variant={isMobile ? "h6" : "h5"} gutterBottom>
+            <Typography variant={isMobile ? 'h6' : 'h5'} gutterBottom>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus,
               perferendis. Vel odit officia hic neque qui eum eos consequatur
               fugit suscipit in, illum atque! Dolor ratione labore eaque
               provident quibusdam?
             </Typography>
-            <Typography variant={isMobile ? "h6" : "h5"} gutterBottom>
+            <Typography variant={isMobile ? 'h6' : 'h5'} gutterBottom>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus,
               perferendis. Vel odit officia hic neque qui eum eos consequatur
               fugit suscipit in, illum atque! Dolor ratione labore eaque
@@ -73,9 +59,9 @@ const About = () => {
           xs={12}
           md={6}
           style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
         >
           <Lottie animationData={Aboutus} />

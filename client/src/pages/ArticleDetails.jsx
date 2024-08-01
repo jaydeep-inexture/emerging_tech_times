@@ -1,23 +1,21 @@
-// ArticleDetails.js
-import { Person } from "@mui/icons-material";
-import { Box, Chip, Grid, Typography } from "@mui/material";
-import React from "react";
-import { useLocation, useParams } from "react-router-dom";
-import { useMobile } from "../context/isMobileContext";
+import {Person} from '@mui/icons-material';
+import {Box, Chip, Grid, Typography} from '@mui/material';
+import {useLocation} from 'react-router-dom';
+
+import {useIsMobile} from '../hooks/useIsMobile';
 
 const ArticleDetails = () => {
-  const { title } = useParams();
   const location = useLocation();
   const article = location.state?.article;
-  const isMobile = useMobile();
+  const {isMobile} = useIsMobile();
 
   return (
     <>
       <Box
         sx={{
-          paddingX: "10%",
-          marginBottom: isMobile ? "10%" : "5%",
-          marginTop: "2%",
+          paddingX: '10%',
+          marginBottom: isMobile ? '10%' : '5%',
+          marginTop: '2%',
         }}
       >
         <Grid container spacing={5}>
@@ -26,29 +24,29 @@ const ArticleDetails = () => {
               <img
                 src={article.image}
                 alt={article.title}
-                style={{ width: "100%", height: "100%" }}
+                style={{width: '100%', height: '100%'}}
               />
             </Grid>
           )}
           <Grid item xs={12} sm={6}>
-            <Typography variant={isMobile ? "h4" : "h2"} fontWeight={800}>
+            <Typography variant={isMobile ? 'h4' : 'h2'} fontWeight={800}>
               {article.title}
             </Typography>
             <Box
               sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
                 my: 3,
               }}
             >
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                <Person sx={{ mr: 1 }} />
-                <Typography color="text.secondary" fontSize={20}>
+              <Box sx={{display: 'flex', alignItems: 'center'}}>
+                <Person sx={{mr: 1}} />
+                <Typography color='text.secondary' fontSize={20}>
                   {article.author} - {article.date}
                 </Typography>
               </Box>
-              <Chip label={article.category} variant="outlined" />
+              <Chip label={article.category} variant='outlined' />
             </Box>
             <Typography fontSize={20} mt={1}>
               Lorem ipsum dolor, sit amet consectetur adipisicing elit. At vero
@@ -68,11 +66,11 @@ const ArticleDetails = () => {
             <img
               src={article.image}
               alt={article.title}
-              style={{ width: "100%", height: "100%" }}
+              style={{width: '100%', height: '100%'}}
             />
           </Grid>
           <Grid item xs={12}>
-            <Typography variant="body1" fontSize={20}>
+            <Typography variant='body1' fontSize={20}>
               Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi
               earum id sint ratione, blanditiis rem delectus modi eaque omnis,
               nulla incidunt esse nesciunt quam, corporis dignissimos

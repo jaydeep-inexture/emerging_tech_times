@@ -1,28 +1,29 @@
-import React, {useEffect, useState} from 'react';
-import {Link} from 'react-router-dom';
+import Close from '@mui/icons-material/Close';
+import MenuIcon from '@mui/icons-material/Menu';
 import {
   Box,
+  Drawer,
   FormControl,
   IconButton,
-  MenuItem,
-  Select,
-  Typography,
-  Drawer,
   List,
   ListItem,
   ListItemText,
+  MenuItem,
+  Select,
+  Typography,
 } from '@mui/material';
-import Close from '@mui/icons-material/Close';
-import MenuIcon from '@mui/icons-material/Menu';
-import Login from '../components/Login';
-import {useMobile} from '../context/isMobileContext';
+import {useEffect, useState} from 'react';
+import {Link} from 'react-router-dom';
+
 import Emerging_Tech_Times_Logo from '../assets/Emerging_Tech_Times_Logo.png';
+import Login from '../components/Login';
+import {useIsMobile} from '../hooks/useIsMobile';
 
 const Nav = () => {
   const [language, setLanguage] = useState('ENG');
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [flag, setFlag] = useState(false);
-  const isMobile = useMobile();
+  const {isMobile} = useIsMobile();
   const [userName, setUserName] = useState('');
   const toggleDrawer = (open) => (event) => {
     if (
