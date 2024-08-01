@@ -9,8 +9,8 @@ import {
   Typography,
 } from '@mui/material';
 
-import ContactUs from '../assets/ContactUs.png';
-import { useIsMobile } from '../hooks/useIsMobile';
+import ContactUs from '@/assets/ContactUs.png';
+import {useIsMobile} from '@/hooks/useIsMobile';
 
 const Contact = () => {
   const {isMobile} = useIsMobile();

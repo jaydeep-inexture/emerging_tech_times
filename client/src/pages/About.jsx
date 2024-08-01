@@ -1,8 +1,8 @@
 import {Box, Container, Grid, Typography} from '@mui/material';
 import Lottie from 'lottie-react';
 
-import Aboutus from '../assets/Aboutus.json';
-import {useIsMobile} from '../hooks/useIsMobile';
+import Aboutus from '@/assets/Aboutus.json';
+import {useIsMobile} from '@/hooks/useIsMobile';
 
 const About = () => {
   const {isMobile} = useIsMobile();

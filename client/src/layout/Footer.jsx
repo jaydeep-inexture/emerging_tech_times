@@ -1,4 +1,4 @@
-import { Facebook, Instagram, Telegram, Twitter } from '@mui/icons-material';
+import {Facebook, Instagram, Telegram, Twitter} from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -9,8 +9,8 @@ import {
   Typography,
 } from '@mui/material';
 
-import White_Logo from '../assets/White_Logo.png';
-import { useIsMobile } from '../hooks/useIsMobile';
+import White_Logo from '@/assets/White_Logo.png';
+import {useIsMobile} from '@/hooks/useIsMobile';
 
 const Footer = () => {
   const {isMobile} = useIsMobile();

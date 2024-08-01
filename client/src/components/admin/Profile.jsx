@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import {
   Box,
   Button,
@@ -7,13 +8,13 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import User from '../../assets/user.png';
-import {useMobile} from '../../context/isMobileContext';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import {useState} from 'react';
+
+import User from '@/assets/user.png';
+import {useIsMobile} from '@/hooks/useIsMobile';
 
 const Profile = () => {
-  const isMobile = useMobile();
+  const {isMobile} = useIsMobile();
   const [formValues, setFormValues] = useState({
     username: '',
     email: '',

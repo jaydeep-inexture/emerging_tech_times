@@ -8,8 +8,8 @@ import {
   Grid,
   Typography,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { useIsMobile } from '../hooks/useIsMobile';
+import {useEffect, useState} from 'react';
+import {useIsMobile} from '@/hooks/useIsMobile';
 
 const NewsData = ({title}) => {
   const {isMobile} = useIsMobile();

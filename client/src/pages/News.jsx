@@ -2,7 +2,7 @@ import {TabContext, TabList, TabPanel} from '@mui/lab';
 import {Box, Tab} from '@mui/material';
 import {useState} from 'react';
 
-import {useIsMobile} from '../hooks/useIsMobile';
+import {useIsMobile} from '@/hooks/useIsMobile';
 import NewsData from './NewsData';
 
 const News = () => {

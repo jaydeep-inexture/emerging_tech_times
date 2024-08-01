@@ -7,7 +7,7 @@ import {
   Typography,
 } from '@mui/material';
 import {useNavigate} from 'react-router-dom';
-import {useIsMobile} from '../hooks/useIsMobile';
+import {useIsMobile} from '@/hooks/useIsMobile';
 
 const ArticleCard = ({image, title, author, date, description, category}) => {
   const {isMobile} = useIsMobile();

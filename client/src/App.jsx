@@ -1,8 +1,8 @@
 import {createTheme, ThemeProvider} from '@mui/material';
 import {Route, BrowserRouter as Router, Routes} from 'react-router-dom';
 
-import AdminLayout from './layout/AdminLayout';
-import MainLayout from './layout/MainLayout';
+import AdminLayout from '@/layout/AdminLayout';
+import MainLayout from '@/layout/MainLayout';
 import About from './pages/About';
 import ArticleDetails from './pages/ArticleDetails';
 import Contact from './pages/Contact';

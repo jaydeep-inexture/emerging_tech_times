@@ -1,5 +1,5 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react-swc'
+import {defineConfig} from 'vite';
+import react from '@vitejs/plugin-react-swc';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -7,6 +7,16 @@ export default defineConfig({
   server: {
     port: 5173,
     open: false,
-    host: '0.0.0.0'
-  }
-})
+    host: '0.0.0.0',
+  },
+  resolve: {
+    alias: {
+      '@': '/src',
+      '@/components': '/src/components',
+      '@/assets': '/src/assets',
+      '@/constants': '/src/constants',
+      '@/hooks': '/src/hooks',
+      '@/layout': '/src/layout',
+    },
+  },
+});

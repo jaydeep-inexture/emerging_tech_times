@@ -2,7 +2,7 @@ import {Person} from '@mui/icons-material';
 import {Box, Chip, Grid, Typography} from '@mui/material';
 import {useLocation} from 'react-router-dom';
 
-import {useIsMobile} from '../hooks/useIsMobile';
+import {useIsMobile} from '@/hooks/useIsMobile';
 
 const ArticleDetails = () => {
   const location = useLocation();

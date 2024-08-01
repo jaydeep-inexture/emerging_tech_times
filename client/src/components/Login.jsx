@@ -13,8 +13,8 @@ import {
 } from '@mui/material';
 import {useState} from 'react';
 
-import Emerging_Tech_Times_Logo from '../assets/Emerging_Tech_Times_Logo.png';
-import {useIsMobile} from '../hooks/useIsMobile';
+import Emerging_Tech_Times_Logo from '@/assets/Emerging_Tech_Times_Logo.png';
+import {useIsMobile} from '@/hooks/useIsMobile';
 
 const Login = ({setFlag, userName, setUserName}) => {
   const {isMobile} = useIsMobile();

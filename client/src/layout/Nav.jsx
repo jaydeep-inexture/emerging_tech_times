@@ -15,9 +15,9 @@ import {
 import {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 
-import Emerging_Tech_Times_Logo from '../assets/Emerging_Tech_Times_Logo.png';
-import Login from '../components/Login';
-import {useIsMobile} from '../hooks/useIsMobile';
+import Emerging_Tech_Times_Logo from '@/assets/Emerging_Tech_Times_Logo.png';
+import Login from '@/components/Login';
+import {useIsMobile} from '@/hooks/useIsMobile';
 
 const Nav = () => {
   const [language, setLanguage] = useState('ENG');

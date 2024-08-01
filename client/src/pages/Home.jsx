@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import {Link} from 'react-router-dom';
 
-import {useIsMobile} from '../hooks/useIsMobile';
+import {useIsMobile} from '@/hooks/useIsMobile';
 import ArticleCard from './ArticleCard';
 
 const Home = () => {
