@@ -9,7 +9,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import ClearIcon from '@mui/icons-material/Clear';
 import AdminPanelSettings from '@mui/icons-material/AdminPanelSettings';
-import {IconButton} from '@mui/material';
+import {Box, IconButton, Typography} from '@mui/material';
 
 const StyledTableCell = styled(TableCell)(({theme}) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -48,39 +48,44 @@ const rows = [
 
 export default function UsersTable() {
   return (
-    <TableContainer component={Paper} sx={{mt: 8}}>
-      <Table sx={{minWidth: 700}} aria-label='customized table'>
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>Id</StyledTableCell>
-            <StyledTableCell>Email</StyledTableCell>
-            <StyledTableCell align='right'>Username</StyledTableCell>
-            <StyledTableCell align='right'>IsAdmin</StyledTableCell>
-            <StyledTableCell align='right'>Change</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <StyledTableRow key={row.id}>
-              <StyledTableCell align='row'>{row.id}</StyledTableCell>
-              <StyledTableCell scope='row'>{row.email}</StyledTableCell>
-              <StyledTableCell align='right'>{row.username}</StyledTableCell>
-              <StyledTableCell align='right'>
-                {row.isAdmin ? (
-                  <CheckIcon color='success' />
-                ) : (
-                  <ClearIcon color='info' />
-                )}
-              </StyledTableCell>
-              <StyledTableCell align='right'>
-                <IconButton>
-                  <AdminPanelSettings sx={{color: '#0F172A'}} />
-                </IconButton>
-              </StyledTableCell>
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <Box sx={{p: 2}}>
+      <Typography variant='h4' gutterBottom>
+        Users
+      </Typography>
+      <TableContainer component={Paper} sx={{mt: 8}}>
+        <Table sx={{minWidth: 700}} aria-label='customized table'>
+          <TableHead>
+            <TableRow>
+              <StyledTableCell>Id</StyledTableCell>
+              <StyledTableCell>Email</StyledTableCell>
+              <StyledTableCell align='right'>Username</StyledTableCell>
+              <StyledTableCell align='right'>IsAdmin</StyledTableCell>
+              <StyledTableCell align='right'>Change</StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <StyledTableRow key={row.id}>
+                <StyledTableCell align='row'>{row.id}</StyledTableCell>
+                <StyledTableCell scope='row'>{row.email}</StyledTableCell>
+                <StyledTableCell align='right'>{row.username}</StyledTableCell>
+                <StyledTableCell align='right'>
+                  {row.isAdmin ? (
+                    <CheckIcon color='success' />
+                  ) : (
+                    <ClearIcon color='info' />
+                  )}
+                </StyledTableCell>
+                <StyledTableCell align='right'>
+                  <IconButton>
+                    <AdminPanelSettings sx={{color: '#0F172A'}} />
+                  </IconButton>
+                </StyledTableCell>
+              </StyledTableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
   );
 }

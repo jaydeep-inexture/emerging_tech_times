@@ -1,13 +1,16 @@
-import React, {useState} from 'react';
+import {Add, Article, Group, Person} from '@mui/icons-material';
 import Box from '@mui/material/Box';
-import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
 import {styled} from '@mui/material/styles';
+import {useState} from 'react';
+import {Link} from 'react-router-dom';
 
-import Posts from '../../components/admin/Posts';
-import Profile from '../../components/admin/Profile';
-import UsersTable from '../../components/admin/UsersTable';
-import PostForm from '../../components/admin/NewsForm';
+import WhiteLogo from '@/assets/White_Logo.png';
+import PostForm from '@/components/admin/PostForm';
+import Posts from '@/components/admin/Posts';
+import Profile from '@/components/admin/Profile';
+import UsersTable from '@/components/admin/UsersTable';
 
 const drawerWidth = 240;
 
@@ -31,12 +34,14 @@ const Sidebar = styled(Box)(({theme}) => ({
   flexDirection: 'column',
 }));
 
+const Logo = styled('img')(({theme}) => ({
+  width: '80%',
+  height: 'auto',
+  margin: '16px auto',
+}));
+
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState(0);
-
-  const handleTabChange = (event, newValue) => {
-    setActiveTab(newValue);
-  };
 
   let content;
 
@@ -45,7 +50,7 @@ const AdminDashboard = () => {
       content = <Profile />;
       break;
     case 1:
-      content = <Posts />;
+      content = <Posts setActiveTab={setActiveTab} />;
       break;
     case 2:
       content = <PostForm />;
@@ -60,15 +65,20 @@ const AdminDashboard = () => {
   return (
     <Box sx={{display: 'flex'}}>
       <Sidebar>
+        <Link style={{display: 'flex'}} to='/'>
+          <Logo src={WhiteLogo} alt='Logo' />
+        </Link>
         <Tabs
           orientation='vertical'
           value={activeTab}
-          onChange={handleTabChange}
+          onChange={(e, value) => setActiveTab(value)}
           textColor='inherit'
           indicatorColor='secondary'
           aria-label='Vertical tabs example'
           sx={{
             '& .MuiTab-root': {
+              justifyContent: 'start',
+              gap: 2,
               color: '#fff',
               '&.Mui-selected': {
                 backgroundColor: '#1e293b',
@@ -76,13 +86,13 @@ const AdminDashboard = () => {
             },
           }}
         >
-          <Tab label='Profile' />
-          <Tab label='Posts' />
-          <Tab label='Create Post' />
-          <Tab label='Users' />
+          <Tab label='profile' icon={<Person />} iconPosition='start' />
+          <Tab label='posts' icon={<Article />} iconPosition='start' />
+          <Tab label='create post' icon={<Add />} iconPosition='start' />
+          <Tab label='users' icon={<Group />} iconPosition='start' />
         </Tabs>
       </Sidebar>
-      <Main>{content}</Main>
+      <Main sx={{height: '100vh'}}>{content}</Main>
     </Box>
   );
 };
