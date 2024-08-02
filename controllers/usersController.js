@@ -3,10 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const User = require('../models/User');
-const {
-  generateRefreshToken,
-  generateAccessToken,
-} = require('../helpers/utils');
+const {generateRefreshToken, generateAccessToken} = require('../helpers/utils');
 
 exports.getLoggedInUser = async (req, res, next) => {
   try {
@@ -20,6 +17,18 @@ exports.getLoggedInUser = async (req, res, next) => {
   }
 };
 
+exports.updateUser = async (req, res, next) => {
+  const {username} = req.body;
+
+  try {
+    await User.findOneAndUpdate({_id: req.user}, {username});
+
+    res.status(200).json({msg: 'User updated successfully.'});
+  } catch (err) {
+    next(err);
+  }
+};
+
 exports.registerUser = async (req, res, next) => {
   const errors = validationResult(req);
 
@@ -27,7 +36,7 @@ exports.registerUser = async (req, res, next) => {
     return res.status(400).json({errors: errors.array()});
   }
 
-  const {email, password, confirmPassword, isAdmin} = req.body;
+  const {email, password, username, confirmPassword, isAdmin} = req.body;
 
   if (password !== confirmPassword) {
     return res.status(400).json({
@@ -50,6 +59,7 @@ exports.registerUser = async (req, res, next) => {
     user = new User({
       email,
       password: hashedPassword,
+      username,
       isAdmin,
     });
 
@@ -139,6 +149,33 @@ exports.refreshToken = async (req, res, next) => {
       accessToken,
       refreshToken: newRefreshToken,
     });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// *********** Admin routes ***************//
+exports.getAllUsers = async (req, res, next) => {
+  try {
+    const users = await User.find().select({password: 0, refreshToken: 0});
+    res.status(200).json(users);
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.grantAdminAccess = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({msg: 'User not found'});
+    }
+
+    user.isAdmin = !user.isAdmin;
+    await user.save();
+
+    res.status(200).json({msg: 'User updated successfully.'});
   } catch (err) {
     next(err);
   }

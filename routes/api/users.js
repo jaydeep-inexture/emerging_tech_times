@@ -4,11 +4,17 @@ const {check} = require('express-validator');
 
 const userController = require('../../controllers/usersController');
 const auth = require('../../middleware/auth');
+const isAdmin = require('../../middleware/isAdmin');
 
 // @route   GET /api/users/me
 // @desc    Get logged in user
 // @access  Private
 router.get('/me', auth, userController.getLoggedInUser);
+
+// @route   PUT /api/users
+// @desc    Update user
+// @access  Private
+router.put('/', auth, userController.updateUser);
 
 // @route   POST /api/users/register
 // @desc    Register the users
@@ -46,5 +52,17 @@ router.post(
   [check('token', 'Refresh token is required').notEmpty()],
   userController.refreshToken,
 );
+
+// ************  Admin routes  ************//
+
+// @route   GET /api/users/admin
+// @desc    Grant the user admin access
+// @access  Private
+router.patch('/:id', auth, isAdmin, userController.grantAdminAccess);
+
+// @route   GET /api/users
+// @desc    Get all users
+// @access  Private
+router.get('/', auth, isAdmin, userController.getAllUsers);
 
 module.exports = router;
