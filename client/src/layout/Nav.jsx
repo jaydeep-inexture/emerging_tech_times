@@ -108,7 +108,6 @@ const Nav = () => {
     </>
   );
 
-  console.log(userName.length);
   return (
     <>
       <Box
@@ -192,7 +191,7 @@ const Nav = () => {
                 <Button onClick={() => setUserName("")}>
                   <LogoutIcon sx={{fontSize:'30px',color:'gray'}}/>
                 </Button>
-              )}  
+              )}
             </>
           )}
           {isMobile && (

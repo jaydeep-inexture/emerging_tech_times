@@ -1,7 +1,8 @@
 
+import CommonDialog from '@/common/CommonDialog';
+import { useIsMobile } from "@/hooks/useIsMobile";
+import { Box, Button } from '@mui/material';
 import { useState } from "react";
-import { useIsMobile } from "../hooks/useIsMobile";
-import CommonDialog from "./common/CommonDialog";
 
 const Login = ({ setFlag, userName, setUserName }) => {
   const { isMobile } = useIsMobile();

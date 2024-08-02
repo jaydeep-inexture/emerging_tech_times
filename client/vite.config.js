@@ -1,7 +1,6 @@
 import {defineConfig} from 'vite';
 import react from '@vitejs/plugin-react-swc';
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   server: {
@@ -18,6 +17,7 @@ export default defineConfig({
       '@/hooks': '/src/hooks',
       '@/layout': '/src/layout',
       '@/helpers': '/src/helpers',
+      '@/common': '/src/common',
     },
   },
 });
