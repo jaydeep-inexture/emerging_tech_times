@@ -1,7 +1,9 @@
-import Close from '@mui/icons-material/Close';
-import MenuIcon from '@mui/icons-material/Menu';
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+
 import {
   Box,
+  Button,
   Drawer,
   FormControl,
   IconButton,
@@ -11,24 +13,26 @@ import {
   MenuItem,
   Select,
   Typography,
-} from '@mui/material';
-import {useEffect, useState} from 'react';
-import {Link} from 'react-router-dom';
+} from "@mui/material";
+
+import Close from "@mui/icons-material/Close";
+import LogoutIcon from "@mui/icons-material/Logout";
+import MenuIcon from "@mui/icons-material/Menu";
 
 import Emerging_Tech_Times_Logo from '@/assets/Emerging_Tech_Times_Logo.png';
 import Login from '@/components/Login';
 import {useIsMobile} from '@/hooks/useIsMobile';
 
 const Nav = () => {
-  const [language, setLanguage] = useState('ENG');
+  const [language, setLanguage] = useState("ENG");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [flag, setFlag] = useState(false);
-  const {isMobile} = useIsMobile();
-  const [userName, setUserName] = useState('');
+  const { isMobile } = useIsMobile();
+  const [userName, setUserName] = useState("");
   const toggleDrawer = (open) => (event) => {
     if (
-      event.type === 'keydown' &&
-      (event.key === 'Tab' || event.key === 'Shift')
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
     ) {
       return;
     }
@@ -46,49 +50,49 @@ const Nav = () => {
       <Box
         sx={{
           width: 320,
-          height: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
+          height: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
         }}
       >
         <Box>
           <Close
-            sx={{position: 'absolute', right: 10, top: 10}}
+            sx={{ position: "absolute", right: 10, top: 10 }}
             onClick={toggleDrawer(false)}
           />
-          <List sx={{mt: 4, textTransform: 'uppercase'}}>
+          <List sx={{ mt: 4, textTransform: "uppercase" }}>
             <ListItem
               component={Link}
-              to='/'
-              sx={{fontStyle: 'italic', color: '#0F172A', fontSize: '20px'}}
+              to="/"
+              sx={{ fontStyle: "italic", color: "#0F172A", fontSize: "20px" }}
               onClick={toggleDrawer(false)} // Ensure the drawer closes on navigation
             >
-              <ListItemText primary='Home' />
+              <ListItemText primary="Home" />
             </ListItem>
             <ListItem
               component={Link}
-              to='/about'
-              sx={{fontStyle: 'italic', color: '#0F172A', fontSize: '20px'}}
+              to="/about"
+              sx={{ fontStyle: "italic", color: "#0F172A", fontSize: "20px" }}
               onClick={toggleDrawer(false)} // Ensure the drawer closes on navigation
             >
-              <ListItemText primary='About Us' />
+              <ListItemText primary="About Us" />
             </ListItem>
             <ListItem
               component={Link}
-              to='/news'
-              sx={{fontStyle: 'italic', color: '#0F172A', fontSize: '20px'}}
+              to="/news"
+              sx={{ fontStyle: "italic", color: "#0F172A", fontSize: "20px" }}
               onClick={toggleDrawer(false)} // Ensure the drawer closes on navigation
             >
-              <ListItemText primary='News' />
+              <ListItemText primary="News" />
             </ListItem>
             <ListItem
               component={Link}
-              to='/contact'
-              sx={{fontStyle: 'italic', color: '#0F172A', fontSize: '20px'}}
+              to="/contact"
+              sx={{ fontStyle: "italic", color: "#0F172A", fontSize: "20px" }}
               onClick={toggleDrawer(false)} // Ensure the drawer closes on navigation
             >
-              <ListItemText primary='Contact' />
+              <ListItemText primary="Contact" />
             </ListItem>
           </List>
         </Box>
@@ -97,62 +101,63 @@ const Nav = () => {
             setFlag={setFlag}
             userName={userName}
             setUserName={setUserName}
-          />{' '}
+          />{" "}
           {/* Pass setFlag to Login */}
         </Box>
       </Box>
     </>
   );
 
+  console.log(userName.length);
   return (
     <>
       <Box
         sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: isMobile ? '10px 7% 10px 5%' : '20px 10%',
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: isMobile ? "10px 7% 10px 5%" : "20px 10%",
         }}
       >
-        <Box sx={{display: 'flex', alignItems: 'center'}}>
-          <Link to='/'>
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Link to="/">
             {isMobile ? (
               <img
                 src={Emerging_Tech_Times_Logo}
-                alt='Emerging_Tech_Times_Logo'
-                style={{width: '170px', height: 'auto', margin: '10px'}}
+                alt="Emerging_Tech_Times_Logo"
+                style={{ width: "170px", height: "auto", margin: "10px" }}
               />
             ) : (
               <img
                 src={Emerging_Tech_Times_Logo}
-                alt='Emerging_Tech_Times_Logo'
-                style={{width: '200px', height: 'auto'}}
+                alt="Emerging_Tech_Times_Logo"
+                style={{ width: "200px", height: "auto" }}
               />
             )}
           </Link>
           {!isMobile && (
             <>
               <Link
-                to='/about'
-                style={{textDecoration: 'none', marginLeft: '70px'}}
+                to="/about"
+                style={{ textDecoration: "none", marginLeft: "70px" }}
               >
-                <Typography variant='h6' sx={{color: 'black'}}>
+                <Typography variant="h6" sx={{ color: "black" }}>
                   About Us
                 </Typography>
               </Link>
               <Link
-                to='/news'
-                style={{textDecoration: 'none', marginLeft: '70px'}}
+                to="/news"
+                style={{ textDecoration: "none", marginLeft: "70px" }}
               >
-                <Typography variant='h6' sx={{color: 'black'}}>
+                <Typography variant="h6" sx={{ color: "black" }}>
                   News
                 </Typography>
               </Link>
               <Link
-                to='/contact'
-                style={{textDecoration: 'none', marginLeft: '70px'}}
+                to="/contact"
+                style={{ textDecoration: "none", marginLeft: "70px" }}
               >
-                <Typography variant='h6' sx={{color: 'black'}}>
+                <Typography variant="h6" sx={{ color: "black" }}>
                   Contact
                 </Typography>
               </Link>
@@ -161,21 +166,21 @@ const Nav = () => {
         </Box>
         <Box
           sx={{
-            display: 'flex',
-            alignItems: 'center',
+            display: "flex",
+            alignItems: "center",
           }}
         >
           {!isMobile && (
             <>
-              <FormControl sx={{minWidth: 70}}>
+              <FormControl sx={{ minWidth: 70 }}>
                 <Select
-                  id='demo-select-small'
+                  id="demo-select-small"
                   value={language}
                   onChange={(event) => setLanguage(event.target.value)}
-                  size='small'
+                  size="small"
                 >
-                  <MenuItem value={'ENG'}>EN</MenuItem>
-                  <MenuItem value={'HIN'}>HIN</MenuItem>
+                  <MenuItem value={"ENG"}>EN</MenuItem>
+                  <MenuItem value={"HIN"}>HIN</MenuItem>
                 </Select>
               </FormControl>
               <Login
@@ -183,13 +188,18 @@ const Nav = () => {
                 userName={userName}
                 setUserName={setUserName}
               />
+              {userName.length > 0 && (
+                <Button onClick={() => setUserName("")}>
+                  <LogoutIcon sx={{fontSize:'30px',color:'gray'}}/>
+                </Button>
+              )}  
             </>
           )}
           {isMobile && (
             <IconButton
-              edge='end'
-              color='inherit'
-              aria-label='menu'
+              edge="end"
+              color="inherit"
+              aria-label="menu"
               onClick={toggleDrawer(true)}
             >
               <MenuIcon />
@@ -197,7 +207,7 @@ const Nav = () => {
           )}
         </Box>
       </Box>
-      <Drawer anchor='right' open={drawerOpen} onClose={toggleDrawer(false)}>
+      <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
         {drawerList}
       </Drawer>
     </>

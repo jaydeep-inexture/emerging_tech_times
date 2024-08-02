@@ -1,5 +1,7 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import { useState } from 'react';
+
 import {
   Box,
   Button,
@@ -16,9 +18,10 @@ import {
   Typography,
 } from '@mui/material';
 import axios from 'axios';
-import {useEffect, useState} from 'react';
+import { useEffect } from 'react';
 
-import {env} from '@/helpers/env';
+
+import { env } from '@/helpers/env';
 
 const Posts = ({setActiveTab}) => {
   const [openDialog, setOpenDialog] = useState(false);
