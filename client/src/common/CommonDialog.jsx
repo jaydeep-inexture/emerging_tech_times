@@ -47,7 +47,7 @@ const CommonDialog = ({
               position: 'relative',
               padding: !isMobile && '16px',
               width: isMobile ? '100%' : '490px',
-              height: isLogin ? '400px' : '530px',
+              height: isLogin ? '400px' : '550px',
               borderRadius: '10px',
               background: '#FFFFFF ',
             }}
@@ -73,7 +73,7 @@ const CommonDialog = ({
                 <img
                   src={Emerging_Tech_Times_Logo}
                   alt='Emerging_Tech_Times_Logo'
-                  style={{width: '130px', height: '50px', marginTop: 10}}
+                  style={{width: '180px', height: '50px', marginTop: 10}}
                 />
               </Box>
             </DialogTitle>
@@ -91,6 +91,7 @@ const CommonDialog = ({
                   autoFocus
                   value={data?.username}
                   onChange={handleFormChange}
+                  required
                   sx={{
                     marginTop: '10px',
                     borderRadius: '8px',
@@ -134,6 +135,7 @@ const CommonDialog = ({
                 autoComplete='off'
                 value={data.email}
                 onChange={handleFormChange}
+                required
                 sx={{
                   marginTop: '25px',
                   borderRadius: '8px',
@@ -176,6 +178,7 @@ const CommonDialog = ({
                 autoComplete='off'
                 value={data?.password}
                 onChange={handleFormChange}
+                required
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position='end'>
@@ -231,6 +234,7 @@ const CommonDialog = ({
                   autoComplete='off'
                   value={data?.cpassword}
                   onChange={handleFormChange}
+                  required
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position='end'>

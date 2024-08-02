@@ -9,6 +9,7 @@ import Contact from './pages/Contact';
 import Home from './pages/Home';
 import News from './pages/News';
 import AdminDashboard from './pages/admin/AdminDashboard';
+import Profile from './pages/Profile';
 
 const theme = createTheme({
   palette: {
@@ -29,6 +30,7 @@ const App = () => {
               <Route path='/about' element={<About />} />
               <Route path='/contact' element={<Contact />} />
               <Route path='/article/:title' element={<ArticleDetails />} />
+              <Route path="/profile" element={<Profile />} />
             </Route>
 
             <Route element={<AdminLayout />}>

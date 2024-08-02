@@ -188,9 +188,9 @@ const Nav = () => {
                 setUserName={setUserName}
               />
               {userName.length > 0 && (
-                <Button onClick={() => setUserName("")}>
+                <IconButton onClick={() => setUserName("")} sx={{ml:2}}>
                   <LogoutIcon sx={{fontSize:'30px',color:'gray'}}/>
-                </Button>
+                </IconButton>
               )}
             </>
           )}

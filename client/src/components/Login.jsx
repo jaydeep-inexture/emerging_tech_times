@@ -1,8 +1,10 @@
-
-import CommonDialog from '@/common/CommonDialog';
-import { useIsMobile } from "@/hooks/useIsMobile";
-import { Box, Button } from '@mui/material';
 import { useState } from "react";
+
+import { Box, Button } from "@mui/material";
+import PersonIcon from "@mui/icons-material/Person";
+import { useIsMobile } from "@/hooks/useIsMobile";
+import CommonDialog from "@/common/CommonDialog";
+import { Link } from "react-router-dom";
 
 const Login = ({ setFlag, userName, setUserName }) => {
   const { isMobile } = useIsMobile();
@@ -50,10 +52,11 @@ const Login = ({ setFlag, userName, setUserName }) => {
 
   const handleLoginSubmit = (event) => {
     event.preventDefault();
-    setUserName(JSON.parse(localStorage.getItem("SignupFormData")).username.slice(0, 1));
+    setUserName(
+      JSON.parse(localStorage.getItem("SignupFormData")).username.slice(0, 5)
+    );
     handleLoginClose();
   };
-
 
   const handleSignupFormChange = (event) => {
     const { name, value, type, checked } = event.target;
@@ -88,21 +91,21 @@ const Login = ({ setFlag, userName, setUserName }) => {
   return (
     <>
       {userName ? (
-        <Button
-          sx={{
-            width: "50px",
-            background: "#ff851b",
-            padding: "15px",
-            borderRadius: "50%",
-            color: "white",
-            fontSize: "15px",
-            fontWeight: 800,
-            marginLeft: "20px",
-            ":hover": { background: "#ff851b" },
-          }}
-        >
-          {userName}
-        </Button>
+        <Link to="/profile">
+          <Button
+            variant="outlined"
+            startIcon={<PersonIcon sx={{ fontSize: "15px" }} />}
+            sx={{
+              ml: 3,
+              p: 2,
+              background: "#f5f5f5",
+              fontWeight: 800,
+              fontSize: "15px",
+            }}
+          >
+            {userName}
+          </Button>
+        </Link>
       ) : isMobile ? (
         <Box
           sx={{
@@ -198,7 +201,7 @@ const Login = ({ setFlag, userName, setUserName }) => {
           buttonText={"Sign In"}
           alternateText={"Dont have an account? Sign up "}
         />
-      ) :(
+      ) : (
         <CommonDialog
           open={signupBtnOpen}
           data={signUpFormData}
@@ -212,8 +215,7 @@ const Login = ({ setFlag, userName, setUserName }) => {
           buttonText={"Sign up"}
           alternateText={"Already have an account? Sign in"}
         />
-      )
-    }
+      )}
     </>
   );
 };
