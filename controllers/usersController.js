@@ -72,9 +72,8 @@ exports.registerUser = async (req, res, next) => {
     await user.save();
 
     res.status(201).json({
+      user: {email, accessToken, refreshToken},
       msg: 'Signed up successfully.',
-      accessToken,
-      refreshToken,
     });
   } catch (error) {
     next(error);

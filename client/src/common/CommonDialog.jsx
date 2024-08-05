@@ -114,9 +114,9 @@ const CommonDialog = ({
               <CustomTextField
                 label='Confirm Password'
                 placeholder='Confirm Your Password'
-                name='cpassword'
+                name='confirmPassword'
                 type='password'
-                value={data?.cpassword}
+                value={data?.confirmPassword}
                 onChange={handleFormChange}
                 showPassword={showPassword}
                 setShowPassword={setShowPassword}

@@ -1,16 +1,22 @@
-import { useState } from "react";
+import {useState} from 'react';
 
-import { Box, Button } from "@mui/material";
-import PersonIcon from "@mui/icons-material/Person";
-import { useIsMobile } from "@/hooks/useIsMobile";
-import CommonDialog from "@/common/CommonDialog";
-import { Link } from "react-router-dom";
+import PersonIcon from '@mui/icons-material/Person';
+import {Box, Button} from '@mui/material';
+import {unwrapResult} from '@reduxjs/toolkit';
+import {useDispatch} from 'react-redux';
+import {Link} from 'react-router-dom';
 
-const Login = ({ setFlag, userName, setUserName }) => {
-  const { isMobile } = useIsMobile();
+import CommonDialog from '@/common/CommonDialog';
+import NotificationSnackbar from '@/common/NotificationSnackbar';
+import {useIsMobile} from '@/hooks/useIsMobile';
+import {signupUser} from '@/redux/user/userSlice';
+
+const Login = ({setFlag, userName, setUserName}) => {
+  const {isMobile} = useIsMobile();
+  const dispatch = useDispatch();
+
   const [loginBtnOpen, setLoginBtnOpen] = useState(false);
   const [signupBtnOpen, setSignupBtnOpen] = useState(false);
-
   const [showPassword, setShowPassword] = useState(false);
 
   const [signUpFormData, setSignUpFormData] = useState({
@@ -19,6 +25,7 @@ const Login = ({ setFlag, userName, setUserName }) => {
     password: "",
     cpassword: "",
   });
+
   const [loginFormData, setLoginFormData] = useState({
     email: "",
     password: "",
@@ -66,15 +73,17 @@ const Login = ({ setFlag, userName, setUserName }) => {
     });
   };
 
-  const handleSignupSubmit = (event) => {
+  const handleSignupSubmit = async (event) => {
     event.preventDefault();
-    if (signUpFormData.password === signUpFormData.cpassword) {
-      localStorage.setItem("SignupFormData", JSON.stringify(signUpFormData));
+
+    try {
+      const resultAction = await dispatch(signupUser(signUpFormData));
+      unwrapResult(resultAction);
       handleSignUpClose();
       handleLoginOpen();
-    } else {
-      // Handle the case where passwords do not match
-      alert("Password and Confirm Password doesn't match");
+    } catch (error) {
+      // Error handling is done in Redux
+      console.log(error);
     }
   };
 
@@ -88,8 +97,11 @@ const Login = ({ setFlag, userName, setUserName }) => {
       setSignupBtnOpen(false);
     }
   };
+
   return (
     <>
+      <NotificationSnackbar />
+
       {userName ? (
         <Link to="/profile">
           <Button
@@ -219,4 +231,5 @@ const Login = ({ setFlag, userName, setUserName }) => {
     </>
   );
 };
+
 export default Login;

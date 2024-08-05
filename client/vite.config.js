@@ -18,6 +18,7 @@ export default defineConfig({
       '@/layout': '/src/layout',
       '@/helpers': '/src/helpers',
       '@/common': '/src/common',
+      '@/redux': '/src/redux',
     },
   },
 });
