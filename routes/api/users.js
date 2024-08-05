@@ -56,7 +56,7 @@ router.post(
 // @route   POST /api/users/logout
 // @desc    Logout the user
 // @access  Private
-router.post('/logout', userController.logout);
+router.post('/logout', auth, userController.logout);
 
 // ************  Admin routes  ************//
 

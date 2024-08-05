@@ -55,3 +55,13 @@ export const logout = async () => {
 
   return response.data;
 };
+
+export const updateUser = async (userData) => {
+  const response = await axios.put(`${env.API_URL}/users`, userData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.data;
+};

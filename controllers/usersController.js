@@ -21,7 +21,15 @@ exports.updateUser = async (req, res, next) => {
   const {username} = req.body;
 
   try {
-    await User.findOneAndUpdate({_id: req.user}, {username});
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: req.user },
+      { username },
+      { new: true },
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ msg: "User not found." });
+    }
 
     res.status(200).json({msg: 'User updated successfully.'});
   } catch (err) {
