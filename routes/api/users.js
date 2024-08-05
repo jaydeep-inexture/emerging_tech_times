@@ -53,6 +53,11 @@ router.post(
   userController.refreshToken,
 );
 
+// @route   POST /api/users/logout
+// @desc    Logout the user
+// @access  Private
+router.post('/logout', userController.logout);
+
 // ************  Admin routes  ************//
 
 // @route   GET /api/users/admin

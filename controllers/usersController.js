@@ -155,6 +155,19 @@ exports.refreshToken = async (req, res, next) => {
   }
 };
 
+exports.logout = async (req, res, next) => {
+  try {
+    await User.findOneAndUpdate(
+      { _id: req.user },
+      { accessToken: null, refreshToken: null },
+    );
+
+    res.status(200).json({ msg: 'Logged out successfully.' });
+  } catch (err) {
+    next(err);
+  }
+};
+
 // *********** Admin routes ***************//
 exports.getAllUsers = async (req, res, next) => {
   try {

@@ -1,4 +1,4 @@
-import { signup, login, loadUser } from "@/helpers/api";
+import { signup, login, loadUser, logout } from "@/helpers/api";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const signupUser = createAsyncThunk(
@@ -30,6 +30,18 @@ export const loadLoggedInUser = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await loadUser();
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.response?.data);
+    }
+  },
+);
+
+export const logoutUser = createAsyncThunk(
+  "user/logout",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await logout();
       return response;
     } catch (error) {
       return rejectWithValue(error.response?.data);
@@ -113,6 +125,27 @@ const userSlice = createSlice({
         state.user = action.payload;
       })
       .addCase(loadLoggedInUser.rejected, (state, action) => {
+        state.loading = false;
+        state.errorMsg =
+          action.payload?.msg ||
+          action.payload?.errors?.[0]?.msg ||
+          "An error occurred";
+        state.successMsg = null;
+      });
+    builder
+      .addCase(logoutUser.pending, (state) => {
+        state.loading = true;
+        state.errorMsg = null;
+        state.successMsg = null;
+      })
+      .addCase(logoutUser.fulfilled, (state, action) => {
+        localStorage.removeItem("user");
+
+        state.loading = false;
+        state.user = null;
+        state.successMsg = action.payload.msg;
+      })
+      .addCase(logoutUser.rejected, (state, action) => {
         state.loading = false;
         state.errorMsg =
           action.payload?.msg ||

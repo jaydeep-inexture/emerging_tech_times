@@ -1,23 +1,26 @@
 import { useState } from "react";
 
+import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
 import { Box, Button, IconButton } from "@mui/material";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
-import LogoutIcon from "@mui/icons-material/Logout";
 import { Link } from "react-router-dom";
 
 import CommonDialog from "@/common/CommonDialog";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { signupUser } from "@/redux/user/userSlice";
-import { loadLoggedInUser, loginUser } from "../redux/user/userSlice";
+import {
+  loadLoggedInUser,
+  loginUser,
+  logoutUser,
+  signupUser,
+} from "@/redux/user/userSlice";
 
 const Login = ({ setFlag }) => {
   const { isMobile } = useIsMobile();
   const dispatch = useDispatch();
 
-  const user = useSelector((state) => state.user.user);
-  console.log({ user });
+  const { user } = useSelector((state) => state.user);
 
   const [loginBtnOpen, setLoginBtnOpen] = useState(false);
   const [signupBtnOpen, setSignupBtnOpen] = useState(false);
@@ -116,13 +119,17 @@ const Login = ({ setFlag }) => {
             startIcon={<PersonIcon />}
             sx={{
               ml: 3,
-              p: 2,
-              background: "#f5f5f5",
+              border: 0,
               fontWeight: 800,
-              fontSize: "15px",
+              fontSize: "18px",
               textTransform: "none",
+              "&:hover": {
+                border: 0,
+                backgroundColor: "transparent",
+              },
+
               "& .MuiButton-startIcon": {
-                margin: user.username ? 0 : "",
+                margin: user.username ? "" : 0,
               },
             }}
           >
@@ -209,7 +216,11 @@ const Login = ({ setFlag }) => {
         </>
       )}
       {user && (
-        <IconButton className="logout" sx={{ ml: 2 }}>
+        <IconButton
+          onClick={() => dispatch(logoutUser())}
+          className="logout"
+          sx={{ ml: 2 }}
+        >
           <LogoutIcon sx={{ fontSize: "30px", color: "gray" }} />
         </IconButton>
       )}
