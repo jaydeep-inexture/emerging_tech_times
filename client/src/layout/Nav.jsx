@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
+import Close from "@mui/icons-material/Close";
+import MenuIcon from "@mui/icons-material/Menu";
 import {
   Box,
-  Button,
   Drawer,
   FormControl,
   IconButton,
@@ -15,21 +17,28 @@ import {
   Typography,
 } from "@mui/material";
 
-import Close from "@mui/icons-material/Close";
-import LogoutIcon from "@mui/icons-material/Logout";
-import MenuIcon from "@mui/icons-material/Menu";
-
-import Emerging_Tech_Times_Logo from '@/assets/Emerging_Tech_Times_Logo.png';
-import Login from '@/components/Login';
-import {useIsMobile} from '@/hooks/useIsMobile';
+import Emerging_Tech_Times_Logo from "@/assets/Emerging_Tech_Times_Logo.png";
+import NotificationSnackbar from "@/common/NotificationSnackbar";
+import Login from "@/components/Login";
+import { useIsMobile } from "@/hooks/useIsMobile";
+import { loadLoggedInUser } from "@/redux/user/userSlice";
 
 const Nav = () => {
+  const { isMobile } = useIsMobile();
+  const dispatch = useDispatch();
+
   const [language, setLanguage] = useState("ENG");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [flag, setFlag] = useState(false);
-  const { isMobile } = useIsMobile();
-  const [userName, setUserName] = useState("");
-  
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    if (user) {
+      dispatch(loadLoggedInUser());
+    }
+  }, []);
+
   const toggleDrawer = (open) => (event) => {
     if (
       event.type === "keydown" &&
@@ -98,11 +107,7 @@ const Nav = () => {
           </List>
         </Box>
         <Box>
-          <Login
-            setFlag={setFlag}
-            userName={userName}
-            setUserName={setUserName}
-          />
+          <Login setFlag={setFlag} />
         </Box>
       </Box>
     </>
@@ -110,6 +115,7 @@ const Nav = () => {
 
   return (
     <>
+      <NotificationSnackbar />
       <Box
         sx={{
           display: "flex",
@@ -182,16 +188,7 @@ const Nav = () => {
                   <MenuItem value={"HIN"}>HIN</MenuItem>
                 </Select>
               </FormControl>
-              <Login
-                setFlag={setFlag}
-                userName={userName}
-                setUserName={setUserName}
-              />
-              {userName.length > 0 && (
-                <IconButton onClick={() => setUserName("")} sx={{ml:2}}>
-                  <LogoutIcon sx={{fontSize:'30px',color:'gray'}}/>
-                </IconButton>
-              )}
+              <Login setFlag={setFlag} />
             </>
           )}
           {isMobile && (

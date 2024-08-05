@@ -1,19 +1,23 @@
-import {useState} from 'react';
+import { useState } from "react";
 
-import PersonIcon from '@mui/icons-material/Person';
-import {Box, Button} from '@mui/material';
-import {unwrapResult} from '@reduxjs/toolkit';
-import {useDispatch} from 'react-redux';
-import {Link} from 'react-router-dom';
+import PersonIcon from "@mui/icons-material/Person";
+import { Box, Button, IconButton } from "@mui/material";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { useDispatch, useSelector } from "react-redux";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { Link } from "react-router-dom";
 
-import CommonDialog from '@/common/CommonDialog';
-import NotificationSnackbar from '@/common/NotificationSnackbar';
-import {useIsMobile} from '@/hooks/useIsMobile';
-import {signupUser} from '@/redux/user/userSlice';
+import CommonDialog from "@/common/CommonDialog";
+import { useIsMobile } from "@/hooks/useIsMobile";
+import { signupUser } from "@/redux/user/userSlice";
+import { loadLoggedInUser, loginUser } from "../redux/user/userSlice";
 
-const Login = ({setFlag, userName, setUserName}) => {
-  const {isMobile} = useIsMobile();
+const Login = ({ setFlag }) => {
+  const { isMobile } = useIsMobile();
   const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.user.user);
+  console.log({ user });
 
   const [loginBtnOpen, setLoginBtnOpen] = useState(false);
   const [signupBtnOpen, setSignupBtnOpen] = useState(false);
@@ -57,12 +61,18 @@ const Login = ({setFlag, userName, setUserName}) => {
     });
   };
 
-  const handleLoginSubmit = (event) => {
+  const handleLoginSubmit = async (event) => {
     event.preventDefault();
-    setUserName(
-      JSON.parse(localStorage.getItem("SignupFormData")).username.slice(0, 5)
-    );
-    handleLoginClose();
+
+    try {
+      const resultAction = await dispatch(loginUser(loginFormData));
+      unwrapResult(resultAction);
+      dispatch(loadLoggedInUser());
+      handleLoginClose();
+    } catch (error) {
+      // Error handling is done in Redux
+      console.log(error);
+    }
   };
 
   const handleSignupFormChange = (event) => {
@@ -80,7 +90,6 @@ const Login = ({setFlag, userName, setUserName}) => {
       const resultAction = await dispatch(signupUser(signUpFormData));
       unwrapResult(resultAction);
       handleSignUpClose();
-      handleLoginOpen();
     } catch (error) {
       // Error handling is done in Redux
       console.log(error);
@@ -100,22 +109,24 @@ const Login = ({setFlag, userName, setUserName}) => {
 
   return (
     <>
-      <NotificationSnackbar />
-
-      {userName ? (
-        <Link to="/profile">
+      {user ? (
+        <Link className="link" to="/profile">
           <Button
             variant="outlined"
-            startIcon={<PersonIcon sx={{ fontSize: "15px" }} />}
+            startIcon={<PersonIcon />}
             sx={{
               ml: 3,
               p: 2,
               background: "#f5f5f5",
               fontWeight: 800,
               fontSize: "15px",
+              textTransform: "none",
+              "& .MuiButton-startIcon": {
+                margin: user.username ? 0 : "",
+              },
             }}
           >
-            {userName}
+            {user.username}
           </Button>
         </Link>
       ) : isMobile ? (
@@ -197,7 +208,11 @@ const Login = ({setFlag, userName, setUserName}) => {
           </Button>
         </>
       )}
-
+      {user && (
+        <IconButton className="logout" sx={{ ml: 2 }}>
+          <LogoutIcon sx={{ fontSize: "30px", color: "gray" }} />
+        </IconButton>
+      )}
       {loginBtnOpen ? (
         <CommonDialog
           open={loginBtnOpen}

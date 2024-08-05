@@ -68,12 +68,13 @@ exports.registerUser = async (req, res, next) => {
     const accessToken = generateAccessToken(user.id);
     const refreshToken = generateRefreshToken(user.id);
 
+    user.accessToken = accessToken;
     user.refreshToken = refreshToken;
     await user.save();
 
     res.status(201).json({
-      user: {email, accessToken, refreshToken},
-      msg: 'Signed up successfully.',
+      user: {email, isAdmin, username, accessToken, refreshToken},
+      msg: "Signed up successfully.",
     });
   } catch (error) {
     next(error);
@@ -110,11 +111,12 @@ exports.loginUser = async (req, res, next) => {
     const refreshToken = generateRefreshToken(user.id);
 
     user.refreshToken = refreshToken;
+    user.accessToken = accessToken;
     await user.save();
 
-    res.json({
-      accessToken,
-      refreshToken,
+    res.status(201).json({
+      user: {email, accessToken, refreshToken},
+      msg: "Login successfully.",
     });
   } catch (error) {
     next(error);
@@ -156,7 +158,11 @@ exports.refreshToken = async (req, res, next) => {
 // *********** Admin routes ***************//
 exports.getAllUsers = async (req, res, next) => {
   try {
-    const users = await User.find().select({password: 0, refreshToken: 0});
+    const users = await User.find().select({
+      password: 0,
+      refreshToken: 0,
+      accessToken: 0,
+    });
     res.status(200).json(users);
   } catch (err) {
     next(err);

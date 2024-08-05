@@ -1,12 +1,35 @@
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
-import {signup} from '@/helpers/api';
+import { signup, login, loadUser } from "@/helpers/api";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const signupUser = createAsyncThunk(
-  'user/signup',
-  async (userData, {rejectWithValue}) => {
+  "user/signup",
+  async (userData, { rejectWithValue }) => {
     try {
       const response = await signup(userData);
-      console.log(response);
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.response?.data);
+    }
+  },
+);
+
+export const loginUser = createAsyncThunk(
+  "user/login",
+  async (userData, { rejectWithValue }) => {
+    try {
+      const response = await login(userData);
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.response?.data);
+    }
+  },
+);
+
+export const loadLoggedInUser = createAsyncThunk(
+  "user/loadUser",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await loadUser();
       return response;
     } catch (error) {
       return rejectWithValue(error.response?.data);
@@ -15,7 +38,7 @@ export const signupUser = createAsyncThunk(
 );
 
 const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState: {
     user: null,
     loading: false,
@@ -38,13 +61,12 @@ const userSlice = createSlice({
         state.successMsg = null;
       })
       .addCase(signupUser.fulfilled, (state, action) => {
-        console.log(action.payload.msg);
         state.loading = false;
         state.user = action.payload.user;
         state.successMsg = action.payload.msg;
 
         if (action.payload.user) {
-          localStorage.setItem('user', JSON.stringify(action.payload.user));
+          localStorage.setItem("user", JSON.stringify(action.payload.user));
         }
       })
       .addCase(signupUser.rejected, (state, action) => {
@@ -52,12 +74,55 @@ const userSlice = createSlice({
         state.errorMsg =
           action.payload?.msg ||
           action.payload?.errors?.[0]?.msg ||
-          'An error occurred';
+          "An error occurred";
+        state.successMsg = null;
+      });
+
+    builder
+      .addCase(loginUser.pending, (state) => {
+        state.loading = true;
+        state.errorMsg = null;
+        state.successMsg = null;
+      })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload.user;
+        state.successMsg = action.payload.msg;
+
+        if (action.payload.user) {
+          localStorage.setItem("user", JSON.stringify(action.payload.user));
+        }
+      })
+      .addCase(loginUser.rejected, (state, action) => {
+        state.loading = false;
+        state.errorMsg =
+          action.payload?.msg ||
+          action.payload?.errors?.[0]?.msg ||
+          "An error occurred";
+        state.successMsg = null;
+      });
+
+    builder
+      .addCase(loadLoggedInUser.pending, (state) => {
+        state.loading = true;
+        state.errorMsg = null;
+        state.successMsg = null;
+      })
+      .addCase(loadLoggedInUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+      })
+      .addCase(loadLoggedInUser.rejected, (state, action) => {
+        state.loading = false;
+        state.errorMsg =
+          action.payload?.msg ||
+          action.payload?.errors?.[0]?.msg ||
+          "An error occurred";
         state.successMsg = null;
       });
   },
 });
 
-export const {clearError, clearSuccess} = userSlice.actions;
+export const { clearError, clearSuccess } = userSlice.actions;
 
 export default userSlice.reducer;

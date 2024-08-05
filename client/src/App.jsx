@@ -3,12 +3,13 @@ import {Route, BrowserRouter as Router, Routes} from 'react-router-dom';
 
 import AdminLayout from '@/layout/AdminLayout';
 import MainLayout from '@/layout/MainLayout';
+
 import About from './pages/About';
+import AdminDashboard from './pages/admin/AdminDashboard';
 import ArticleDetails from './pages/ArticleDetails';
 import Contact from './pages/Contact';
 import Home from './pages/Home';
 import News from './pages/News';
-import AdminDashboard from './pages/admin/AdminDashboard';
 import Profile from './pages/Profile';
 
 const theme = createTheme({
