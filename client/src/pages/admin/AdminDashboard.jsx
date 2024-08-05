@@ -16,7 +16,7 @@ const drawerWidth = 240;
 
 const Main = styled('main')(({theme}) => ({
   flexGrow: 1,
-  padding: theme.spacing(3),
+  padding:  `0 ${theme.spacing(3)}`,
   marginLeft: `${drawerWidth}px`,
   backgroundColor: '#f0f2f5',
 }));
@@ -26,7 +26,7 @@ const Sidebar = styled(Box)(({theme}) => ({
   flexShrink: 0,
   backgroundColor: '#0F172A',
   color: '#fff',
-  height: '100vh',
+  height: '100%',
   position: 'fixed',
   top: 0,
   left: 0,
@@ -64,35 +64,37 @@ const AdminDashboard = () => {
 
   return (
     <Box sx={{display: 'flex'}}>
-      <Sidebar>
-        <Link style={{display: 'flex'}} to='/'>
-          <Logo src={WhiteLogo} alt='Logo' />
-        </Link>
-        <Tabs
-          orientation='vertical'
-          value={activeTab}
-          onChange={(e, value) => setActiveTab(value)}
-          textColor='inherit'
-          indicatorColor='secondary'
-          aria-label='Vertical tabs example'
-          sx={{
-            '& .MuiTab-root': {
-              justifyContent: 'start',
-              gap: 2,
-              color: '#fff',
-              '&.Mui-selected': {
-                backgroundColor: '#1e293b',
+      <Main sx={{height: '100vh'}}>
+        <Sidebar>
+          <Link style={{display: 'flex'}} to='/'>
+            <Logo src={WhiteLogo} alt='Logo' />
+          </Link>
+          <Tabs
+            orientation='vertical'
+            value={activeTab}
+            onChange={(e, value) => setActiveTab(value)}
+            textColor='inherit'
+            indicatorColor='secondary'
+            aria-label='Vertical tabs example'
+            sx={{
+              '& .MuiTab-root': {
+                justifyContent: 'start',
+                gap: 2,
+                color: '#fff',
+                '&.Mui-selected': {
+                  backgroundColor: '#1e293b',
+                },
               },
-            },
-          }}
-        >
-          <Tab label='profile' icon={<Person />} iconPosition='start' />
-          <Tab label='posts' icon={<Article />} iconPosition='start' />
-          <Tab label='create post' icon={<Add />} iconPosition='start' />
-          <Tab label='users' icon={<Group />} iconPosition='start' />
-        </Tabs>
-      </Sidebar>
-      <Main sx={{height: '100vh'}}>{content}</Main>
+            }}
+          >
+            <Tab label='profile' icon={<Person />} iconPosition='start' />
+            <Tab label='posts' icon={<Article />} iconPosition='start' />
+            <Tab label='create post' icon={<Add />} iconPosition='start' />
+            <Tab label='users' icon={<Group />} iconPosition='start' />
+          </Tabs>
+        </Sidebar>
+        {content}
+      </Main>
     </Box>
   );
 };

@@ -29,6 +29,7 @@ const Nav = () => {
   const [flag, setFlag] = useState(false);
   const { isMobile } = useIsMobile();
   const [userName, setUserName] = useState("");
+  
   const toggleDrawer = (open) => (event) => {
     if (
       event.type === "keydown" &&
@@ -66,7 +67,7 @@ const Nav = () => {
               component={Link}
               to="/"
               sx={{ fontStyle: "italic", color: "#0F172A", fontSize: "20px" }}
-              onClick={toggleDrawer(false)} // Ensure the drawer closes on navigation
+              onClick={toggleDrawer(false)}
             >
               <ListItemText primary="Home" />
             </ListItem>
@@ -74,7 +75,7 @@ const Nav = () => {
               component={Link}
               to="/about"
               sx={{ fontStyle: "italic", color: "#0F172A", fontSize: "20px" }}
-              onClick={toggleDrawer(false)} // Ensure the drawer closes on navigation
+              onClick={toggleDrawer(false)}
             >
               <ListItemText primary="About Us" />
             </ListItem>
@@ -82,7 +83,7 @@ const Nav = () => {
               component={Link}
               to="/news"
               sx={{ fontStyle: "italic", color: "#0F172A", fontSize: "20px" }}
-              onClick={toggleDrawer(false)} // Ensure the drawer closes on navigation
+              onClick={toggleDrawer(false)}
             >
               <ListItemText primary="News" />
             </ListItem>
@@ -90,7 +91,7 @@ const Nav = () => {
               component={Link}
               to="/contact"
               sx={{ fontStyle: "italic", color: "#0F172A", fontSize: "20px" }}
-              onClick={toggleDrawer(false)} // Ensure the drawer closes on navigation
+              onClick={toggleDrawer(false)}
             >
               <ListItemText primary="Contact" />
             </ListItem>
@@ -101,8 +102,7 @@ const Nav = () => {
             setFlag={setFlag}
             userName={userName}
             setUserName={setUserName}
-          />{" "}
-          {/* Pass setFlag to Login */}
+          />
         </Box>
       </Box>
     </>

@@ -43,7 +43,6 @@ const Profile = () => {
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'column',
-        padding: '40px',
         height: '100%',
         backgroundColor: '#f0f2f5',
       }}
