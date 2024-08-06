@@ -1,9 +1,12 @@
 import { createTheme, ThemeProvider } from "@mui/material";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
-import AdminLayout from "@/layout/AdminLayout";
 import MainLayout from "@/layout/MainLayout";
+import { loadLoggedInUser } from "@/redux/userSlice";
 
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import AuthLayout from "./layout/AuthLayout";
 import About from "./pages/About";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import ArticleDetails from "./pages/ArticleDetails";
@@ -21,6 +24,16 @@ const theme = createTheme({
 });
 
 const App = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    if (user) {
+      dispatch(loadLoggedInUser());
+    }
+  }, [dispatch]);
+
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -35,7 +48,7 @@ const App = () => {
               <Route path="/profile" element={<Profile />} />
             </Route>
 
-            <Route element={<AdminLayout />}>
+            <Route element={<AuthLayout />}>
               <Route path="/admin" element={<AdminDashboard />} />
             </Route>
           </Routes>

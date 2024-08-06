@@ -21,23 +21,13 @@ import Emerging_Tech_Times_Logo from "@/assets/Emerging_Tech_Times_Logo.png";
 import NotificationSnackbar from "@/common/NotificationSnackbar";
 import Login from "@/components/Login";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { loadLoggedInUser } from "@/redux/userSlice";
 
 const Nav = () => {
   const { isMobile } = useIsMobile();
-  const dispatch = useDispatch();
 
   const [language, setLanguage] = useState("ENG");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [flag, setFlag] = useState(false);
-
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-
-    if (user) {
-      dispatch(loadLoggedInUser());
-    }
-  }, []);
 
   const toggleDrawer = (open) => (event) => {
     if (
