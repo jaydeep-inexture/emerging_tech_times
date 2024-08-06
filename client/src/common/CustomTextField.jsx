@@ -7,13 +7,17 @@ const CustomTextField = ({
   name,
   type,
   value,
-  onChange,
-  showPassword,
-  setShowPassword,
+  onChange = () => {},
+  showPassword = true,
+  setShowPassword = () => {},
+  autoFocus = true,
+  disabled = false,
 }) => (
   <TextField
     variant='outlined'
     fullWidth
+    disabled={disabled}
+    autoFocus={autoFocus}
     label={label}
     placeholder={placeholder}
     type={type === 'password' && !showPassword ? 'password' : 'text'}

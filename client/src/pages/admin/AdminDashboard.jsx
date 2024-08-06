@@ -9,7 +9,7 @@ import {Link} from 'react-router-dom';
 import WhiteLogo from '@/assets/White_Logo.png';
 import PostForm from '@/components/admin/PostForm';
 import Posts from '@/components/admin/Posts';
-import Profile from '@/components/admin/Profile';
+import Profile from "@/components/Profile";
 import UsersTable from '@/components/admin/UsersTable';
 
 const drawerWidth = 240;

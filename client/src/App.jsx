@@ -1,8 +1,11 @@
 import { createTheme, ThemeProvider } from "@mui/material";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
+import Spinner from "@/common/Spinner";
+import Profile from "@/components/Profile";
 import MainLayout from "@/layout/MainLayout";
 import { loadLoggedInUser } from "@/redux/userSlice";
+import NotificationSnackbar from "@/common/NotificationSnackbar";
 
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -13,7 +16,6 @@ import ArticleDetails from "./pages/ArticleDetails";
 import Contact from "./pages/Contact";
 import Home from "./pages/Home";
 import News from "./pages/News";
-import Profile from "./pages/Profile";
 
 const theme = createTheme({
   palette: {
@@ -36,6 +38,8 @@ const App = () => {
 
   return (
     <>
+      <NotificationSnackbar />
+      <Spinner />
       <ThemeProvider theme={theme}>
         <Router>
           <Routes>

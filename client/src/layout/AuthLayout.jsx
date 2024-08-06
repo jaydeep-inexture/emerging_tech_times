@@ -2,16 +2,13 @@ import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
 
 const AuthLayout = () => {
-  const user = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user);
 
-  const isAuthenticated = user && user.accessToken;
-  const isAdmin = user && user.isAdmin;
-
-  if (!isAuthenticated || !isAdmin) {
+  if (user && (!user.accessToken || !user.isAdmin)) {
     return <Navigate to="/" replace={true} />;
   }
 
-  return <Outlet />;
+  return user && <Outlet />;
 };
 
 export default AuthLayout;

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
 import Close from "@mui/icons-material/Close";
@@ -18,7 +17,6 @@ import {
 } from "@mui/material";
 
 import Emerging_Tech_Times_Logo from "@/assets/Emerging_Tech_Times_Logo.png";
-import NotificationSnackbar from "@/common/NotificationSnackbar";
 import Login from "@/components/Login";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
@@ -105,7 +103,6 @@ const Nav = () => {
 
   return (
     <>
-      <NotificationSnackbar />
       <Box
         sx={{
           display: "flex",
