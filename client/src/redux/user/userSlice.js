@@ -1,12 +1,24 @@
-import { signup, login, loadUser, logout, updateUser } from "@/helpers/api";
+import {
+  loadUser,
+  login,
+  logout,
+  refreshToken,
+  signup,
+  updateUser,
+} from "@/helpers/api";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const signupUser = createAsyncThunk(
   "user/signup",
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await signup(userData);
-      return response;
+      const data = await signup(userData);
+
+      if (data.user) {
+        localStorage.setItem("user", JSON.stringify(data.user));
+      }
+
+      return data;
     } catch (error) {
       return rejectWithValue(error.response?.data);
     }
@@ -17,8 +29,13 @@ export const loginUser = createAsyncThunk(
   "user/login",
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await login(userData);
-      return response;
+      const data = await login(userData);
+
+      if (data.user) {
+        localStorage.setItem("user", JSON.stringify(data.user));
+      }
+
+      return data;
     } catch (error) {
       return rejectWithValue(error.response?.data);
     }
@@ -29,8 +46,8 @@ export const loadLoggedInUser = createAsyncThunk(
   "user/loadUser",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await loadUser();
-      return response;
+      const data = await loadUser();
+      return data;
     } catch (error) {
       return rejectWithValue(error.response?.data);
     }
@@ -41,8 +58,9 @@ export const logoutUser = createAsyncThunk(
   "user/logout",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await logout();
-      return response;
+      const data = await logout();
+      localStorage.removeItem("user");
+      return data;
     } catch (error) {
       return rejectWithValue(error.response?.data);
     }
@@ -53,8 +71,36 @@ export const updateUserDetails = createAsyncThunk(
   "user/updateUser",
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await updateUser(userData);
-      return response;
+      const data = await updateUser(userData);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data);
+    }
+  },
+);
+
+export const refreshAuthToken = createAsyncThunk(
+  "user/refreshToken",
+  async (_, { rejectWithValue }) => {
+    try {
+      const storedUser = JSON.parse(localStorage.getItem("user"));
+      if (!storedUser || !storedUser.refreshToken) {
+        throw new Error("No refresh token found");
+      }
+
+      const data = await refreshToken(storedUser.refreshToken);
+
+      // Save the new tokens to local storage
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          ...storedUser,
+          accessToken: data.accessToken,
+          refreshToken: data.refreshToken,
+        }),
+      );
+
+      return data;
     } catch (error) {
       return rejectWithValue(error.response?.data);
     }
@@ -88,10 +134,6 @@ const userSlice = createSlice({
         state.loading = false;
         state.user = action.payload.user;
         state.successMsg = action.payload.msg;
-
-        if (action.payload.user) {
-          localStorage.setItem("user", JSON.stringify(action.payload.user));
-        }
       })
       .addCase(signupUser.rejected, (state, action) => {
         state.loading = false;
@@ -112,10 +154,6 @@ const userSlice = createSlice({
         state.loading = false;
         state.user = action.payload.user;
         state.successMsg = action.payload.msg;
-
-        if (action.payload.user) {
-          localStorage.setItem("user", JSON.stringify(action.payload.user));
-        }
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
@@ -144,6 +182,7 @@ const userSlice = createSlice({
           "An error occurred";
         state.successMsg = null;
       });
+
     builder
       .addCase(logoutUser.pending, (state) => {
         state.loading = true;
@@ -151,8 +190,6 @@ const userSlice = createSlice({
         state.successMsg = null;
       })
       .addCase(logoutUser.fulfilled, (state, action) => {
-        localStorage.removeItem("user");
-
         state.loading = false;
         state.user = null;
         state.successMsg = action.payload.msg;
@@ -165,6 +202,7 @@ const userSlice = createSlice({
           "An error occurred";
         state.successMsg = null;
       });
+
     builder
       .addCase(updateUserDetails.pending, (state) => {
         state.loading = true;
@@ -176,6 +214,26 @@ const userSlice = createSlice({
         state.successMsg = action.payload.msg;
       })
       .addCase(updateUserDetails.rejected, (state, action) => {
+        state.loading = false;
+        state.errorMsg =
+          action.payload?.msg ||
+          action.payload?.errors?.[0]?.msg ||
+          "An error occurred";
+        state.successMsg = null;
+      });
+
+    builder
+      .addCase(refreshAuthToken.pending, (state) => {
+        state.loading = true;
+        state.errorMsg = null;
+        state.successMsg = null;
+      })
+      .addCase(refreshAuthToken.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload.user;
+        state.successMsg = action.payload.msg;
+      })
+      .addCase(refreshAuthToken.rejected, (state, action) => {
         state.loading = false;
         state.errorMsg =
           action.payload?.msg ||

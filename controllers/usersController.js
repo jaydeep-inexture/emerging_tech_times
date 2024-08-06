@@ -81,7 +81,7 @@ exports.registerUser = async (req, res, next) => {
     await user.save();
 
     res.status(201).json({
-      user: {email, isAdmin, username, accessToken, refreshToken},
+      user: { accessToken, refreshToken },
       msg: "Signed up successfully.",
     });
   } catch (error) {
@@ -123,7 +123,7 @@ exports.loginUser = async (req, res, next) => {
     await user.save();
 
     res.status(201).json({
-      user: {email, accessToken, refreshToken},
+      user: { accessToken, refreshToken },
       msg: "Login successfully.",
     });
   } catch (error) {
