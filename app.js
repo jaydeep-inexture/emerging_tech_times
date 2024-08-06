@@ -6,6 +6,7 @@ const multer = require('multer');
 
 const connectDB = require('./helpers/db');
 const errorHandler = require('./middleware/error');
+const { cleanExpiredTokens } = require('./helpers/utils');
 
 require('dotenv').config();
 
@@ -14,6 +15,8 @@ const port = process.env.PORT || 5000;
 
 //connect to database
 connectDB();
+
+setInterval(cleanExpiredTokens, 60 * 60 * 1000); //every hour
 
 // filter image file types
 const imageFileFilter = (req, file, cb) => {

@@ -29,17 +29,27 @@ axiosInstance.interceptors.response.use(
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
-      const token = JSON.parse(localStorage.getItem("user")).refreshToken;
-
       try {
-        // Attempt to refresh the token
-        const { data } = await refreshToken(token);
-        localStorage.setItem("user", JSON.stringify(data.user));
+        const storedUser = JSON.parse(localStorage.getItem("user"));
+        if (!storedUser || !storedUser.refreshToken) {
+          throw new Error("No refresh token found");
+        }
+
+        const data = await refreshToken(storedUser.refreshToken);
+
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            ...storedUser,
+            accessToken: data.accessToken,
+            refreshToken: data.refreshToken,
+          }),
+        );
 
         // Set the new token in the headers
         axiosInstance.defaults.headers.common[
           "Authorization"
-        ] = `Bearer ${data.user.accessToken}`;
+        ] = `Bearer ${data.accessToken}`;
 
         // Retry the original request
         return axiosInstance(originalRequest);

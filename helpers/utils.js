@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const CONSTANTS = require('./constants');
 const { S3Client, PutObjectCommand, DeleteObjectCommand } = require('@aws-sdk/client-s3');
+const Blacklist = require('../models/Blacklist');
 
 const ACCESS_TOKEN_EXPIRY = CONSTANTS.ACCESS_TOKEN_EXPIRY;
 const REFRESH_TOKEN_EXPIRY = {expiresIn: CONSTANTS.REFRESH_TOKEN_EXPIRY};
@@ -13,6 +14,15 @@ const generateAccessToken = (userId) => {
 
 const generateRefreshToken = (userId) => {
   return jwt.sign({user: userId}, process.env.JWT_SECRET, REFRESH_TOKEN_EXPIRY);
+};
+
+const cleanExpiredTokens = async () => {
+  try {
+    await Blacklist.deleteMany({ expiresAt: { $lt: new Date() } });
+    console.error('Cleared all the expired tokens');
+  } catch (err) {
+    console.error('Error cleaning expired tokens:', err);
+  }
 };
 
 // *********** File upload *************//
@@ -58,4 +68,5 @@ module.exports = {
   generateRefreshToken,
   uploadImageToS3,
   deleteImageFromS3,
+  cleanExpiredTokens
 };

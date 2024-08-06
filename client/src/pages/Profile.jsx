@@ -11,7 +11,9 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import User from "@/assets/user.png";
-import { updateUserDetails, loadLoggedInUser } from "@/redux/user/userSlice";
+import { updateUser } from "@/helpers/api";
+import { setNotification } from "@/redux/notificationSlice";
+import { loadLoggedInUser } from "@/redux/userSlice";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -26,10 +28,29 @@ const Profile = () => {
     }
   }, [user]);
 
-  const handleUpdateBtnClicked = () => {
-    dispatch(updateUserDetails({ username }));
-    dispatch(loadLoggedInUser());
-    setIsEditable(false);
+  const handleUpdateBtnClicked = async () => {
+    try {
+      const data = await updateUser({ username });
+      dispatch(loadLoggedInUser());
+      setIsEditable(false);
+      dispatch(
+        setNotification({
+          type: "success",
+          message: data.msg,
+        }),
+      );
+    } catch (error) {
+      const errMessage =
+        error.response.data.msg ||
+        error.response.data?.errors?.[0]?.msg ||
+        "An error occurred";
+      dispatch(
+        setNotification({
+          type: "error",
+          message: errMessage,
+        }),
+      );
+    }
   };
 
   return (

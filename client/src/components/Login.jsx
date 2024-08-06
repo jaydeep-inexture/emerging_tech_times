@@ -3,18 +3,14 @@ import { useState } from "react";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
 import { Box, Button, IconButton } from "@mui/material";
-import { unwrapResult } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 import CommonDialog from "@/common/CommonDialog";
+import { login, logout, signup } from "@/helpers/api";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import {
-  loadLoggedInUser,
-  loginUser,
-  logoutUser,
-  signupUser,
-} from "@/redux/user/userSlice";
+import { setNotification } from "@/redux/notificationSlice";
+import { loadLoggedInUser, setLoading, setUser } from "@/redux/userSlice";
 
 const Login = ({ setFlag }) => {
   const { isMobile } = useIsMobile();
@@ -68,13 +64,31 @@ const Login = ({ setFlag }) => {
     event.preventDefault();
 
     try {
-      const resultAction = await dispatch(loginUser(loginFormData));
-      unwrapResult(resultAction);
+      const data = await login(loginFormData);
+
+      if (data.user) {
+        localStorage.setItem("user", JSON.stringify(data.user));
+      }
+
       dispatch(loadLoggedInUser());
       handleLoginClose();
+      dispatch(
+        setNotification({
+          type: "success",
+          message: data.msg,
+        }),
+      );
     } catch (error) {
-      // Error handling is done in Redux
-      console.log(error);
+      const errMessage =
+        error.response.data.msg ||
+        error.response.data?.errors?.[0]?.msg ||
+        "An error occurred";
+      dispatch(
+        setNotification({
+          type: "error",
+          message: errMessage,
+        }),
+      );
     }
   };
 
@@ -90,13 +104,62 @@ const Login = ({ setFlag }) => {
     event.preventDefault();
 
     try {
-      const resultAction = await dispatch(signupUser(signUpFormData));
-      unwrapResult(resultAction);
+      const data = await signup(signUpFormData);
+
+      if (data.user) {
+        localStorage.setItem("user", JSON.stringify(data.user));
+      }
+
+      dispatch(loadLoggedInUser());
       handleSignUpClose();
+      dispatch(
+        setNotification({
+          type: "success",
+          message: data.msg,
+        }),
+      );
     } catch (error) {
-      // Error handling is done in Redux
-      console.log(error);
+      const errMessage =
+        error.response.data.msg ||
+        error.response.data?.errors?.[0]?.msg ||
+        "An error occurred";
+      dispatch(
+        setNotification({
+          type: "error",
+          message: errMessage,
+        }),
+      );
     }
+  };
+
+  const handleLogout = async () => {
+    dispatch(setLoading(true));
+
+    try {
+      const data = await logout();
+      dispatch(setUser(null));
+
+      localStorage.removeItem("user");
+
+      dispatch(
+        setNotification({
+          type: "success",
+          message: data.msg,
+        }),
+      );
+    } catch (error) {
+      const errMessage =
+        error.response.data.msg ||
+        error.response.data?.errors?.[0]?.msg ||
+        "Logout failed. Please try again.";
+      dispatch(
+        setNotification({
+          type: "error",
+          message: errMessage,
+        }),
+      );
+    }
+    dispatch(setLoading(false));
   };
 
   const handleOpenDialog = (item) => {
@@ -216,11 +279,7 @@ const Login = ({ setFlag }) => {
         </>
       )}
       {user && (
-        <IconButton
-          onClick={() => dispatch(logoutUser())}
-          className="logout"
-          sx={{ ml: 2 }}
-        >
+        <IconButton onClick={handleLogout} className="logout" sx={{ ml: 2 }}>
           <LogoutIcon sx={{ fontSize: "30px", color: "gray" }} />
         </IconButton>
       )}

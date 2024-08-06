@@ -1,34 +1,34 @@
-import {clearError, clearSuccess} from '@/redux/user/userSlice';
-import Alert from '@mui/material/Alert';
-import Snackbar from '@mui/material/Snackbar';
-import {useDispatch, useSelector} from 'react-redux';
+import { clearNotification } from "@/redux/notificationSlice";
+import Alert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const NotificationSnackbar = () => {
   const dispatch = useDispatch();
-  const errorMsg = useSelector((state) => state.user.errorMsg);
-  const successMsg = useSelector((state) => state.user.successMsg);
+  const { type, message } = useSelector((state) => state.notification);
 
-  const handleClose = () => {
-    dispatch(clearError());
-    dispatch(clearSuccess());
-  };
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      dispatch(clearNotification());
+    }, 5000);
 
-  // Determine if there's an error or success message to display
-  const open = Boolean(errorMsg || successMsg);
-  const message = errorMsg || successMsg;
-  const severity = errorMsg ? 'error' : 'success';
+    return () => clearTimeout(timer);
+  }, [dispatch]);
+
+  if (!message) return null;
 
   return (
     <Snackbar
-      anchorOrigin={{vertical: 'top', horizontal: 'right'}}
+      anchorOrigin={{ vertical: "top", horizontal: "right" }}
       open={open}
       autoHideDuration={6000}
-      onClose={handleClose}
+      onClose={() => dispatch(clearNotification())}
     >
       <Alert
-        onClose={handleClose}
-        severity={severity}
-        sx={{width: '100%', padding: '20px 40px', fontSize: '16px'}}
+        onClose={() => dispatch(clearNotification())}
+        severity={type}
+        sx={{ width: "100%", padding: "20px 40px", fontSize: "16px" }}
       >
         {message}
       </Alert>

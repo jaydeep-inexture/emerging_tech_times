@@ -3,7 +3,12 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const User = require('../models/User');
-const {generateRefreshToken, generateAccessToken} = require('../helpers/utils');
+const Blacklist = require('../models/Blacklist');
+const CONSTANTS = require('../helpers/constants');
+const {
+  generateRefreshToken,
+  generateAccessToken,
+} = require('../helpers/utils');
 
 exports.getLoggedInUser = async (req, res, next) => {
   try {
@@ -165,12 +170,19 @@ exports.refreshToken = async (req, res, next) => {
 
 exports.logout = async (req, res, next) => {
   try {
-    await User.findOneAndUpdate(
-      { _id: req.user },
-      { accessToken: null, refreshToken: null },
-    );
+    const user = await User.findById(req.user);
+    const token = user.accessToken;
 
-    res.status(200).json({ msg: 'Logged out successfully.' });
+    if (token) {
+      await Blacklist.create({
+        token,
+        expiresAt: new Date(Date.now() + CONSTANTS.REFRESH_RATE),
+      });
+
+      res.status(200).json({ msg: 'Logged out successfully' });
+    } else {
+      res.status(400).json({ msg: 'No token provided' });
+    }
   } catch (err) {
     next(err);
   }
