@@ -59,7 +59,6 @@ const Profile = () => {
         flexDirection: "column",
         height: "100%",
         backgroundColor: "#f0f2f5",
-        padding: "4% 10%",
       }}
     >
       <Box
@@ -113,6 +112,7 @@ const Profile = () => {
                 display: "flex",
                 alignItems: "center",
                 width: "100%",
+                marginY:'25px'
               }}
             >
               <CustomTextField

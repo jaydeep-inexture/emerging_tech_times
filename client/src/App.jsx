@@ -11,7 +11,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import AuthLayout from "./layout/AuthLayout";
 import About from "./pages/About";
-import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminDashboard from "./pages/AdminDashboard";
 import ArticleDetails from "./pages/ArticleDetails";
 import Contact from "./pages/Contact";
 import Home from "./pages/Home";

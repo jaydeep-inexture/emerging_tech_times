@@ -40,7 +40,6 @@ const CustomTextField = ({
         ) : null,
     }}
     sx={{
-      marginTop: '25px',
       borderRadius: '8px',
       background: '#F6F5F5',
       '& .MuiOutlinedInput-root': {

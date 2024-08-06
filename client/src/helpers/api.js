@@ -1,5 +1,6 @@
 import axiosInstance from "@/helpers/axios";
 
+//  ************ AUTH **********************//
 export const signup = async (userData) => {
   const formData = new FormData();
   if (userData.username) {
@@ -41,14 +42,20 @@ export const logout = async () => {
   return response.data;
 };
 
+export const refreshToken = async (token) => {
+  const response = await axiosInstance.post("/users/refresh-token", {
+    token,
+  });
+  return response.data;
+};
+
+//  ************ Users **********************//
 export const updateUser = async (userData) => {
   const response = await axiosInstance.put("/users", userData);
   return response.data;
 };
 
-export const refreshToken = async (token) => {
-  const response = await axiosInstance.post("/users/refresh-token", {
-    token,
-  });
+export const fetchUsers = async () => {
+  const response = await axiosInstance.get("/users");
   return response.data;
 };
