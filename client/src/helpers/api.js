@@ -55,6 +55,11 @@ export const updateUser = async (userData) => {
   return response.data;
 };
 
+export const grantAdminPermission = async (userId) => {
+  const response = await axiosInstance.post(`/users/${userId}`);
+  return response.data;
+};
+
 export const fetchUsers = async () => {
   const response = await axiosInstance.get("/users");
   return response.data;

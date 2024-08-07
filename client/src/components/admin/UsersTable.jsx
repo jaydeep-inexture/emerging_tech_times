@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers } from "@/helpers/api";
 import { setNotification } from "@/redux/notificationSlice";
 import { setLoading, setUsers } from "@/redux/userSlice";
+import { grantAdminPermission } from "../../helpers/api";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -41,33 +42,61 @@ export default function UsersTable() {
   const dispatch = useDispatch();
   const users = useSelector((state) => state.user.users);
 
+  const fetchUsersList = async () => {
+    try {
+      dispatch(setLoading(true));
+      const data = await fetchUsers();
+
+      dispatch(setUsers(data));
+      dispatch(setLoading(false));
+    } catch (error) {
+      const errMessage =
+        error.response.data.msg ||
+        error.response.data?.errors?.[0]?.msg ||
+        "An error occurred";
+      dispatch(
+        setNotification({
+          type: "error",
+          message: errMessage,
+        }),
+      );
+      dispatch(setLoading(false));
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        dispatch(setLoading(true));
-        const data = await fetchUsers();
-
-        dispatch(setUsers(data));
-        dispatch(setLoading(false));
-      } catch (error) {
-        const errMessage =
-          error.response.data.msg ||
-          error.response.data?.errors?.[0]?.msg ||
-          "An error occurred";
-        dispatch(
-          setNotification({
-            type: "error",
-            message: errMessage,
-          }),
-        );
-        dispatch(setLoading(false));
-      }
-    };
-
     if (!users) {
-      fetchData();
+      fetchUsersList();
     }
   }, [dispatch]);
+
+  const handlePermission = async (id) => {
+    setLoading(true);
+
+    try {
+      const data = await grantAdminPermission(id);
+      fetchUsersList();
+      dispatch(
+        setNotification({
+          type: "success",
+          message: data.msg,
+        }),
+      );
+      setLoading(false);
+    } catch (error) {
+      const errMessage =
+        error.response.data.msg ||
+        error.response.data?.errors?.[0]?.msg ||
+        "An error occurred";
+      dispatch(
+        setNotification({
+          type: "error",
+          message: errMessage,
+        }),
+      );
+      setLoading(false);
+    }
+  };
 
   return (
     <Box sx={{ p: 2 }}>
@@ -102,7 +131,7 @@ export default function UsersTable() {
                     )}
                   </StyledTableCell>
                   <StyledTableCell align="right">
-                    <IconButton>
+                    <IconButton onClick={() => handlePermission(user._id)}>
                       <AdminPanelSettings sx={{ color: "#0F172A" }} />
                     </IconButton>
                   </StyledTableCell>

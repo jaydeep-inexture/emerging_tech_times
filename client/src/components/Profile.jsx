@@ -7,7 +7,7 @@ import User from "@/assets/user.png";
 import { updateUser } from "@/helpers/api";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { setNotification } from "@/redux/notificationSlice";
-import { loadLoggedInUser } from "@/redux/userSlice";
+import { loadLoggedInUser, setLoading } from "@/redux/userSlice";
 import { CancelOutlined } from "@mui/icons-material";
 import CustomTextField from "@/common/CustomTextField";
 
@@ -28,6 +28,8 @@ const Profile = () => {
   }, [user]);
 
   const handleUpdateBtnClicked = async () => {
+    setLoading(true);
+
     try {
       const data = await updateUser({ username });
       dispatch(loadLoggedInUser());
@@ -38,6 +40,7 @@ const Profile = () => {
           message: data.msg,
         }),
       );
+      setLoading(false);
     } catch (error) {
       const errMessage =
         error.response.data.msg ||
@@ -49,6 +52,7 @@ const Profile = () => {
           message: errMessage,
         }),
       );
+      setLoading(false);
     }
   };
 

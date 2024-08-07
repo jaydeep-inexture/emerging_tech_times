@@ -63,6 +63,8 @@ const Login = ({ setFlag }) => {
   const handleLoginSubmit = async (event) => {
     event.preventDefault();
 
+    setLoading(true);
+
     try {
       const data = await login(loginFormData);
 
@@ -78,6 +80,7 @@ const Login = ({ setFlag }) => {
           message: data.msg,
         }),
       );
+      setLoading(false);
     } catch (error) {
       const errMessage =
         error.response.data.msg ||
@@ -89,6 +92,7 @@ const Login = ({ setFlag }) => {
           message: errMessage,
         }),
       );
+      setLoading(false);
     }
   };
 
@@ -102,6 +106,7 @@ const Login = ({ setFlag }) => {
 
   const handleSignupSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
 
     try {
       const data = await signup(signUpFormData);
@@ -118,6 +123,7 @@ const Login = ({ setFlag }) => {
           message: data.msg,
         }),
       );
+      setLoading(false);
     } catch (error) {
       const errMessage =
         error.response.data.msg ||
@@ -129,6 +135,7 @@ const Login = ({ setFlag }) => {
           message: errMessage,
         }),
       );
+      setLoading(false);
     }
   };
 

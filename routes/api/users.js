@@ -63,7 +63,7 @@ router.post('/logout', auth, userController.logout);
 // @route   GET /api/users/admin
 // @desc    Grant the user admin access
 // @access  Private
-router.patch('/:id', auth, isAdmin, userController.grantAdminAccess);
+router.post('/:id', auth, isAdmin, userController.grantAdminAccess);
 
 // @route   GET /api/users
 // @desc    Get all users
