@@ -21,7 +21,7 @@ const NotificationSnackbar = () => {
   return (
     <Snackbar
       anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      open={open}
+      open={Boolean(message)}
       autoHideDuration={6000}
       onClose={() => dispatch(clearNotification())}
     >

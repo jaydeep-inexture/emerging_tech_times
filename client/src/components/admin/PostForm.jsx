@@ -44,6 +44,18 @@ const PostForm = () => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      const fileTypes = ["image/jpeg", "image/png", "image/gif"];
+      if (!fileTypes.includes(file.type)) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          imageFile: "Only image files are allowed",
+        }));
+        return;
+      }
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        imageFile: null,
+      }));
       setFormData((prevData) => ({
         ...prevData,
         imageFile: file,
@@ -156,6 +168,8 @@ const PostForm = () => {
               name="imageFile"
               value={formData.imageFile ? formData.imageFile.name : ""}
               onChange={handleChange}
+              error={Boolean(errors.imageFile)}
+              helperText={errors.imageFile}
               InputProps={{
                 endAdornment: (
                   <Button
@@ -175,7 +189,6 @@ const PostForm = () => {
                   </Button>
                 ),
               }}
-              // InputProps to disable user input
               inputProps={{ readOnly: true }}
             />
           </Grid>
