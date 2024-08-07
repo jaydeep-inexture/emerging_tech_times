@@ -5,16 +5,11 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import {
   Box,
-  Button,
   Card,
   CardActions,
   CardContent,
   CardHeader,
   CardMedia,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   Grid,
   IconButton,
   Typography,
@@ -22,16 +17,16 @@ import {
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+import DeletePopup from "@/common/DeletePopup";
 import { deletePost } from "@/helpers/api";
 import { setNotification } from "@/redux/notificationSlice";
-import { fetchPostList, setLoading } from "@/redux/postSlice";
+import { fetchPostList, setLoading, setSelectedPost } from "@/redux/postSlice";
 
 const Posts = ({ setActiveTab }) => {
   const dispatch = useDispatch();
-  const posts = useSelector((state) => state.post.posts);
+  const { posts, selectedPost } = useSelector((state) => state.post);
 
   const [openDialog, setOpenDialog] = useState(false);
-  const [selectedPost, setSelectedPost] = useState(null);
 
   const fetchPosts = async () => {
     try {
@@ -58,11 +53,12 @@ const Posts = ({ setActiveTab }) => {
   }, [dispatch]);
 
   const handleEdit = (post) => {
+    dispatch(setSelectedPost(post));
     setActiveTab(2);
   };
 
   const handleDelete = (post) => {
-    setSelectedPost(post);
+    dispatch(setSelectedPost(post));
     setOpenDialog(true);
   };
 
@@ -97,7 +93,7 @@ const Posts = ({ setActiveTab }) => {
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
-    setSelectedPost(null);
+    dispatch(setSelectedPost(null));
   };
 
   return (
@@ -210,31 +206,13 @@ const Posts = ({ setActiveTab }) => {
         </Box>
       )}
 
-      <Dialog
-        sx={{ "& .MuiPaper-root": { padding: 2 } }}
+      <DeletePopup
         open={openDialog}
         onClose={handleCloseDialog}
-      >
-        <DialogTitle>Confirm Delete</DialogTitle>
-        <DialogContent>
-          <Typography>
-            Are you sure you want to delete the post titled "
-            {selectedPost?.title}"?
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            variant="outlined"
-            onClick={handleCloseDialog}
-            color="primary"
-          >
-            Cancel
-          </Button>
-          <Button variant="contained" onClick={confirmDelete} color="error">
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
+        title={selectedPost?.title}
+        handleClose={handleCloseDialog}
+        handleDelete={confirmDelete}
+      />
     </Box>
   );
 };

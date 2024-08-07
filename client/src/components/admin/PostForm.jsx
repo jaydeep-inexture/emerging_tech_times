@@ -1,15 +1,17 @@
 import { Box, Button, Grid, Input, TextField, Typography } from "@mui/material";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-import { createPost } from "@/helpers/api";
+import { createPost, updatePost } from "@/helpers/api";
 import { setNotification } from "@/redux/notificationSlice";
 import { fetchPostList, setLoading } from "@/redux/postSlice";
 
-const PostForm = () => {
+const PostForm = ({ setActiveTab }) => {
   const dispatch = useDispatch();
+  const { selectedPost } = useSelector((state) => state.post);
 
   const [errors, setErrors] = useState({});
+  const [existingImageFileName, setExistingImageFileName] = useState("");
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -23,6 +25,36 @@ const PostForm = () => {
     seoDescription: "",
     seoSlug: "",
   });
+
+  useEffect(() => {
+    if (selectedPost) {
+      setFormData({
+        title: selectedPost?.title ? selectedPost.title : "",
+        description: selectedPost?.description ? selectedPost.description : "",
+        imageFile: null,
+        authorName: selectedPost?.author.name ? selectedPost.author.name : "",
+        authorDescription: selectedPost?.author.description
+          ? selectedPost.author.description
+          : "",
+        twitter: selectedPost.author.socials?.twitter
+          ? selectedPost.author.socials.twitter
+          : "",
+        instagram: selectedPost.author.socials?.instagram
+          ? selectedPost.author.socials.instagram
+          : "",
+        linkedin: selectedPost.author.socials?.linkedin
+          ? selectedPost.author.socials.linkedin
+          : "",
+        seoTitle: selectedPost?.seo.title ? selectedPost.seo.title : "",
+        seoDescription: selectedPost?.seo.description
+          ? selectedPost.seo.description
+          : "",
+        seoSlug: selectedPost?.seo.slug ? selectedPost.seo.slug : "",
+      });
+    }
+    const imageUrl = selectedPost?.imageUrl || "";
+    setExistingImageFileName(imageUrl ? imageUrl.split("/").pop() : "");
+  }, [selectedPost]);
 
   const validate = () => {
     const newErrors = {};
@@ -91,6 +123,35 @@ const PostForm = () => {
     }
   };
 
+  const updateSinglePost = async (formData) => {
+    dispatch(setLoading(true));
+
+    try {
+      const data = await updatePost(selectedPost._id, formData);
+      dispatch(fetchPostList());
+      dispatch(
+        setNotification({
+          type: "success",
+          message: data.msg,
+        }),
+      );
+      dispatch(setLoading(false));
+      setActiveTab(1);
+    } catch (error) {
+      const errMessage =
+        error.response.data.msg ||
+        error.response.data?.errors?.[0]?.msg ||
+        "An error occurred";
+      dispatch(
+        setNotification({
+          type: "error",
+          message: errMessage,
+        }),
+      );
+      dispatch(setLoading(false));
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -107,7 +168,11 @@ const PostForm = () => {
         }
       });
 
-      await createNewPost(data);
+      if (selectedPost) {
+        await updateSinglePost(data);
+      } else {
+        await createNewPost(data);
+      }
 
       // Clear form data
       setFormData({
@@ -166,7 +231,11 @@ const PostForm = () => {
               fullWidth
               label="Image"
               name="imageFile"
-              value={formData.imageFile ? formData.imageFile.name : ""}
+              value={
+                formData.imageFile
+                  ? formData.imageFile.name
+                  : existingImageFileName || ""
+              }
               onChange={handleChange}
               error={Boolean(errors.imageFile)}
               helperText={errors.imageFile}
