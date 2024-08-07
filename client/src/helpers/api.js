@@ -70,3 +70,9 @@ export const createPost = async (postData) => {
 
   return response.data;
 };
+
+export const deletePost = async (id) => {
+  const response = await axiosInstance.delete(`/posts/${id}`);
+
+  return response.data;
+};

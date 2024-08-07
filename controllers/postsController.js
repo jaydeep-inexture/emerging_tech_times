@@ -143,7 +143,7 @@ exports.updatePost = async (req, res, next) => {
 
     const updatedPost = await post.save();
 
-    if (updatedPost) {
+    if (image && updatedPost) {
       await deleteImageFromS3(oldImageUrl);
     }
 
@@ -161,11 +161,14 @@ exports.deletePost = async (req, res, next) => {
     }
 
     const post = await Post.findById(req.params.postId);
+
     if (!post) {
       return res.status(404).json({msg: 'Post not found.'});
     }
 
-    await deleteImageFromS3(post.imageUrl);
+    if (post.imageUrl) {
+      await deleteImageFromS3(post.imageUrl);
+    }
 
     await post.deleteOne();
 

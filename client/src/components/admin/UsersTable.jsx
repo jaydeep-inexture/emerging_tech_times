@@ -47,7 +47,7 @@ export default function UsersTable() {
       const data = await fetchUsers();
 
       dispatch(setUsers(data));
-      dispatch(dispatch(setLoading(false)));
+      dispatch(setLoading(false));
     } catch (error) {
       const errMessage =
         error.response.data.msg ||
@@ -59,7 +59,7 @@ export default function UsersTable() {
           message: errMessage,
         }),
       );
-      dispatch(dispatch(setLoading(false)));
+      dispatch(setLoading(false));
     }
   };
 

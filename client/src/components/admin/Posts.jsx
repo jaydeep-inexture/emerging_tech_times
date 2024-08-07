@@ -22,6 +22,7 @@ import {
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+import { deletePost } from "@/helpers/api";
 import { setNotification } from "@/redux/notificationSlice";
 import { fetchPostList, setLoading } from "@/redux/postSlice";
 
@@ -46,7 +47,7 @@ const Posts = ({ setActiveTab }) => {
           message: errMessage,
         }),
       );
-      dispatch(dispatch(setLoading(false)));
+      dispatch(setLoading(false));
     }
   };
 
@@ -66,17 +67,32 @@ const Posts = ({ setActiveTab }) => {
   };
 
   const confirmDelete = async () => {
-    // try {
-    //   await axios.delete(`${env.API_URL}/posts/${selectedPost._id}`);
-    //   dispatch(
-    //     setPosts((prevPosts) =>
-    //       prevPosts.filter((post) => post._id !== selectedPost._id),
-    //     ),
-    //   );
-    //   setOpenDialog(false);
-    // } catch (error) {
-    //   console.error("Error deleting post:", error);
-    // }
+    setLoading(true);
+
+    try {
+      const data = await deletePost(selectedPost._id);
+      dispatch(
+        setNotification({
+          type: "success",
+          message: data.msg,
+        }),
+      );
+      dispatch(fetchPostList());
+      setOpenDialog(false);
+      setLoading(false);
+    } catch (error) {
+      const errMessage =
+        error.response.data.msg ||
+        error.response.data?.errors?.[0]?.msg ||
+        "An error occurred";
+      dispatch(
+        setNotification({
+          type: "error",
+          message: errMessage,
+        }),
+      );
+      dispatch(setLoading(false));
+    }
   };
 
   const handleCloseDialog = () => {
@@ -194,7 +210,11 @@ const Posts = ({ setActiveTab }) => {
         </Box>
       )}
 
-      <Dialog open={openDialog} onClose={handleCloseDialog}>
+      <Dialog
+        sx={{ "& .MuiPaper-root": { padding: 2 } }}
+        open={openDialog}
+        onClose={handleCloseDialog}
+      >
         <DialogTitle>Confirm Delete</DialogTitle>
         <DialogContent>
           <Typography>
@@ -203,10 +223,14 @@ const Posts = ({ setActiveTab }) => {
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog} color="primary">
+          <Button
+            variant="outlined"
+            onClick={handleCloseDialog}
+            color="primary"
+          >
             Cancel
           </Button>
-          <Button onClick={confirmDelete} color="error">
+          <Button variant="contained" onClick={confirmDelete} color="error">
             Delete
           </Button>
         </DialogActions>

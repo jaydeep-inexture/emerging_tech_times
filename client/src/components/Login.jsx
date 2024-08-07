@@ -190,7 +190,7 @@ const Login = ({ setFlag }) => {
         }),
       );
     }
-    dispatch(dispatch(setLoading(false)));
+    dispatch(setLoading(false));
   };
 
   const handleOpenDialog = (item) => {
