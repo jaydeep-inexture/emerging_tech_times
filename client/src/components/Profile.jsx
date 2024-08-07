@@ -22,6 +22,8 @@ const Profile = () => {
   useEffect(() => {
     if (user) {
       setUsername(user.username);
+    } else {
+      setUsername("");
     }
   }, [user]);
 
@@ -70,6 +72,7 @@ const Profile = () => {
           padding: "46px",
           borderRadius: "12px",
           boxShadow: 3,
+          margin: 10,
           backgroundColor: "white",
         }}
       >
@@ -112,7 +115,6 @@ const Profile = () => {
                 display: "flex",
                 alignItems: "center",
                 width: "100%",
-                marginY:'25px'
               }}
             >
               <CustomTextField

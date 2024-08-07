@@ -1,11 +1,12 @@
 import { createTheme, ThemeProvider } from "@mui/material";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
+import NotificationSnackbar from "@/common/NotificationSnackbar";
 import Spinner from "@/common/Spinner";
 import Profile from "@/components/Profile";
 import MainLayout from "@/layout/MainLayout";
-import { loadLoggedInUser } from "@/redux/userSlice";
-import NotificationSnackbar from "@/common/NotificationSnackbar";
+import { setNotification } from "@/redux/notificationSlice";
+import { loadLoggedInUser, setLoading } from "@/redux/userSlice";
 
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -32,7 +33,23 @@ const App = () => {
     const user = JSON.parse(localStorage.getItem("user"));
 
     if (user) {
-      dispatch(loadLoggedInUser());
+      try {
+        setLoading(true);
+        dispatch(loadLoggedInUser());
+        setLoading(false);
+      } catch (error) {
+        const errMessage =
+          error.response.data.msg ||
+          error.response.data?.errors?.[0]?.msg ||
+          "An error occurred";
+        dispatch(
+          setNotification({
+            type: "error",
+            message: errMessage,
+          }),
+        );
+        setLoading(false);
+      }
     }
   }, [dispatch]);
 

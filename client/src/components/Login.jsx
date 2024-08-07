@@ -140,6 +140,7 @@ const Login = ({ setFlag }) => {
       dispatch(setUser(null));
 
       localStorage.removeItem("user");
+      dispatch(setUser(null));
 
       dispatch(
         setNotification({

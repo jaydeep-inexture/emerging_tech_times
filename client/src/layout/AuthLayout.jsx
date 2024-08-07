@@ -2,9 +2,12 @@ import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
 
 const AuthLayout = () => {
+  const isAuth = JSON.parse(localStorage.getItem("user"));
   const { user } = useSelector((state) => state.user);
 
-  if (user && (!user.accessToken || !user.isAdmin)) {
+  const isNotAdmin = user && !user.isAdmin;
+
+  if (!isAuth || isNotAdmin) {
     return <Navigate to="/" replace={true} />;
   }
 

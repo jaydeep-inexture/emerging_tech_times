@@ -69,12 +69,12 @@ const CommonDialog = ({
               <img
                 src={Emerging_Tech_Times_Logo}
                 alt='Emerging_Tech_Times_Logo'
-                style={{width: '130px', height: '50px', marginTop: 10}}
+                style={{width: '180px', height: '50px', marginTop: 10}}
               />
             </Box>
           </DialogTitle>
 
-          <DialogContent>
+          <DialogContent sx={{marginTop:"16px"}}>
             {!isLogin && (
               <CustomTextField
                 label='Username'
@@ -127,7 +127,7 @@ const CommonDialog = ({
               <Button
                 type='submit'
                 sx={{
-                  marginTop: '30px',
+                  marginTop: '16px',
                   width: '100%',
                   background: '#0F172A',
                   color: 'white',

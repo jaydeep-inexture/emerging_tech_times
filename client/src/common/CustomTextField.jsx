@@ -41,6 +41,7 @@ const CustomTextField = ({
     }}
     sx={{
       borderRadius: '8px',
+      margin: "10px 0px 8px 0px  ",
       background: '#F6F5F5',
       '& .MuiOutlinedInput-root': {
         '&:hover fieldset': {

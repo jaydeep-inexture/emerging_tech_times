@@ -1,4 +1,7 @@
+import AdminPanelSettings from "@mui/icons-material/AdminPanelSettings";
 import CheckIcon from "@mui/icons-material/Check";
+import ClearIcon from "@mui/icons-material/Clear";
+import { Box, IconButton, Typography } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
@@ -7,11 +10,12 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import ClearIcon from "@mui/icons-material/Clear";
-import AdminPanelSettings from "@mui/icons-material/AdminPanelSettings";
-import { Box, IconButton, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
-import { fetchUsers } from "../../helpers/api";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+import { fetchUsers } from "@/helpers/api";
+import { setNotification } from "@/redux/notificationSlice";
+import { setLoading, setUsers } from "@/redux/userSlice";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -34,60 +38,94 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 export default function UsersTable() {
-  const [users, setUsers] = useState([]);
-  const [dataLoaded, setDataLoaded] = useState(false);
+  const dispatch = useDispatch();
+  const users = useSelector((state) => state.user.users);
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await fetchUsers();
-      setUsers(data);
-      setDataLoaded(true)
+      try {
+        dispatch(setLoading(true));
+        const data = await fetchUsers();
+
+        dispatch(setUsers(data));
+        dispatch(setLoading(false));
+      } catch (error) {
+        const errMessage =
+          error.response.data.msg ||
+          error.response.data?.errors?.[0]?.msg ||
+          "An error occurred";
+        dispatch(
+          setNotification({
+            type: "error",
+            message: errMessage,
+          }),
+        );
+        dispatch(setLoading(false));
+      }
     };
 
-    if (!dataLoaded) {
+    if (!users) {
       fetchData();
     }
-  }, []);
+  }, [dispatch]);
 
   return (
     <Box sx={{ p: 2 }}>
       <Typography variant="h4" gutterBottom>
         Users
       </Typography>
-      <TableContainer component={Paper} sx={{ mt: 8 }}>
-        <Table sx={{ minWidth: 700 }} aria-label="customized table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell>Id</StyledTableCell>
-              <StyledTableCell>Email</StyledTableCell>
-              <StyledTableCell align="right">Username</StyledTableCell>
-              <StyledTableCell align="right">IsAdmin</StyledTableCell>
-              <StyledTableCell align="right">Change</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {users.map((user) => (
-              <StyledTableRow key={user._id}>
-                <StyledTableCell align="user">{user._id}</StyledTableCell>
-                <StyledTableCell scope="user">{user.email}</StyledTableCell>
-                <StyledTableCell align="right">{user.username}</StyledTableCell>
-                <StyledTableCell align="right">
-                  {user.isAdmin ? (
-                    <CheckIcon color="success" />
-                  ) : (
-                    <ClearIcon color="info" />
-                  )}
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  <IconButton>
-                    <AdminPanelSettings sx={{ color: "#0F172A" }} />
-                  </IconButton>
-                </StyledTableCell>
-              </StyledTableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      {users?.length > 0 ? (
+        <TableContainer component={Paper} sx={{ mt: 8 }}>
+          <Table sx={{ minWidth: 700 }} aria-label="customized table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell>Id</StyledTableCell>
+                <StyledTableCell>Email</StyledTableCell>
+                <StyledTableCell align="right">Username</StyledTableCell>
+                <StyledTableCell align="right">IsAdmin</StyledTableCell>
+                <StyledTableCell align="right">Change</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {users?.map((user) => (
+                <StyledTableRow key={user._id}>
+                  <StyledTableCell align="left">{user._id}</StyledTableCell>
+                  <StyledTableCell scope="user">{user.email}</StyledTableCell>
+                  <StyledTableCell align="right">
+                    {user.username}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    {user.isAdmin ? (
+                      <CheckIcon color="success" />
+                    ) : (
+                      <ClearIcon color="info" />
+                    )}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    <IconButton>
+                      <AdminPanelSettings sx={{ color: "#0F172A" }} />
+                    </IconButton>
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      ) : (
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "60vh",
+            textAlign: "center",
+          }}
+        >
+          <Typography variant="h6" color="text.secondary">
+            No Data to show
+          </Typography>
+        </Box>
+      )}
     </Box>
   );
 }
