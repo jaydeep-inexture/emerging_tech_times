@@ -6,7 +6,6 @@ export default function Spinner() {
   const usersLoading = useSelector((state) => state.user.loading);
   const postsLoading = useSelector((state) => state.post.loading);
 
-  console.log({ postsLoading });
   return (
     <>
       {postsLoading ||

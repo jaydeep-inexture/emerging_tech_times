@@ -1,4 +1,17 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { fetchPosts } from "@/helpers/api";
+
+export const fetchPostList = createAsyncThunk(
+  "post/fetchPosts",
+  async (_, { rejectWithValue }) => {
+    try {
+      const data = await fetchPosts();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data);
+    }
+  },
+);
 
 const postSlice = createSlice({
   name: "post",
@@ -7,16 +20,25 @@ const postSlice = createSlice({
     posts: null,
   },
   reducers: {
-    setPosts: (state, action) => {
-      state.posts = action.payload;
-    },
-
     setLoading: (state, action) => {
       state.loading = action.payload;
     },
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchPostList.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchPostList.fulfilled, (state, action) => {
+        state.loading = false;
+        state.posts = action.payload.data.posts;
+      })
+      .addCase(fetchPostList.rejected, (state) => {
+        state.loading = false;
+      });
+  },
 });
 
-export const { setLoading, setPosts } = postSlice.actions;
+export const { setLoading } = postSlice.actions;
 
 export default postSlice.reducer;

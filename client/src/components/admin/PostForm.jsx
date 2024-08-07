@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 
 import { createPost } from "@/helpers/api";
 import { setNotification } from "@/redux/notificationSlice";
-import { setLoading } from "@/redux/postSlice";
+import { fetchPostList, setLoading } from "@/redux/postSlice";
 
 const PostForm = () => {
   const dispatch = useDispatch();
@@ -56,7 +56,7 @@ const PostForm = () => {
 
     try {
       const data = await createPost(formData);
-      // fetchPostList();
+      dispatch(fetchPostList());
       dispatch(
         setNotification({
           type: "success",

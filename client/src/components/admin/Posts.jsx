@@ -1,8 +1,8 @@
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import InstagramIcon from "@mui/icons-material/Instagram";
-import TwitterIcon from "@mui/icons-material/Twitter";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import TwitterIcon from "@mui/icons-material/Twitter";
 import {
   Box,
   Button,
@@ -19,14 +19,11 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { fetchPosts } from "@/helpers/api";
-import { env } from "@/helpers/env";
 import { setNotification } from "@/redux/notificationSlice";
-import { setLoading, setPosts } from "@/redux/postSlice";
+import { fetchPostList, setLoading } from "@/redux/postSlice";
 
 const Posts = ({ setActiveTab }) => {
   const dispatch = useDispatch();
@@ -35,13 +32,9 @@ const Posts = ({ setActiveTab }) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
 
-  const fetchPostList = async () => {
+  const fetchPosts = async () => {
     try {
-      dispatch(setLoading(true));
-      const response = await fetchPosts();
-
-      dispatch(setPosts(response.data.posts));
-      dispatch(dispatch(setLoading(false)));
+      dispatch(fetchPostList());
     } catch (error) {
       const errMessage =
         error.response.data.msg ||
@@ -59,7 +52,7 @@ const Posts = ({ setActiveTab }) => {
 
   useEffect(() => {
     if (!posts) {
-      fetchPostList();
+      fetchPosts();
     }
   }, [dispatch]);
 
@@ -73,15 +66,17 @@ const Posts = ({ setActiveTab }) => {
   };
 
   const confirmDelete = async () => {
-    try {
-      await axios.delete(`${env.API_URL}/posts/${selectedPost._id}`);
-      dispatch(setPosts((prevPosts) =>
-        prevPosts.filter((post) => post._id !== selectedPost._id),
-      ));
-      setOpenDialog(false);
-    } catch (error) {
-      console.error("Error deleting post:", error);
-    }
+    // try {
+    //   await axios.delete(`${env.API_URL}/posts/${selectedPost._id}`);
+    //   dispatch(
+    //     setPosts((prevPosts) =>
+    //       prevPosts.filter((post) => post._id !== selectedPost._id),
+    //     ),
+    //   );
+    //   setOpenDialog(false);
+    // } catch (error) {
+    //   console.error("Error deleting post:", error);
+    // }
   };
 
   const handleCloseDialog = () => {
@@ -106,7 +101,7 @@ const Posts = ({ setActiveTab }) => {
                   height: "100%",
                   border: "1px solid #e0e0e0",
                   boxShadow: 3,
-                  '&:hover': {
+                  "&:hover": {
                     boxShadow: 6,
                   },
                 }}
@@ -122,8 +117,13 @@ const Posts = ({ setActiveTab }) => {
                 )}
                 <CardHeader
                   title={post.title}
-                  subheader={`By ${post.author.name} on ${new Date(post.date).toLocaleDateString()}`}
-                  sx={{ backgroundColor: '#f5f5f5', borderBottom: '1px solid #e0e0e0' }}
+                  subheader={`By ${post.author.name} on ${new Date(
+                    post.date,
+                  ).toLocaleDateString()}`}
+                  sx={{
+                    backgroundColor: "#f5f5f5",
+                    borderBottom: "1px solid #e0e0e0",
+                  }}
                 />
                 <CardContent sx={{ flexGrow: 1 }}>
                   <Typography variant="body2" color="text.secondary" paragraph>
@@ -138,19 +138,28 @@ const Posts = ({ setActiveTab }) => {
                         {post.author.description}
                       </Typography>
                     )}
-                    <Box sx={{ display: 'flex', mt: 1 }}>
+                    <Box sx={{ display: "flex", mt: 1 }}>
                       {post.author.socials.instagram && (
-                        <IconButton href={post.author.socials.instagram} target="_blank">
+                        <IconButton
+                          href={post.author.socials.instagram}
+                          target="_blank"
+                        >
                           <InstagramIcon />
                         </IconButton>
                       )}
                       {post.author.socials.twitter && (
-                        <IconButton href={post.author.socials.twitter} target="_blank">
+                        <IconButton
+                          href={post.author.socials.twitter}
+                          target="_blank"
+                        >
                           <TwitterIcon />
                         </IconButton>
                       )}
                       {post.author.socials.linkedin && (
-                        <IconButton href={post.author.socials.linkedin} target="_blank">
+                        <IconButton
+                          href={post.author.socials.linkedin}
+                          target="_blank"
+                        >
                           <LinkedInIcon />
                         </IconButton>
                       )}
@@ -158,10 +167,7 @@ const Posts = ({ setActiveTab }) => {
                   </Box>
                 </CardContent>
                 <CardActions sx={{ justifyContent: "space-between", p: 2 }}>
-                  <IconButton
-                    color="primary"
-                    onClick={() => handleEdit(post)}
-                  >
+                  <IconButton color="primary" onClick={() => handleEdit(post)}>
                     <EditIcon />
                   </IconButton>
                   <IconButton color="error" onClick={() => handleDelete(post)}>
