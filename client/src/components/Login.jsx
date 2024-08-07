@@ -36,6 +36,10 @@ const Login = ({ setFlag }) => {
 
   const handleLoginClose = () => {
     setLoginBtnOpen(false);
+    setLoginFormData({
+      email: "",
+      password: "",
+    });
   };
 
   const handleLoginOpen = () => {
@@ -50,6 +54,13 @@ const Login = ({ setFlag }) => {
 
   const handleSignUpClose = () => {
     setSignupBtnOpen(false);
+
+    setSignUpFormData({
+      username: "",
+      email: "",
+      password: "",
+      cpassword: "",
+    });
   };
 
   const handleLoginFormChange = (event) => {
@@ -63,7 +74,7 @@ const Login = ({ setFlag }) => {
   const handleLoginSubmit = async (event) => {
     event.preventDefault();
 
-    setLoading(true);
+    dispatch(setLoading(true));
 
     try {
       const data = await login(loginFormData);
@@ -80,7 +91,12 @@ const Login = ({ setFlag }) => {
           message: data.msg,
         }),
       );
-      setLoading(false);
+      dispatch(setLoading(false));
+
+      setLoginFormData({
+        email: "",
+        password: "",
+      });
     } catch (error) {
       const errMessage =
         error.response.data.msg ||
@@ -92,7 +108,7 @@ const Login = ({ setFlag }) => {
           message: errMessage,
         }),
       );
-      setLoading(false);
+      dispatch(setLoading(false));
     }
   };
 
@@ -106,7 +122,7 @@ const Login = ({ setFlag }) => {
 
   const handleSignupSubmit = async (event) => {
     event.preventDefault();
-    setLoading(true);
+    dispatch(setLoading(true));
 
     try {
       const data = await signup(signUpFormData);
@@ -123,7 +139,14 @@ const Login = ({ setFlag }) => {
           message: data.msg,
         }),
       );
-      setLoading(false);
+      dispatch(setLoading(false));
+
+      setSignUpFormData({
+        username: "",
+        email: "",
+        password: "",
+        cpassword: "",
+      });
     } catch (error) {
       const errMessage =
         error.response.data.msg ||
@@ -135,7 +158,7 @@ const Login = ({ setFlag }) => {
           message: errMessage,
         }),
       );
-      setLoading(false);
+      dispatch(setLoading(false));
     }
   };
 
@@ -167,7 +190,7 @@ const Login = ({ setFlag }) => {
         }),
       );
     }
-    dispatch(setLoading(false));
+    dispatch(dispatch(setLoading(false)));
   };
 
   const handleOpenDialog = (item) => {

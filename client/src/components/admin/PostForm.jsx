@@ -1,34 +1,40 @@
-import {Box, Button, Grid, TextField, Typography, Input} from '@mui/material';
-import {useState} from 'react';
+import { Box, Button, Grid, Input, TextField, Typography } from "@mui/material";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+
+import { createPost } from "@/helpers/api";
+import { setNotification } from "@/redux/notificationSlice";
+import { setLoading } from "@/redux/postSlice";
 
 const PostForm = () => {
-  const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    imageFile: null,
-    seoTitle: '',
-    seoDescription: '',
-    seoSlug: '',
-    authorName: '',
-    authorDescription: '',
-    authorTwitter: '',
-    authorInstagram: '',
-    authorLinkedin: '',
-  });
+  const dispatch = useDispatch();
 
   const [errors, setErrors] = useState({});
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    imageFile: null,
+    authorName: "",
+    authorDescription: "",
+    twitter: "",
+    instagram: "",
+    linkedin: "",
+    seoTitle: "",
+    seoDescription: "",
+    seoSlug: "",
+  });
 
   const validate = () => {
     const newErrors = {};
-    if (!formData.title) newErrors.title = 'Title is required';
+    if (!formData.title) newErrors.title = "Title is required";
     if (!formData.description)
-      newErrors.description = 'Description is required';
-    if (!formData.authorName) newErrors.authorName = 'Author Name is required';
+      newErrors.description = "Description is required";
+    if (!formData.authorName) newErrors.authorName = "Author Name is required";
     return newErrors;
   };
 
   const handleChange = (e) => {
-    const {name, value} = e.target;
+    const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -45,33 +51,64 @@ const PostForm = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const createNewPost = async (formData) => {
+    dispatch(setLoading(true));
+
+    try {
+      const data = await createPost(formData);
+      // fetchPostList();
+      dispatch(
+        setNotification({
+          type: "success",
+          message: data.msg,
+        }),
+      );
+      dispatch(setLoading(false));
+    } catch (error) {
+      const errMessage =
+        error.response.data.msg ||
+        error.response.data?.errors?.[0]?.msg ||
+        "An error occurred";
+      dispatch(
+        setNotification({
+          type: "error",
+          message: errMessage,
+        }),
+      );
+      dispatch(setLoading(false));
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     const validationErrors = validate();
+
     if (Object.keys(validationErrors).length === 0) {
       const data = new FormData();
+
       Object.keys(formData).forEach((key) => {
-        if (key === 'imageFile' && formData[key]) {
-          data.append('image', formData[key]);
+        if (key === "imageFile" && formData[key]) {
+          data.append("image", formData[key]);
         } else {
           data.append(key, formData[key]);
         }
       });
 
-      // API call
+      await createNewPost(data);
 
       // Clear form data
       setFormData({
-        title: '',
-        description: '',
-        seoTitle: '',
-        seoDescription: '',
-        seoSlug: '',
-        authorName: '',
-        authorDescription: '',
-        authorTwitter: '',
-        authorInstagram: '',
-        authorLinkedin: '',
+        title: "",
+        description: "",
+        seoTitle: "",
+        seoDescription: "",
+        seoSlug: "",
+        authorName: "",
+        authorDescription: "",
+        twitter: "",
+        instagram: "",
+        linkedin: "",
         imageFile: null,
       });
     } else {
@@ -80,17 +117,17 @@ const PostForm = () => {
   };
 
   return (
-    <Box sx={{p: 2}}>
-      <Typography variant='h4' gutterBottom>
+    <Box sx={{ p: 2, mt: 4 }}>
+      <Typography variant="h4" gutterBottom>
         Create a New Post
       </Typography>
-      <Box component='form' onSubmit={handleSubmit} sx={{mt: 3}}>
+      <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <TextField
               fullWidth
-              label='Title'
-              name='title'
+              label="Title"
+              name="title"
               value={formData.title}
               onChange={handleChange}
               error={Boolean(errors.title)}
@@ -101,8 +138,8 @@ const PostForm = () => {
           <Grid item xs={12}>
             <TextField
               fullWidth
-              label='Description'
-              name='description'
+              label="Description"
+              name="description"
               value={formData.description}
               onChange={handleChange}
               error={Boolean(errors.description)}
@@ -115,43 +152,43 @@ const PostForm = () => {
           <Grid item xs={12}>
             <TextField
               fullWidth
-              label='Image'
-              name='imageFile'
-              value={formData.imageFile ? formData.imageFile.name : ''}
+              label="Image"
+              name="imageFile"
+              value={formData.imageFile ? formData.imageFile.name : ""}
               onChange={handleChange}
               InputProps={{
                 endAdornment: (
                   <Button
-                    variant='contained'
-                    component='label'
-                    size='small'
-                    sx={{ml: 1}}
+                    variant="contained"
+                    component="label"
+                    size="small"
+                    sx={{ ml: 1 }}
                   >
                     Upload
                     <Input
-                      type='file'
+                      type="file"
                       hidden
                       onChange={handleFileChange}
-                      inputProps={{accept: 'image/*'}}
-                      sx={{display: 'none'}}
+                      inputProps={{ accept: "image/*" }}
+                      sx={{ display: "none" }}
                     />
                   </Button>
                 ),
               }}
               // InputProps to disable user input
-              inputProps={{readOnly: true}}
+              inputProps={{ readOnly: true }}
             />
           </Grid>
           <Grid item xs={12}>
-            <Typography variant='h6' gutterBottom>
+            <Typography variant="h6" gutterBottom>
               SEO Details
             </Typography>
           </Grid>
           <Grid item xs={12} sm={4}>
             <TextField
               fullWidth
-              label='SEO Title'
-              name='seoTitle'
+              label="SEO Title"
+              name="seoTitle"
               value={formData.seoTitle}
               onChange={handleChange}
             />
@@ -159,8 +196,8 @@ const PostForm = () => {
           <Grid item xs={12} sm={4}>
             <TextField
               fullWidth
-              label='SEO Description'
-              name='seoDescription'
+              label="SEO Description"
+              name="seoDescription"
               value={formData.seoDescription}
               onChange={handleChange}
             />
@@ -168,22 +205,22 @@ const PostForm = () => {
           <Grid item xs={12} sm={4}>
             <TextField
               fullWidth
-              label='SEO Slug'
-              name='seoSlug'
+              label="SEO Slug"
+              name="seoSlug"
               value={formData.seoSlug}
               onChange={handleChange}
             />
           </Grid>
           <Grid item xs={12}>
-            <Typography variant='h6' gutterBottom>
+            <Typography variant="h6" gutterBottom>
               Author Details
             </Typography>
           </Grid>
           <Grid item xs={12} sm={4}>
             <TextField
               fullWidth
-              label='Author Name'
-              name='authorName'
+              label="Author Name"
+              name="authorName"
               value={formData.authorName}
               onChange={handleChange}
               error={Boolean(errors.authorName)}
@@ -194,8 +231,8 @@ const PostForm = () => {
           <Grid item xs={12} sm={4}>
             <TextField
               fullWidth
-              label='Author Description'
-              name='authorDescription'
+              label="Author Description"
+              name="authorDescription"
               value={formData.authorDescription}
               onChange={handleChange}
             />
@@ -203,32 +240,32 @@ const PostForm = () => {
           <Grid item xs={12} sm={4}>
             <TextField
               fullWidth
-              label='Twitter'
-              name='authorTwitter'
-              value={formData.authorTwitter}
+              label="Twitter"
+              name="twitter"
+              value={formData.twitter}
               onChange={handleChange}
             />
           </Grid>
           <Grid item xs={12} sm={4}>
             <TextField
               fullWidth
-              label='Instagram'
-              name='authorInstagram'
-              value={formData.authorInstagram}
+              label="Instagram"
+              name="instagram"
+              value={formData.instagram}
               onChange={handleChange}
             />
           </Grid>
           <Grid item xs={12} sm={4}>
             <TextField
               fullWidth
-              label='LinkedIn'
-              name='authorLinkedin'
-              value={formData.authorLinkedin}
+              label="LinkedIn"
+              name="linkedin"
+              value={formData.linkedin}
               onChange={handleChange}
             />
           </Grid>
           <Grid item xs={12}>
-            <Button type='submit' variant='contained' color='primary'>
+            <Button type="submit" variant="contained" color="primary">
               Submit
             </Button>
           </Grid>

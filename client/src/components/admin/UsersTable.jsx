@@ -13,10 +13,9 @@ import TableRow from "@mui/material/TableRow";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { fetchUsers } from "@/helpers/api";
+import { fetchUsers, grantAdminPermission } from "@/helpers/api";
 import { setNotification } from "@/redux/notificationSlice";
 import { setLoading, setUsers } from "@/redux/userSlice";
-import { grantAdminPermission } from "../../helpers/api";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -48,7 +47,7 @@ export default function UsersTable() {
       const data = await fetchUsers();
 
       dispatch(setUsers(data));
-      dispatch(setLoading(false));
+      dispatch(dispatch(setLoading(false)));
     } catch (error) {
       const errMessage =
         error.response.data.msg ||
@@ -60,7 +59,7 @@ export default function UsersTable() {
           message: errMessage,
         }),
       );
-      dispatch(setLoading(false));
+      dispatch(dispatch(setLoading(false)));
     }
   };
 
@@ -71,7 +70,7 @@ export default function UsersTable() {
   }, [dispatch]);
 
   const handlePermission = async (id) => {
-    setLoading(true);
+    dispatch(setLoading(true));
 
     try {
       const data = await grantAdminPermission(id);
@@ -82,7 +81,7 @@ export default function UsersTable() {
           message: data.msg,
         }),
       );
-      setLoading(false);
+      dispatch(setLoading(false));
     } catch (error) {
       const errMessage =
         error.response.data.msg ||
@@ -94,17 +93,17 @@ export default function UsersTable() {
           message: errMessage,
         }),
       );
-      setLoading(false);
+      dispatch(setLoading(false));
     }
   };
 
   return (
-    <Box sx={{ p: 2 }}>
+    <Box sx={{ p: 2, mt: 4 }}>
       <Typography variant="h4" gutterBottom>
         Users
       </Typography>
       {users?.length > 0 ? (
-        <TableContainer component={Paper} sx={{ mt: 8 }}>
+        <TableContainer component={Paper} sx={{ mt: 6 }}>
           <Table sx={{ minWidth: 700 }} aria-label="customized table">
             <TableHead>
               <TableRow>

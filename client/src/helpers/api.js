@@ -1,18 +1,10 @@
 import axiosInstance from "@/helpers/axios";
 
-//  ************ AUTH **********************//
+//  ************ Auth **********************//
 export const signup = async (userData) => {
-  const formData = new FormData();
-  if (userData.username) {
-    formData.append("username", userData.username);
-  }
-  formData.append("email", userData.email);
-  formData.append("password", userData.password);
-  formData.append("confirmPassword", userData.confirmPassword);
-
-  const response = await axiosInstance.post("/users/register", formData, {
+  const response = await axiosInstance.post("/users/register", userData, {
     headers: {
-      "Content-Type": "multipart/form-data",
+      "Content-Type": "application/json",
     },
   });
 
@@ -20,13 +12,9 @@ export const signup = async (userData) => {
 };
 
 export const login = async (userData) => {
-  const formData = new FormData();
-  formData.append("email", userData.email);
-  formData.append("password", userData.password);
-
-  const response = await axiosInstance.post("/users/login", formData, {
+  const response = await axiosInstance.post("/users/login", userData, {
     headers: {
-      "Content-Type": "multipart/form-data",
+      "Content-Type": "application/json",
     },
   });
   return response.data;
@@ -50,6 +38,7 @@ export const refreshToken = async (token) => {
 };
 
 //  ************ Users **********************//
+
 export const updateUser = async (userData) => {
   const response = await axiosInstance.put("/users", userData);
   return response.data;
@@ -62,5 +51,22 @@ export const grantAdminPermission = async (userId) => {
 
 export const fetchUsers = async () => {
   const response = await axiosInstance.get("/users");
+  return response.data;
+};
+
+//  *************** Posts **************** //
+
+export const fetchPosts = async () => {
+  const response = await axiosInstance.get("/posts");
+  return response.data;
+};
+
+export const createPost = async (postData) => {
+  const response = await axiosInstance.post("/posts", postData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
   return response.data;
 };

@@ -34,9 +34,9 @@ const App = () => {
 
     if (user) {
       try {
-        setLoading(true);
+        dispatch(setLoading(true));
         dispatch(loadLoggedInUser());
-        setLoading(false);
+        dispatch(setLoading(false));
       } catch (error) {
         const errMessage =
           error.response.data.msg ||
@@ -48,7 +48,7 @@ const App = () => {
             message: errMessage,
           }),
         );
-        setLoading(false);
+        dispatch(setLoading(false));
       }
     }
   }, [dispatch]);

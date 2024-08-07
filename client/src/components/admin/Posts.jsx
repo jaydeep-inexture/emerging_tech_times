@@ -1,13 +1,15 @@
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import { useState } from 'react';
-
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import {
   Box,
   Button,
   Card,
   CardActions,
   CardContent,
+  CardHeader,
   CardMedia,
   Dialog,
   DialogActions,
@@ -16,30 +18,50 @@ import {
   Grid,
   IconButton,
   Typography,
-} from '@mui/material';
-import axios from 'axios';
-import { useEffect } from 'react';
+} from "@mui/material";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
+import { fetchPosts } from "@/helpers/api";
+import { env } from "@/helpers/env";
+import { setNotification } from "@/redux/notificationSlice";
+import { setLoading, setPosts } from "@/redux/postSlice";
 
-import { env } from '@/helpers/env';
+const Posts = ({ setActiveTab }) => {
+  const dispatch = useDispatch();
+  const posts = useSelector((state) => state.post.posts);
 
-const Posts = ({setActiveTab}) => {
   const [openDialog, setOpenDialog] = useState(false);
-  const [posts, setPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const response = await axios.get(`${env.API_URL}/posts`);
-        setPosts(response.data.data.posts);
-      } catch (error) {
-        console.error('Error fetching posts:', error);
-      }
-    };
+  const fetchPostList = async () => {
+    try {
+      dispatch(setLoading(true));
+      const response = await fetchPosts();
 
-    fetchPosts();
-  }, []);
+      dispatch(setPosts(response.data.posts));
+      dispatch(dispatch(setLoading(false)));
+    } catch (error) {
+      const errMessage =
+        error.response.data.msg ||
+        error.response.data?.errors?.[0]?.msg ||
+        "An error occurred";
+      dispatch(
+        setNotification({
+          type: "error",
+          message: errMessage,
+        }),
+      );
+      dispatch(dispatch(setLoading(false)));
+    }
+  };
+
+  useEffect(() => {
+    if (!posts) {
+      fetchPostList();
+    }
+  }, [dispatch]);
 
   const handleEdit = (post) => {
     setActiveTab(2);
@@ -53,12 +75,12 @@ const Posts = ({setActiveTab}) => {
   const confirmDelete = async () => {
     try {
       await axios.delete(`${env.API_URL}/posts/${selectedPost._id}`);
-      setPosts((prevPosts) =>
+      dispatch(setPosts((prevPosts) =>
         prevPosts.filter((post) => post._id !== selectedPost._id),
-      );
+      ));
       setOpenDialog(false);
     } catch (error) {
-      console.error('Error deleting post:', error);
+      console.error("Error deleting post:", error);
     }
   };
 
@@ -68,59 +90,81 @@ const Posts = ({setActiveTab}) => {
   };
 
   return (
-    <Box sx={{p: 2}}>
-      <Typography variant='h4' gutterBottom>
+    <Box sx={{ p: 2 }}>
+      <Typography variant="h4" gutterBottom>
         Posts
       </Typography>
-      {posts.length > 0 ? (
+      {posts?.length > 0 ? (
         <Grid container spacing={2}>
-          {posts.map((post) => (
+          {posts?.map((post) => (
             <Grid item xs={12} sm={6} md={4} key={post._id}>
               <Card
                 sx={{
                   maxWidth: 345,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  height: '100%',
+                  display: "flex",
+                  flexDirection: "column",
+                  height: "100%",
+                  border: "1px solid #e0e0e0",
+                  boxShadow: 3,
+                  '&:hover': {
+                    boxShadow: 6,
+                  },
                 }}
               >
                 {post.imageUrl && (
                   <CardMedia
-                    component='img'
+                    component="img"
                     alt={post.title}
-                    height='140'
+                    height="140"
                     image={post.imageUrl}
-                    sx={{objectFit: 'cover'}}
+                    sx={{ objectFit: "cover", width: "100%" }}
                   />
                 )}
-                <CardContent sx={{flexGrow: 1}}>
-                  <Typography gutterBottom variant='h6' component='div'>
-                    {post.title}
-                  </Typography>
-                  <Typography variant='body2' color='text.secondary'>
+                <CardHeader
+                  title={post.title}
+                  subheader={`By ${post.author.name} on ${new Date(post.date).toLocaleDateString()}`}
+                  sx={{ backgroundColor: '#f5f5f5', borderBottom: '1px solid #e0e0e0' }}
+                />
+                <CardContent sx={{ flexGrow: 1 }}>
+                  <Typography variant="body2" color="text.secondary" paragraph>
                     {post.description}
                   </Typography>
-                  <Typography
-                    variant='body2'
-                    color='text.secondary'
-                    sx={{mt: 1}}
-                  >
-                    <strong>Author:</strong> {post.author.name}
-                  </Typography>
-                  <Typography variant='body2' color='text.secondary'>
-                    <strong>Date:</strong>{' '}
-                    {new Date(post.date).toLocaleDateString()}
-                  </Typography>
+                  <Box sx={{ mt: 2 }}>
+                    <Typography variant="subtitle2" color="text.primary">
+                      Author Details:
+                    </Typography>
+                    {post.author.description && (
+                      <Typography variant="body2" color="text.secondary">
+                        {post.author.description}
+                      </Typography>
+                    )}
+                    <Box sx={{ display: 'flex', mt: 1 }}>
+                      {post.author.socials.instagram && (
+                        <IconButton href={post.author.socials.instagram} target="_blank">
+                          <InstagramIcon />
+                        </IconButton>
+                      )}
+                      {post.author.socials.twitter && (
+                        <IconButton href={post.author.socials.twitter} target="_blank">
+                          <TwitterIcon />
+                        </IconButton>
+                      )}
+                      {post.author.socials.linkedin && (
+                        <IconButton href={post.author.socials.linkedin} target="_blank">
+                          <LinkedInIcon />
+                        </IconButton>
+                      )}
+                    </Box>
+                  </Box>
                 </CardContent>
-                <CardActions sx={{justifyContent: 'space-between'}}>
+                <CardActions sx={{ justifyContent: "space-between", p: 2 }}>
                   <IconButton
-                    color='primary'
+                    color="primary"
                     onClick={() => handleEdit(post)}
-                    sx={{mr: 1}}
                   >
                     <EditIcon />
                   </IconButton>
-                  <IconButton color='error' onClick={() => handleDelete(post)}>
+                  <IconButton color="error" onClick={() => handleDelete(post)}>
                     <DeleteIcon />
                   </IconButton>
                 </CardActions>
@@ -131,14 +175,14 @@ const Posts = ({setActiveTab}) => {
       ) : (
         <Box
           sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '60vh',
-            textAlign: 'center',
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "60vh",
+            textAlign: "center",
           }}
         >
-          <Typography variant='h6' color='text.secondary'>
+          <Typography variant="h6" color="text.secondary">
             No Data to show
           </Typography>
         </Box>
@@ -153,10 +197,10 @@ const Posts = ({setActiveTab}) => {
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog} color='primary'>
+          <Button onClick={handleCloseDialog} color="primary">
             Cancel
           </Button>
-          <Button onClick={confirmDelete} color='error'>
+          <Button onClick={confirmDelete} color="error">
             Delete
           </Button>
         </DialogActions>

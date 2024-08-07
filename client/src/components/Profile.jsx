@@ -28,7 +28,7 @@ const Profile = () => {
   }, [user]);
 
   const handleUpdateBtnClicked = async () => {
-    setLoading(true);
+    dispatch(setLoading(true));
 
     try {
       const data = await updateUser({ username });
@@ -40,7 +40,7 @@ const Profile = () => {
           message: data.msg,
         }),
       );
-      setLoading(false);
+      dispatch(setLoading(false));
     } catch (error) {
       const errMessage =
         error.response.data.msg ||
@@ -52,7 +52,7 @@ const Profile = () => {
           message: errMessage,
         }),
       );
-      setLoading(false);
+      dispatch(setLoading(false));
     }
   };
 
