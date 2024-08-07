@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { createPost, updatePost } from "@/helpers/api";
 import { setNotification } from "@/redux/notificationSlice";
-import { fetchPostList, setLoading } from "@/redux/postSlice";
+import { fetchPostList, setLoading, setSelectedPost } from "@/redux/postSlice";
 
 const PostForm = ({ setActiveTab }) => {
   const dispatch = useDispatch();
@@ -25,6 +25,12 @@ const PostForm = ({ setActiveTab }) => {
     seoDescription: "",
     seoSlug: "",
   });
+
+  useEffect(() => {
+    return () => {
+      dispatch(setSelectedPost(null));
+    };
+  }, []);
 
   useEffect(() => {
     if (selectedPost) {
@@ -108,6 +114,20 @@ const PostForm = ({ setActiveTab }) => {
         }),
       );
       dispatch(setLoading(false));
+      // Clear form data
+      setFormData({
+        title: "",
+        description: "",
+        seoTitle: "",
+        seoDescription: "",
+        seoSlug: "",
+        authorName: "",
+        authorDescription: "",
+        twitter: "",
+        instagram: "",
+        linkedin: "",
+        imageFile: null,
+      });
     } catch (error) {
       const errMessage =
         error.response.data.msg ||
@@ -136,6 +156,20 @@ const PostForm = ({ setActiveTab }) => {
         }),
       );
       dispatch(setLoading(false));
+      // Clear form data
+      setFormData({
+        title: "",
+        description: "",
+        seoTitle: "",
+        seoDescription: "",
+        seoSlug: "",
+        authorName: "",
+        authorDescription: "",
+        twitter: "",
+        instagram: "",
+        linkedin: "",
+        imageFile: null,
+      });
       setActiveTab(1);
     } catch (error) {
       const errMessage =
@@ -173,21 +207,6 @@ const PostForm = ({ setActiveTab }) => {
       } else {
         await createNewPost(data);
       }
-
-      // Clear form data
-      setFormData({
-        title: "",
-        description: "",
-        seoTitle: "",
-        seoDescription: "",
-        seoSlug: "",
-        authorName: "",
-        authorDescription: "",
-        twitter: "",
-        instagram: "",
-        linkedin: "",
-        imageFile: null,
-      });
     } else {
       setErrors(validationErrors);
     }

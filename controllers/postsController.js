@@ -137,6 +137,11 @@ exports.updatePost = async (req, res, next) => {
     if (seoSlug !== undefined) post.seo.slug = seoSlug;
 
     if (image) {
+
+      if (oldImageUrl) {
+        await deleteImageFromS3(oldImageUrl);
+      }
+
       const uploadedFile = await uploadImageToS3(image);
       post.imageUrl = uploadedFile.Location;
     }

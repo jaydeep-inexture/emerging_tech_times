@@ -12,6 +12,7 @@ import {
   CardMedia,
   Grid,
   IconButton,
+  Link,
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -150,29 +151,74 @@ const Posts = ({ setActiveTab }) => {
                         {post.author.description}
                       </Typography>
                     )}
-                    <Box sx={{ display: "flex", mt: 1 }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        mt: 2,
+                        gap: 2,
+                      }}
+                    >
                       {post.author.socials.instagram && (
                         <IconButton
-                          href={post.author.socials.instagram}
-                          target="_blank"
+                          sx={{
+                            borderRadius: "8px",
+                            height: "40px",
+                            width: "40px",
+                            border: "1px solid #0F172A",
+                          }}
                         >
-                          <InstagramIcon />
+                          <Link
+                            className="link"
+                            href={post.author.socials.instagram}
+                            target="_blank"
+                            sx={{
+                              lineHeight: "0",
+                            }}
+                          >
+                            <InstagramIcon />
+                          </Link>
                         </IconButton>
                       )}
                       {post.author.socials.twitter && (
                         <IconButton
-                          href={post.author.socials.twitter}
-                          target="_blank"
+                          sx={{
+                            borderRadius: "8px",
+                            height: "40px",
+                            width: "40px",
+                            border: "1px solid #0F172A",
+                          }}
                         >
-                          <TwitterIcon />
+                          <Link
+                            className="link"
+                            href={post.author.socials.twitter}
+                            target="_blank"
+                            sx={{
+                              lineHeight: "0",
+                            }}
+                          >
+                            <TwitterIcon />
+                          </Link>
                         </IconButton>
                       )}
                       {post.author.socials.linkedin && (
                         <IconButton
-                          href={post.author.socials.linkedin}
-                          target="_blank"
+                          sx={{
+                            borderRadius: "8px",
+                            height: "40px",
+                            width: "40px",
+                            border: "1px solid #0F172A",
+                          }}
                         >
-                          <LinkedInIcon />
+                          <Link
+                            className="link"
+                            href={post.author.socials.linkedin}
+                            target="_blank"
+                            sx={{
+                              lineHeight: "0",
+                            }}
+                          >
+                            <LinkedInIcon />
+                          </Link>
                         </IconButton>
                       )}
                     </Box>
