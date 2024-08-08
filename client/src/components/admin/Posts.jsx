@@ -5,6 +5,7 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import {
   Box,
+  Button,
   Card,
   CardActions,
   CardContent,
@@ -21,21 +22,31 @@ import { useDispatch, useSelector } from "react-redux";
 import DeletePopup from "@/common/DeletePopup";
 import { deletePost } from "@/helpers/api";
 import { setNotification } from "@/redux/notificationSlice";
-import { fetchPostList, setLoading, setSelectedPost } from "@/redux/postSlice";
+import {
+  fetchPostList,
+  incrementPage,
+  resetPage,
+  resetPosts,
+  setLoading,
+  setSelectedPost,
+} from "@/redux/postSlice";
 
 const Posts = ({ setActiveTab }) => {
   const dispatch = useDispatch();
-  const { posts, selectedPost } = useSelector((state) => state.post);
+  const { posts, selectedPost, page, limit, hasMore, dataFetched } =
+    useSelector((state) => state.post);
 
   const [openDialog, setOpenDialog] = useState(false);
 
   const fetchPosts = async () => {
+    dispatch(setLoading(true));
+
     try {
-      dispatch(fetchPostList());
+      dispatch(fetchPostList({ page, limit }));
     } catch (error) {
       const errMessage =
-        error.response.data.msg ||
-        error.response.data?.errors?.[0]?.msg ||
+        error.response?.data?.msg ||
+        error.response?.data?.errors?.[0]?.msg ||
         "An error occurred";
       dispatch(
         setNotification({
@@ -46,12 +57,6 @@ const Posts = ({ setActiveTab }) => {
       dispatch(setLoading(false));
     }
   };
-
-  useEffect(() => {
-    if (!posts) {
-      fetchPosts();
-    }
-  }, [dispatch]);
 
   const handleEdit = (post) => {
     dispatch(setSelectedPost(post));
@@ -74,13 +79,13 @@ const Posts = ({ setActiveTab }) => {
           message: data.msg,
         }),
       );
-      dispatch(fetchPostList());
+      dispatch(resetPosts());
       setOpenDialog(false);
       setLoading(false);
     } catch (error) {
       const errMessage =
-        error.response.data.msg ||
-        error.response.data?.errors?.[0]?.msg ||
+        error.response?.data?.msg ||
+        error.response?.data?.errors?.[0]?.msg ||
         "An error occurred";
       dispatch(
         setNotification({
@@ -96,6 +101,27 @@ const Posts = ({ setActiveTab }) => {
     setOpenDialog(false);
     dispatch(setSelectedPost(null));
   };
+
+  // stop data fetching while changing tabs if data is already fetched(inital)
+  useEffect(() => {
+    if (!dataFetched) {
+      fetchPosts();
+    }
+  }, [dispatch, dataFetched]);
+
+  // stop data fetching while changing tabs if data is already fetched(load more)
+  useEffect(() => {
+    return () => {
+      dispatch(resetPage());
+    };
+  }, [dispatch]);
+
+  // Load more data
+  useEffect(() => {
+    if (page > 0 && dataFetched) {
+      fetchPosts();
+    }
+  }, [page, dataFetched]);
 
   return (
     <Box sx={{ p: 2 }}>
@@ -131,7 +157,7 @@ const Posts = ({ setActiveTab }) => {
                 <CardHeader
                   title={post.title}
                   subheader={`By ${post.author.name} on ${new Date(
-                    post.date,
+                    post.createdAt,
                   ).toLocaleDateString()}`}
                   sx={{
                     backgroundColor: "#f5f5f5",
@@ -249,6 +275,14 @@ const Posts = ({ setActiveTab }) => {
           <Typography variant="h6" color="text.secondary">
             No Data to show
           </Typography>
+        </Box>
+      )}
+
+      {hasMore && (
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+          <Button variant="contained" onClick={() => dispatch(incrementPage())}>
+            Load More
+          </Button>
         </Box>
       )}
 

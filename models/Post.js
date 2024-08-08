@@ -1,53 +1,52 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const PostSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  description: {
-    type: String,
-    required: true,
-  },
-  imageUrl: {
-    type: String,
-  },
-  seo: {
+const PostSchema = new mongoose.Schema(
+  {
     title: {
       type: String,
-    },
-    description: {
-      type: String,
-    },
-    slug: {
-      type: String,
+      required: true,
       unique: true,
     },
-  },
-  author: {
-    name: {
+    description: {
       type: String,
       required: true,
     },
-    description: {
+    imageUrl: {
       type: String,
     },
-    socials: {
-      twitter: String,
-      instagram: String,
-      linkedin: String,
+    seo: {
+      title: {
+        type: String,
+      },
+      description: {
+        type: String,
+      },
+      slug: {
+        type: String,
+        unique: true,
+      },
+    },
+    author: {
+      name: {
+        type: String,
+        required: true,
+      },
+      description: {
+        type: String,
+      },
+      socials: {
+        twitter: String,
+        instagram: String,
+        linkedin: String,
+      },
+    },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
   },
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
-  },
-  date: {
-    type: Date,
-    default: Date.now(),
-  },
-});
+  { timestamps: true },
+);
 
-module.exports = mongoose.model('Post', PostSchema);
+module.exports = mongoose.model("Post", PostSchema);

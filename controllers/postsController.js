@@ -6,11 +6,24 @@ const {uploadImageToS3, deleteImageFromS3} = require('../helpers/utils');
 
 // get all posts
 exports.getAllPosts = async (req, res, next) => {
+  let page = parseInt(req.query.page) || 0;
+  let limit = parseInt(req.query.limit) || 9;
+
   try {
-    const posts = await Post.find().sort({date: -1});
+    const totalPosts = await Post.countDocuments();
+    const posts = await Post.find()
+      .sort({ updatedAt: -1 }) // desc
+      .skip(page * limit)
+      .limit(limit);
+
     res.status(200).json({
-      msg: 'Post fetched successfully',
-      data: {posts, total: posts.length},
+      msg: "Posts fetched successfully",
+      data: {
+        posts,
+        total: totalPosts,
+        page,
+        totalPages: Math.ceil(totalPosts / limit),
+      },
     });
   } catch (err) {
     next(err);

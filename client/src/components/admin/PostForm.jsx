@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { createPost, updatePost } from "@/helpers/api";
 import { setNotification } from "@/redux/notificationSlice";
-import { fetchPostList, setLoading, setSelectedPost } from "@/redux/postSlice";
+import { resetPosts, setLoading, setSelectedPost } from "@/redux/postSlice";
 
 const PostForm = ({ setActiveTab }) => {
   const dispatch = useDispatch();
@@ -30,7 +30,7 @@ const PostForm = ({ setActiveTab }) => {
     return () => {
       dispatch(setSelectedPost(null));
     };
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (selectedPost) {
@@ -106,7 +106,7 @@ const PostForm = ({ setActiveTab }) => {
 
     try {
       const data = await createPost(formData);
-      dispatch(fetchPostList());
+      dispatch(resetPosts());
       dispatch(
         setNotification({
           type: "success",
@@ -128,6 +128,7 @@ const PostForm = ({ setActiveTab }) => {
         linkedin: "",
         imageFile: null,
       });
+      setActiveTab(1);
     } catch (error) {
       const errMessage =
         error.response.data.msg ||
@@ -148,7 +149,7 @@ const PostForm = ({ setActiveTab }) => {
 
     try {
       const data = await updatePost(selectedPost._id, formData);
-      dispatch(fetchPostList());
+      dispatch(resetPosts());
       dispatch(
         setNotification({
           type: "success",

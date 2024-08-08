@@ -3,10 +3,11 @@ import { fetchPosts } from "@/helpers/api";
 
 export const fetchPostList = createAsyncThunk(
   "post/fetchPosts",
-  async (_, { rejectWithValue }) => {
+  async ({ page, limit }, { rejectWithValue }) => {
     try {
-      const data = await fetchPosts();
-      return data;
+      const data = await fetchPosts(page, limit);
+
+      return { posts: data.data.posts, total: data.data.total };
     } catch (error) {
       return rejectWithValue(error.response?.data);
     }
@@ -17,8 +18,13 @@ const postSlice = createSlice({
   name: "post",
   initialState: {
     loading: false,
-    posts: null,
+    posts: [],
     selectedPost: null,
+    page: 0,
+    limit: 9,
+    total: 0,
+    hasMore: true,
+    dataFetched: false,
   },
   reducers: {
     setLoading: (state, action) => {
@@ -26,6 +32,21 @@ const postSlice = createSlice({
     },
     setSelectedPost: (state, action) => {
       state.selectedPost = action.payload;
+    },
+    incrementPage: (state) => {
+      state.page += 1;
+    },
+    resetPosts: (state) => {
+      state.posts = [];
+      state.page = 0;
+      state.hasMore = true;
+      state.dataFetched = false;
+    },
+    setDataFetched: (state, action) => {
+      state.dataFetched = action.payload;
+    },
+    resetPage: (state) => {
+      state.page = 0;
     },
   },
   extraReducers: (builder) => {
@@ -35,7 +56,10 @@ const postSlice = createSlice({
       })
       .addCase(fetchPostList.fulfilled, (state, action) => {
         state.loading = false;
-        state.posts = action.payload.data.posts;
+        state.posts = [...state.posts, ...action.payload.posts];
+        state.total = action.payload.total;
+        state.hasMore = state.posts.length < state.total;
+        state.dataFetched = true;
       })
       .addCase(fetchPostList.rejected, (state) => {
         state.loading = false;
@@ -43,6 +67,13 @@ const postSlice = createSlice({
   },
 });
 
-export const { setLoading, setSelectedPost } = postSlice.actions;
+export const {
+  setLoading,
+  setSelectedPost,
+  incrementPage,
+  resetPosts,
+  setDataFetched,
+  resetPage,
+} = postSlice.actions;
 
 export default postSlice.reducer;

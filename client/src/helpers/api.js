@@ -56,8 +56,10 @@ export const fetchUsers = async () => {
 
 //  *************** Posts **************** //
 
-export const fetchPosts = async () => {
-  const response = await axiosInstance.get("/posts");
+export const fetchPosts = async (page = 0, limit = 9) => {
+  const response = await axiosInstance.get("/posts", {
+    params: { page, limit },
+  });
   return response.data;
 };
 

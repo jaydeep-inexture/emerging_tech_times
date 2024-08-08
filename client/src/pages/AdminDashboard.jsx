@@ -53,7 +53,7 @@ const AdminDashboard = () => {
       content = <Posts setActiveTab={setActiveTab} />;
       break;
     case 2:
-      content = <PostForm />;
+      content = <PostForm setActiveTab={setActiveTab} />;
       break;
     case 3:
       content = <UsersTable />;
