@@ -1,4 +1,3 @@
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import {
   Box,
   Button,
@@ -7,319 +6,282 @@ import {
   CardMedia,
   Chip,
   Grid,
-  Stack,
-  TextField,
   Typography,
-} from '@mui/material';
-import {Link} from 'react-router-dom';
+} from "@mui/material";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-import {useIsMobile} from '@/hooks/useIsMobile';
-import ArticleCard from './ArticleCard';
+import { setNotification } from "@/redux/notificationSlice";
+import { fetchPostList, setLoading } from "@/redux/postSlice";
+import Banner from "../components/Banner";
+import CategoryCard from "../components/CategoryCard";
+import ArticleCard from "./ArticleCard";
+import { Link } from "react-router-dom";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 const Home = () => {
-  const {isMobile} = useIsMobile();
-  const articles = [
-    {
-      image:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFtEPwKHXE0w36wxAe838uaGFBJUzQ3Nup4w&s',
-      title: 'Have You Met the Next Generation of AutoGPT?',
-      author: 'Vishal Shah',
-      date: 'July 16, 2024',
-      description:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem quos nulla doloribus ratione amet fuga delectus facilis, architecto hic dolore!',
+  const dispatch = useDispatch();
+  const { posts, page, limit } = useSelector((state) => state.post);
 
-      category: 'AI NEWS',
+  const categories = [
+    {
+      name: "Politics",
+      imageUrl:
+        "https://plus.unsplash.com/premium_photo-1683141498413-cdfc0feccdb3?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      link: "/category/politics",
     },
     {
-      image:
-        'https://www.livemint.com/lm-img/img/2024/07/08/600x338/PTI07-08-2024-000210B-0_1720443963570_1720443995911.jpg',
-      title: 'AI Advances in Healthcare',
-      author: 'Dharmesh Patel',
-      date: 'July 15, 2024',
-      description:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem quos nulla doloribus ratione amet fuga delectus facilis, architecto hic dolore!',
-      category: 'HEALTHCARE',
+      name: "Technology",
+      imageUrl:
+        "https://images.unsplash.com/photo-1508780709619-79562169bc64?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      link: "/category/technology",
     },
-
     {
-      image:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFtEPwKHXE0w36wxAe838uaGFBJUzQ3Nup4w&s',
-      title: 'AI and the Future of Work',
-      author: 'Dhruv Patel',
-      date: 'July 12, 2024',
-      description:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem quos nulla doloribus ratione amet fuga delectus facilis, architecto hic dolore!',
-      category: 'BUSINESS',
+      name: "Finance",
+      imageUrl:
+        "https://plus.unsplash.com/premium_photo-1663040328859-48bddaa9dfeb?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      link: "/category/finance",
     },
+    {
+      name: "Education",
+      imageUrl:
+        "https://plus.unsplash.com/premium_photo-1682284353484-4e16001c58eb?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      link: "/category/education",
+    },
+    // {
+    //   name: "Health",
+    //   imageUrl:
+    //     "https://plus.unsplash.com/premium_photo-1673953509975-576678fa6710?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    //   link: "/category/health",
+    // },
+    // {
+    //   name: "Travel",
+    //   imageUrl:
+    //     "https://plus.unsplash.com/premium_photo-1683121257579-d40449389b63?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    //   link: "/category/travel",
+    // },
   ];
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      dispatch(setLoading(true));
+
+      try {
+        dispatch(fetchPostList({ page, limit: 3 }));
+      } catch (error) {
+        const errMessage =
+          error.response?.data?.msg ||
+          error.response?.data?.errors?.[0]?.msg ||
+          "An error occurred";
+        dispatch(
+          setNotification({
+            type: "error",
+            message: errMessage,
+          }),
+        );
+        dispatch(setLoading(false));
+      }
+    };
+    if (posts.length === 0) {
+      fetchPosts();
+    }
+  }, []);
+
+  console.log({ posts });
+
   return (
-    <>
-      <Box
-        sx={{
-          width: '100%',
-          height: isMobile ? ' 500px' : '400px',
-          backgroundColor: 'lightblue',
-          position: 'relative',
-        }}
-      >
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '100%',
-            textAlign: 'center',
-            padding: '16px',
-          }}
-        >
-          <Typography
-            variant='h4'
-            sx={{fontFamily: 'URW Chancery L, cursive', marginBottom: '16px'}}
-          >
-            Get in Touch with us for daily updates and daily news
-          </Typography>
-          <Typography variant='body1' sx={{color: 'gray'}}>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quidem hic
-            sunt, ab nostrum ea cum dolores officiis sequi earum optio?
-          </Typography>
-          {isMobile ? (
-            <>
-              <Stack
-                direction='column'
-                spacing={2}
-                alignItems='center'
-                sx={{
-                  marginTop: '13%',
-                }}
-              >
-                <TextField
-                  label='Email Address'
-                  variant='outlined'
-                  sx={{width: '250px'}}
-                />
-
-                <Button
-                  sx={{
-                    background: '#0F172A',
-                    padding: '15px',
-                    borderRadius: '8px',
-                    color: 'white',
-                    fontWeight: 800,
-                    ':hover': {background: '#0F172A'},
-                  }}
-                >
-                  Subscribe
-                </Button>
-              </Stack>
-            </>
-          ) : (
-            <Stack
-              direction='row'
-              spacing={2}
-              alignItems='center'
-              sx={{marginTop: '5%'}}
-            >
-              <TextField
-                label='Email Address'
-                variant='outlined'
-                sx={{width: '300px'}}
-              />
-
-              <Button
-                sx={{
-                  background: '#0F172A',
-                  padding: '15px',
-                  borderRadius: '8px',
-                  color: 'white',
-                  fontWeight: 800,
-                  ':hover': {background: '#0F172A'},
-                }}
-              >
-                Subscribe
-              </Button>
-            </Stack>
-          )}
-        </Box>
+    <Box sx={{ width: "100%" }}>
+      <Box sx={{ height: "400px", position: "relative" }}>
+        <Banner />
       </Box>
 
-      <Box
-        sx={{paddingX: isMobile ? '10%' : '12%', marginTop: 4, marginBottom: 5}}
-      >
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            textAlign: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <Typography
-            variant={isMobile ? 'h6' : 'h4'}
-            fontWeight={800}
-            textTransform={'uppercase'}
-          >
-            Latest News
-          </Typography>
-          <Link to='/news'>
-            <Button
+      <Box sx={{ padding: "20px 10%" }}>
+        {/* Latest news */}
+        {posts.length > 0 && (
+          <Box sx={{ paddingX: 2, marginTop: 6 }}>
+            <Box
               sx={{
-                textTransform: 'capitalize',
-                color: 'gray',
-                fontSize: isMobile ? 16 : 20,
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: 2,
               }}
             >
-              More <KeyboardArrowRightIcon />
-            </Button>
-          </Link>
-        </Box>
-
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={6}>
-              <Card
+              <Typography variant="h5" fontWeight={700}>
+                Latest News
+              </Typography>
+              <Button
+                component={Link}
+                to="/news"
+                variant="text"
+                color="primary"
                 sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  height: '100%',
-                  marginTop: 3,
-                  boxShadow: 'none',
+                  textTransform: "capitalize",
+                  fontWeight: 700,
+                  borderRadius: 8,
+                  paddingX: 2,
+                  paddingY: 1,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                  "&:hover": {
+                    backgroundColor: "white !important",
+                  },
                 }}
               >
-                <CardMedia
-                  component='img'
-                  sx={{width: '100%', height: '100%'}}
-                  image={articles[0].image}
-                  alt={articles[0].title}
-                />
-                <Box sx={{display: 'flex', flexDirection: 'column', flex: 1}}>
-                  <CardContent sx={{flexGrow: 1}}>
-                    <Typography
-                      component='div'
-                      variant='h5'
-                      fontWeight={900}
-                      textTransform={'capitalize'}
+                More
+                <KeyboardArrowRightIcon />
+              </Button>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={6}>
+                  <Card
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      height: "100%",
+                      boxShadow: "none",
+                    }}
+                  >
+                    <CardMedia
+                      component="img"
+                      sx={{ width: "100%", height: "100%" }}
+                      image={posts[0].imageUrl}
+                      alt={posts[0].title}
+                    />
+                    <Box
+                      sx={{ display: "flex", flexDirection: "column", flex: 1 }}
                     >
-                      {articles[0].title}
-                    </Typography>
-                    <Typography
-                      variant='subtitle1'
-                      color='text.secondary'
-                      component='div'
-                    >
-                      {articles[0].author} - {articles[0].date}
-                    </Typography>
-                    <Typography
-                      variant='body2'
-                      color='text.secondary'
-                      sx={{mt: 1.5}}
-                    >
-                      {articles[0].description}
-                    </Typography>
-                  </CardContent>
-                  <Box sx={{p: 1}}>
-                    <Chip label={articles[0].category} variant='outlined' />
-                  </Box>
-                </Box>
-              </Card>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              {articles.map((article, index) => (
+                      <CardContent sx={{ flexGrow: 1 }}>
+                        <Typography
+                          component="div"
+                          variant="h5"
+                          fontWeight={900}
+                          textTransform={"capitalize"}
+                        >
+                          {posts[0].title}
+                        </Typography>
+                        <Typography
+                          variant="subtitle1"
+                          color="text.secondary"
+                          component="div"
+                        >
+                          {`By ${posts[0].author.name} on ${new Date(
+                            posts[0].createdAt,
+                          ).toLocaleDateString()}`}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          sx={{ mt: 1.5 }}
+                        >
+                          {posts[0].description}
+                        </Typography>
+                      </CardContent>
+                      <Box sx={{ p: 1 }}>
+                        <Chip label={"category"} variant="outlined" />
+                      </Box>
+                    </Box>
+                  </Card>
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  md={6}
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "20px",
+                  }}
+                >
+                  {posts.map((article, index) => (
+                    <ArticleCard key={index} {...article} />
+                  ))}
+                </Grid>
+              </Grid>
+            </Box>
+          </Box>
+        )}
+
+        {/* Trending News */}
+        <Box sx={{ paddingX: 2, marginTop: 6 }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: 2,
+            }}
+          >
+            <Typography variant="h5" fontWeight={700}>
+              Trending News
+            </Typography>
+            <Button
+              component={Link}
+              to="/news"
+              variant="text"
+              color="primary"
+              sx={{
+                textTransform: "capitalize",
+                fontWeight: 700,
+                borderRadius: 8,
+                paddingX: 2,
+                paddingY: 1,
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                "&:hover": {
+                  backgroundColor: "white !important",
+                },
+              }}
+            >
+              More
+              <KeyboardArrowRightIcon />
+            </Button>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+            }}
+          >
+            <Grid
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "20px",
+              }}
+            >
+              {posts?.map((article, index) => (
                 <ArticleCard key={index} {...article} />
               ))}
             </Grid>
-          </Grid>
+          </Box>
         </Box>
 
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            textAlign: 'center',
-            alignItems: 'center',
-            mt: 4,
-          }}
-        >
-          <Typography
-            variant={isMobile ? 'h6' : 'h4'}
-            fontWeight={800}
-            textTransform={'uppercase'}
-          >
-            Top News
+        {/* Browse through categories */}
+        <Box sx={{ paddingX: 2, margin: "32px 0" }}>
+          <Typography variant="h5" fontWeight={700} gutterBottom>
+            Browse by Category
           </Typography>
-          <Link to='/news'>
-            <Button
-              sx={{
-                textTransform: 'capitalize',
-                color: 'gray',
-                fontSize: isMobile ? 16 : 20,
-              }}
-            >
-              More <KeyboardArrowRightIcon />
-            </Button>
-          </Link>
-        </Box>
-
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-          }}
-        >
-          <Grid>
-            {articles.map((article, index) => (
-              <ArticleCard key={index} {...article} />
-            ))}
-          </Grid>
-        </Box>
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            textAlign: '',
-            alignItems: 'center',
-            mt: 4,
-          }}
-        >
-          <Typography
-            variant={isMobile ? 'h6' : 'h4'}
-            fontWeight={800}
-            textTransform={'uppercase'}
-          >
-            Trending News
-          </Typography>
-          <Link to='/news'>
-            <Button
-              sx={{
-                textTransform: 'capitalize',
-                color: 'gray',
-                fontSize: isMobile ? 16 : 20,
-              }}
-            >
-              More <KeyboardArrowRightIcon />
-            </Button>
-          </Link>
-        </Box>
-
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-          }}
-        >
-          <Grid>
-            {articles.reverse().map((article, index) => (
-              <ArticleCard key={index} {...article} />
+          <Grid container spacing={2}>
+            {categories.map((category) => (
+              <Grid item xs={12} sm={6} md={3} key={category.name}>
+                <CategoryCard {...category} />
+              </Grid>
             ))}
           </Grid>
         </Box>
       </Box>
-    </>
+
+      {/* <NewsletterSignupForm /> */}
+    </Box>
   );
 };
 

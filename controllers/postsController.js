@@ -161,11 +161,7 @@ exports.updatePost = async (req, res, next) => {
 
     const updatedPost = await post.save();
 
-    if (image && updatedPost) {
-      await deleteImageFromS3(oldImageUrl);
-    }
-
-    res.json({msg: 'Post updated successfully', data: updatedPost});
+    res.json({ msg: "Post updated successfully", data: updatedPost });
   } catch (err) {
     next(err);
   }

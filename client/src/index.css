@@ -1,6 +1,11 @@
-body{
-    margin : 0
+body {
+  margin: 0;
 }
-body ::-webkit-scrollbar{
-    display: none;
+body ::-webkit-scrollbar {
+  display: none;
+}
+
+.link {
+  text-decoration: none;
+  color: inherit;
 }
