@@ -11,6 +11,7 @@ import {
   CardContent,
   CardHeader,
   CardMedia,
+  Chip,
   Grid,
   IconButton,
   Link,
@@ -19,6 +20,7 @@ import {
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+import Placeholder from "@/assets/placeholder.jpg";
 import DeletePopup from "@/common/DeletePopup";
 import { deletePost } from "@/helpers/api";
 import { setNotification } from "@/redux/notificationSlice";
@@ -131,7 +133,7 @@ const Posts = ({ setActiveTab }) => {
       {posts?.length > 0 ? (
         <Grid container spacing={2}>
           {posts?.map((post) => (
-            <Grid item xs={12} sm={6} md={4} key={post._id}>
+            <Grid item xs={12} sm={6} md={3} key={post._id}>
               <Card
                 sx={{
                   maxWidth: 345,
@@ -145,15 +147,14 @@ const Posts = ({ setActiveTab }) => {
                   },
                 }}
               >
-                {post.imageUrl && (
-                  <CardMedia
-                    component="img"
-                    alt={post.title}
-                    height="140"
-                    image={post.imageUrl}
-                    sx={{ objectFit: "cover", width: "100%" }}
-                  />
-                )}
+                <CardMedia
+                  component="img"
+                  alt={post.title}
+                  height="140"
+                  image={post.imageUrl ? post.imageUrl : Placeholder}
+                  sx={{ objectFit: "cover", width: "100%" }}
+                />
+
                 <CardHeader
                   title={post.title}
                   subheader={`By ${post.author.name} on ${new Date(
@@ -176,6 +177,18 @@ const Posts = ({ setActiveTab }) => {
                       <Typography variant="body2" color="text.secondary">
                         {post.author.description}
                       </Typography>
+                    )}
+                    {post.category && (
+                      <Chip
+                        sx={{
+                          mt: 2,
+                          p: "20px 0",
+                          fontSize: "16px",
+                          textTransform: "capitalize",
+                        }}
+                        label={post.category}
+                        variant="outlined"
+                      />
                     )}
                     <Box
                       sx={{

@@ -22,15 +22,15 @@ router.post(
     check("description", "Description is required").notEmpty(),
     check("authorName", "Author name is required").notEmpty(),
     check("twitter")
-      .optional()
+      .optional({ checkFalsy: true })
       .isURL({ protocols: ["http", "https"], require_protocol: true })
       .withMessage("Invalid Twitter URL"),
     check("instagram")
-      .optional()
+      .optional({ checkFalsy: true })
       .isURL({ protocols: ["http", "https"], require_protocol: true })
       .withMessage("Invalid Instagram URL"),
     check("linkedin")
-      .optional()
+      .optional({ checkFalsy: true })
       .isURL({ protocols: ["http", "https"], require_protocol: true })
       .withMessage("Invalid LinkedIn URL"),
   ],
@@ -46,15 +46,15 @@ router.put(
   "/:postId",
   [
     check("twitter")
-      .optional()
+      .optional({ checkFalsy: true })
       .isURL({ protocols: ["http", "https"], require_protocol: true })
       .withMessage("Invalid Twitter URL"),
     check("instagram")
-      .optional()
+      .optional({ checkFalsy: true })
       .isURL({ protocols: ["http", "https"], require_protocol: true })
       .withMessage("Invalid Instagram URL"),
     check("linkedin")
-      .optional()
+      .optional({ checkFalsy: true })
       .isURL({ protocols: ["http", "https"], require_protocol: true })
       .withMessage("Invalid LinkedIn URL"),
   ],

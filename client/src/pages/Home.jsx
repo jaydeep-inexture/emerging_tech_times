@@ -1,3 +1,4 @@
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import {
   Box,
   Button,
@@ -10,57 +11,19 @@ import {
 } from "@mui/material";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
-import { setNotification } from "@/redux/notificationSlice";
-import { fetchPostList, setLoading } from "@/redux/postSlice";
-import Banner from "../components/Banner";
-import CategoryCard from "../components/CategoryCard";
-import ArticleCard from "./ArticleCard";
 import { Link } from "react-router-dom";
-import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+
+import Banner from "@/components/Banner";
+import CategoryCard from "@/components/CategoryCard";
+import { CONSTANTS } from "@/helpers/constants";
+import { setNotification } from "@/redux/notificationSlice";
+import { fetchPostList, resetPosts, setLoading } from "@/redux/postSlice";
+import ArticleCard from "./ArticleCard";
+import Placeholder from "@/assets/placeholder.jpg";
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { posts, page, limit } = useSelector((state) => state.post);
-
-  const categories = [
-    {
-      name: "Politics",
-      imageUrl:
-        "https://plus.unsplash.com/premium_photo-1683141498413-cdfc0feccdb3?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      link: "/category/politics",
-    },
-    {
-      name: "Technology",
-      imageUrl:
-        "https://images.unsplash.com/photo-1508780709619-79562169bc64?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      link: "/category/technology",
-    },
-    {
-      name: "Finance",
-      imageUrl:
-        "https://plus.unsplash.com/premium_photo-1663040328859-48bddaa9dfeb?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      link: "/category/finance",
-    },
-    {
-      name: "Education",
-      imageUrl:
-        "https://plus.unsplash.com/premium_photo-1682284353484-4e16001c58eb?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      link: "/category/education",
-    },
-    // {
-    //   name: "Health",
-    //   imageUrl:
-    //     "https://plus.unsplash.com/premium_photo-1673953509975-576678fa6710?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    //   link: "/category/health",
-    // },
-    // {
-    //   name: "Travel",
-    //   imageUrl:
-    //     "https://plus.unsplash.com/premium_photo-1683121257579-d40449389b63?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    //   link: "/category/travel",
-    // },
-  ];
+  const { posts, page } = useSelector((state) => state.post);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -82,12 +45,13 @@ const Home = () => {
         dispatch(setLoading(false));
       }
     };
-    if (posts.length === 0) {
-      fetchPosts();
-    }
-  }, []);
 
-  console.log({ posts });
+    fetchPosts();
+
+    return () => {
+      dispatch(resetPosts());
+    };
+  }, []);
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -152,7 +116,7 @@ const Home = () => {
                     <CardMedia
                       component="img"
                       sx={{ width: "100%", height: "100%" }}
-                      image={posts[0].imageUrl}
+                      image={posts[0].imageUrl ? posts[0].imageUrl : Placeholder}
                       alt={posts[0].title}
                     />
                     <Box
@@ -185,7 +149,7 @@ const Home = () => {
                         </Typography>
                       </CardContent>
                       <Box sx={{ p: 1 }}>
-                        <Chip label={"category"} variant="outlined" />
+                        <Chip label={posts[0].category} variant="outlined" />
                       </Box>
                     </Box>
                   </Card>
@@ -209,7 +173,7 @@ const Home = () => {
           </Box>
         )}
 
-        {/* Trending News */}
+        {/* Trending News
         <Box sx={{ paddingX: 2, marginTop: 6 }}>
           <Box
             sx={{
@@ -263,15 +227,47 @@ const Home = () => {
               ))}
             </Grid>
           </Box>
-        </Box>
+        </Box> */}
 
         {/* Browse through categories */}
         <Box sx={{ paddingX: 2, margin: "32px 0" }}>
-          <Typography variant="h5" fontWeight={700} gutterBottom>
-            Browse by Category
-          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: 2,
+            }}
+          >
+            <Typography variant="h5" fontWeight={700}>
+              Browse by Category
+            </Typography>
+            <Button
+              component={Link}
+              to="/news"
+              variant="text"
+              color="primary"
+              sx={{
+                textTransform: "capitalize",
+                fontWeight: 700,
+                borderRadius: 8,
+                paddingX: 2,
+                paddingY: 1,
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                "&:hover": {
+                  backgroundColor: "white !important",
+                },
+              }}
+            >
+              More
+              <KeyboardArrowRightIcon />
+            </Button>
+          </Box>
+
           <Grid container spacing={2}>
-            {categories.map((category) => (
+            {CONSTANTS.CATEGORIES.slice(0, 4).map((category) => (
               <Grid item xs={12} sm={6} md={3} key={category.name}>
                 <CategoryCard {...category} />
               </Grid>
@@ -279,8 +275,6 @@ const Home = () => {
           </Grid>
         </Box>
       </Box>
-
-      {/* <NewsletterSignupForm /> */}
     </Box>
   );
 };

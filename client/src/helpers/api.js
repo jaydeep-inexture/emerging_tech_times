@@ -1,4 +1,5 @@
 import axiosInstance from "@/helpers/axios";
+import { CONSTANTS } from "@/helpers/constants";
 
 //  ************ Auth **********************//
 export const signup = async (userData) => {
@@ -56,7 +57,10 @@ export const fetchUsers = async () => {
 
 //  *************** Posts **************** //
 
-export const fetchPosts = async (page = 0, limit = 9) => {
+export const fetchPosts = async (
+  page = 0,
+  limit = CONSTANTS.PAGINATION_LIMIT,
+) => {
   const response = await axiosInstance.get("/posts", {
     params: { page, limit },
   });

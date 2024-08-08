@@ -1,5 +1,6 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { fetchPosts } from "@/helpers/api";
+import { CONSTANTS } from "@/helpers/constants";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const fetchPostList = createAsyncThunk(
   "post/fetchPosts",
@@ -21,7 +22,7 @@ const postSlice = createSlice({
     posts: [],
     selectedPost: null,
     page: 0,
-    limit: 9,
+    limit: CONSTANTS.PAGINATION_LIMIT,
     total: 0,
     hasMore: true,
     dataFetched: false,

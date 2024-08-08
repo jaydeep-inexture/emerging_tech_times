@@ -3,11 +3,12 @@ const mongoose = require('mongoose');
 
 const Post = require('../models/Post');
 const {uploadImageToS3, deleteImageFromS3} = require('../helpers/utils');
+const CONSTANTS = require('../helpers/constants');
 
 // get all posts
 exports.getAllPosts = async (req, res, next) => {
   let page = parseInt(req.query.page) || 0;
-  let limit = parseInt(req.query.limit) || 9;
+  let limit = parseInt(req.query.limit) || CONSTANTS.PAGINATION_LIMIT;
 
   try {
     const totalPosts = await Post.countDocuments();
@@ -48,6 +49,7 @@ exports.createPost = async (req, res, next) => {
     seoTitle,
     seoDescription,
     seoSlug,
+    category
   } = req.body;
   const image = req.file;
 
@@ -69,6 +71,7 @@ exports.createPost = async (req, res, next) => {
       userId: req.user,
       title,
       description,
+      category,
       author: {
         name: authorName,
         description: authorDescription ?? '',
@@ -114,6 +117,7 @@ exports.updatePost = async (req, res, next) => {
     seoTitle,
     seoDescription,
     seoSlug,
+    category
   } = req.body;
   const image = req.file;
 
@@ -140,6 +144,7 @@ exports.updatePost = async (req, res, next) => {
     if (authorName) post.author.name = authorName;
     if (authorDescription !== undefined)
       post.author.description = authorDescription;
+    if (category !== undefined) post.category = category;
 
     if (twitter !== undefined) post.author.socials.twitter = twitter;
     if (instagram !== undefined) post.author.socials.instagram = instagram;

@@ -8,19 +8,13 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import Placeholder from "@/assets/placeholder.jpg";
 
 const ArticleCard = (article) => {
   const { isMobile } = useIsMobile();
   const navigate = useNavigate();
 
-  const {
-    imageUrl,
-    title,
-    author,
-    createdAt,
-    description,
-    category = "category",
-  } = article;
+  const { imageUrl, title, author, createdAt, description, category } = article;
 
   const handleClick = () => {
     navigate(`/article/${title}`, { state: { article } });
@@ -42,7 +36,7 @@ const ArticleCard = (article) => {
       <CardMedia
         component="img"
         sx={{ width: isMobile ? "100%" : 200 }}
-        image={imageUrl}
+        image={imageUrl ? imageUrl : Placeholder}
         alt={title}
       />
       <Box sx={{ display: "flex", flexDirection: "column", flex: 1 }}>
@@ -68,9 +62,11 @@ const ArticleCard = (article) => {
               : description}
           </Typography>
         </CardContent>
-        <Box sx={{ p: 1 }}>
-          <Chip label={category} variant="outlined" />
-        </Box>
+        {category && (
+          <Box sx={{ p: 1 }}>
+            <Chip label={category} variant="outlined" />
+          </Box>
+        )}
       </Box>
     </Card>
   );

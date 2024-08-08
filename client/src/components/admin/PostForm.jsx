@@ -1,8 +1,17 @@
-import { Box, Button, Grid, Input, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  Input,
+  MenuItem,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { createPost, updatePost } from "@/helpers/api";
+import { CONSTANTS } from "@/helpers/constants";
 import { setNotification } from "@/redux/notificationSlice";
 import { resetPosts, setLoading, setSelectedPost } from "@/redux/postSlice";
 
@@ -24,6 +33,7 @@ const PostForm = ({ setActiveTab }) => {
     seoTitle: "",
     seoDescription: "",
     seoSlug: "",
+    category: "",
   });
 
   useEffect(() => {
@@ -56,6 +66,7 @@ const PostForm = ({ setActiveTab }) => {
           ? selectedPost.seo.description
           : "",
         seoSlug: selectedPost?.seo.slug ? selectedPost.seo.slug : "",
+        category: selectedPost?.category ? selectedPost.category : "",
       });
     }
     const imageUrl = selectedPost?.imageUrl || "";
@@ -127,6 +138,7 @@ const PostForm = ({ setActiveTab }) => {
         instagram: "",
         linkedin: "",
         imageFile: null,
+        category: "",
       });
       setActiveTab(1);
     } catch (error) {
@@ -169,6 +181,7 @@ const PostForm = ({ setActiveTab }) => {
         twitter: "",
         instagram: "",
         linkedin: "",
+        category: "",
         imageFile: null,
       });
       setActiveTab(1);
@@ -203,6 +216,7 @@ const PostForm = ({ setActiveTab }) => {
         }
       });
 
+      console.log({ formData });
       if (selectedPost) {
         await updateSinglePost(data);
       } else {
@@ -246,6 +260,26 @@ const PostForm = ({ setActiveTab }) => {
               rows={4}
             />
           </Grid>
+          <Grid item xs={12} sm={4}>
+            <TextField
+              select
+              fullWidth
+              label="Category"
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+              error={Boolean(errors.category)}
+              helperText={errors.category}
+              required
+            >
+              {CONSTANTS.CATEGORIES.map((cat) => (
+                <MenuItem key={cat.name} value={cat.name}>
+                  {cat.name}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Grid>
+
           <Grid item xs={12}>
             <TextField
               fullWidth

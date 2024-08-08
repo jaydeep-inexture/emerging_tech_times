@@ -1,7 +1,7 @@
 import { Box, Card, CardMedia, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 
-const CategoryCard = ({ name, imageUrl, link }) => {
+const CategoryCard = ({ name, imageUrl, slug }) => {
   return (
     <Card
       sx={{
@@ -11,7 +11,7 @@ const CategoryCard = ({ name, imageUrl, link }) => {
         overflow: "hidden",
       }}
       component={Link}
-      to={link}
+      to={`?${slug}`}
     >
       <CardMedia
         component="img"

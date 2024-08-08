@@ -14,6 +14,10 @@ const PostSchema = new mongoose.Schema(
     imageUrl: {
       type: String,
     },
+    category: {
+      type: String,
+      unique: true,
+    },
     seo: {
       title: {
         type: String,
