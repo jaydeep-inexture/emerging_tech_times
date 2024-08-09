@@ -43,6 +43,7 @@ app.use(upload.single('image'));
 app.use('/api/users', require('./routes/api/users'));
 app.use('/api/posts', require('./routes/api/posts'));
 app.use('/api/message', require('./routes/api/message'));
+app.use('/api/subscribers', require('./routes/api/subscribers'));
 
 app.use(errorHandler);
 

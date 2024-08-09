@@ -17,3 +17,12 @@ exports.subscribe = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.getSubscribers = async (req, res, next) => {
+  try {
+    const subscribers = await Subscriber.find();
+    res.status(200).json(subscribers);
+  } catch (err) {
+    next(err);
+  }
+};
