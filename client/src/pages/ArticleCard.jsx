@@ -14,10 +14,11 @@ const ArticleCard = (article) => {
   const { isMobile } = useIsMobile();
   const navigate = useNavigate();
 
-  const { imageUrl, title, author, createdAt, description, category } = article;
+  const { _id, imageUrl, title, author, createdAt, description, category } =
+    article;
 
   const handleClick = () => {
-    navigate(`/article/${title}`, { state: { article } });
+    navigate(`/article/${_id}`, { state: { article } });
   };
 
   return (

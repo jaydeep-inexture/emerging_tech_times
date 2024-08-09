@@ -67,6 +67,12 @@ export const fetchPosts = async (
   return response.data;
 };
 
+export const fetchPostDetails = async (postId) => {
+  const response = await axiosInstance.get(`/posts/${postId}`);
+
+  return response.data;
+};
+
 export const createPost = async (postData) => {
   const response = await axiosInstance.post("/posts", postData, {
     headers: {

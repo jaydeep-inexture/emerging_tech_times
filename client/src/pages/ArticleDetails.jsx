@@ -1,104 +1,104 @@
-import {Person} from '@mui/icons-material';
-import {Box, Chip, Grid, Typography} from '@mui/material';
-import {useLocation} from 'react-router-dom';
+import { Person } from "@mui/icons-material";
+import { Box, Chip, Typography } from "@mui/material";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
-import {useIsMobile} from '@/hooks/useIsMobile';
+import Spinner from "@/common/Spinner";
+import { fetchPostDetails } from "@/helpers/api";
+import { useIsMobile } from "@/hooks/useIsMobile";
+import { setNotification } from "@/redux/notificationSlice";
+import { setLoading, setSelectedPost } from "@/redux/postSlice";
 
 const ArticleDetails = () => {
-  const location = useLocation();
-  const article = location.state?.article;
-  const {isMobile} = useIsMobile();
+  const { id } = useParams();
+
+  const dispatch = useDispatch();
+
+  const { isMobile } = useIsMobile();
+  const { selectedPost, loading } = useSelector((state) => state.post);
+
+  useEffect(() => {
+    const fetchPostInfo = async () => {
+      dispatch(setLoading(true));
+
+      try {
+        const data = await fetchPostDetails(id);
+        dispatch(setSelectedPost(data));
+        dispatch(setLoading(false));
+      } catch (error) {
+        const errMessage =
+          error.response?.data?.msg ||
+          error.response?.data?.errors?.[0]?.msg ||
+          "An error occurred";
+        dispatch(
+          setNotification({
+            type: "error",
+            message: errMessage,
+          }),
+        );
+        dispatch(setLoading(false));
+      }
+    };
+
+    if (id) {
+      fetchPostInfo();
+    }
+
+    return () => {
+      dispatch(setSelectedPost(null));
+    };
+  }, [dispatch, id]);
 
   return (
     <>
+      {/* {loading && <Spinner />} */}
       <Box
         sx={{
-          paddingX: '10%',
-          marginBottom: isMobile ? '10%' : '5%',
-          marginTop: '2%',
+          paddingX: "10%",
+          marginBottom: isMobile ? "10%" : "5%",
+          marginTop: "2%",
         }}
       >
-        <Grid container spacing={5}>
-          {isMobile && (
-            <Grid item xs={12}>
-              <img
-                src={article.image}
-                alt={article.title}
-                style={{width: '100%', height: '100%'}}
-              />
-            </Grid>
-          )}
-          <Grid item xs={12} sm={6}>
-            <Typography variant={isMobile ? 'h4' : 'h2'} fontWeight={800}>
-              {article.title}
-            </Typography>
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                my: 3,
-              }}
-            >
-              <Box sx={{display: 'flex', alignItems: 'center'}}>
-                <Person sx={{mr: 1}} />
-                <Typography color='text.secondary' fontSize={20}>
-                  {article.author} - {article.date}
-                </Typography>
-              </Box>
-              <Chip label={article.category} variant='outlined' />
+        <Box>
+          <Typography variant={isMobile ? "h4" : "h2"} fontWeight={800}>
+            {selectedPost?.title}
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              my: 3,
+            }}
+          >
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Person sx={{ mr: 1 }} />
+              <Typography color="text.secondary" fontSize={20}>
+                {`By ${selectedPost?.author.name} on ${new Date(
+                  selectedPost?.createdAt,
+                ).toLocaleDateString()}`}
+              </Typography>
             </Box>
-            <Typography fontSize={20} mt={1}>
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. At vero
-              autem voluptatibus? Ea qui nemo tempore temporibus obcaecati
-              placeat explicabo ipsum nihil deleniti, ullam ab, possimus
-              voluptatem facilis tempora odit soluta, iure in officiis adipisci
-              fugit expedita modi? Cum dolores repudiandae dolorem iusto amet
-              explicabo ab, fugit alias laborum quibusdam earum ex saepe natus
-              accusamus sed quaerat debitis excepturi et mollitia eligendi in
-              nam commodi. Ipsum ab laborum modi. Ea quas dolores culpa, ipsa
-              reprehenderit, ab numquam consectetur accusantium minima, commodi
-              assumenda rem alias ullam ad voluptatem laudantium nisi quisquam!
-              Est ducimus sit ipsum quisquam natus molestiae nam perferendis ab.
-            </Typography>
-          </Grid>
-          <Grid item xs={12} sm={6}>
+            {selectedPost?.category && (
+              <Chip label={selectedPost?.category} variant="outlined" />
+            )}
+          </Box>
+
+          <Typography fontSize={20} mt={1} whiteSpace="pre-wrap">
             <img
-              src={article.image}
-              alt={article.title}
-              style={{width: '100%', height: '100%'}}
+              src={selectedPost?.imageUrl}
+              alt={selectedPost?.title}
+              style={{
+                width: isMobile ? "100%" : "65%",
+                height: "100%",
+                float: isMobile ? "none" : "right",
+                padding: isMobile ? "8px 0" : "8px",
+              }}
             />
-          </Grid>
-          <Grid item xs={12}>
-            <Typography variant='body1' fontSize={20}>
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi
-              earum id sint ratione, blanditiis rem delectus modi eaque omnis,
-              nulla incidunt esse nesciunt quam, corporis dignissimos
-              repellendus consequuntur laudantium doloremque dolor soluta
-              similique quis reiciendis! Autem dolores soluta natus non
-              repudiandae necessitatibus, eos quos, dolor alias, ducimus est eum
-              deleniti dicta officiis odit. Sequi nobis asperiores error?
-              Quibusdam dolore aliquam incidunt dicta provident repellendus
-              dolor tempore illo nulla nostrum, sapiente doloribus placeat
-              aliquid aspernatur! Porro illum rem voluptatum esse aliquam
-              doloribus odit, culpa perferendis. Fugiat amet, dolor atque dolore
-              quas tempore facilis nostrum eius, distinctio veniam perferendis
-              quia natus deleniti officiis! Suscipit magnam vero voluptates
-              repudiandae veniam ut? Cupiditate perferendis natus iusto, alias
-              ducimus beatae odio! Tempore corporis, ex ratione ullam voluptas
-              amet quibusdam ducimus facilis, officiis reiciendis, voluptates
-              rerum. Perferendis voluptas obcaecati quibusdam laudantium
-              accusantium sapiente, nemo sit, quae unde tenetur provident,
-              labore impedit adipisci praesentium molestias quam. Nisi unde
-              nulla quos ab quidem facilis? Culpa ad atque nam maiores
-              consequatur aspernatur eos pariatur velit iste! Harum tempora
-              quidem optio, voluptatibus perspiciatis dolorem corrupti quae
-              nostrum laborum vitae. Ratione tenetur, explicabo molestiae
-              incidunt fuga sit expedita? Consequatur sit laborum, excepturi
-              dolorem quia quo molestias velit quod vitae animi itaque.
-            </Typography>
-          </Grid>
-        </Grid>
+            {selectedPost?.description}
+          </Typography>
+        </Box>
       </Box>
     </>
   );
