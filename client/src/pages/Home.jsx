@@ -190,63 +190,60 @@ const Home = () => {
               </Box>
             </Box>
           )}
-
-          {/* Trending News
-        <Box sx={{ paddingX: 2, marginTop: 6 }}>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: 2,
-            }}
-          >
-            <Typography variant="h5" fontWeight={700}>
-              Trending News
-            </Typography>
-            <Button
-              component={Link}
-              to="/news"
-              variant="text"
-              color="primary"
+          <Box sx={{ paddingX: 2, marginTop: 6 }}>
+            <Box
               sx={{
-                textTransform: "capitalize",
-                fontWeight: 700,
-                borderRadius: 8,
-                paddingX: 2,
-                paddingY: 1,
                 display: "flex",
+                justifyContent: "space-between",
                 alignItems: "center",
-                gap: 1,
-                "&:hover": {
-                  backgroundColor: "white !important",
-                },
+                marginBottom: 2,
               }}
             >
-              More
-              <KeyboardArrowRightIcon />
-            </Button>
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-            }}
-          >
-            <Grid
+              <Typography variant="h5" fontWeight={700}>
+                Trending News
+              </Typography>
+              <Button
+                component={Link}
+                to="/news"
+                variant="text"
+                color="primary"
+                sx={{
+                  textTransform: "capitalize",
+                  fontWeight: 700,
+                  borderRadius: 8,
+                  paddingX: 2,
+                  paddingY: 1,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                  "&:hover": {
+                    backgroundColor: "white !important",
+                  },
+                }}
+              >
+                More
+                <KeyboardArrowRightIcon />
+              </Button>
+            </Box>
+            <Box
               sx={{
                 display: "flex",
-                flexDirection: "column",
-                gap: "20px",
+                flexDirection: "row",
               }}
             >
-              {posts?.map((article, index) => (
-                <ArticleCard key={index} {...article} />
-              ))}
-            </Grid>
+              <Grid
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "20px",
+                }}
+              >
+                {posts?.map((article, index) => (
+                  <ArticleCard key={index} {...article} />
+                ))}
+              </Grid>
+            </Box>
           </Box>
-        </Box> */}
-
           {/* Browse through categories */}
           <Box sx={{ paddingX: 2, margin: "32px 0" }}>
             <Box

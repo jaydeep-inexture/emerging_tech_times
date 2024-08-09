@@ -1,7 +1,13 @@
 import { Box, Card, CardMedia, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const CategoryCard = ({ name, imageUrl, slug }) => {
+const CategoryCard = ({ name, imageUrl }) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate("/news", { state: { name } });
+  };
+
   return (
     <Card
       sx={{
@@ -10,8 +16,7 @@ const CategoryCard = ({ name, imageUrl, slug }) => {
         position: "relative",
         overflow: "hidden",
       }}
-      component={Link}
-      to={`?${slug}`}
+      onClick={handleClick}
     >
       <CardMedia
         component="img"
