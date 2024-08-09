@@ -18,6 +18,7 @@ const PostSchema = new mongoose.Schema(
       type: String,
       unique: true,
     },
+    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     seo: {
       title: {
         type: String,

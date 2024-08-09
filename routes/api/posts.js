@@ -12,6 +12,11 @@ const postsController = require("../../controllers/postsController");
 // @access  Public
 router.get("/", postsController.getAllPosts);
 
+// @route   GET /api/posts/:postId
+// @desc    Get single post details
+// @access  Public
+router.get("/:postId", postsController.getPostDetails);
+
 // @route   POST /api/posts
 // @desc    Create a post
 // @access  Private and admin only
@@ -67,5 +72,10 @@ router.put(
 // @desc    Delete a post by ID
 // @access  Private and admin only
 router.delete("/:postId", auth, isAdmin, postsController.deletePost);
+
+// @route   POST /api/posts/:postId/like
+// @desc    Like/unlike a post
+// @access  Private
+router.post("/:postId/like", auth, postsController.updateLikeCount);
 
 module.exports = router;

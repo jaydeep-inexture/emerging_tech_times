@@ -31,6 +31,25 @@ exports.getAllPosts = async (req, res, next) => {
   }
 };
 
+// get post details
+exports.getPostDetails = async (req, res, next) => {
+  try {
+    if (!mongoose.isValidObjectId(req.params.postId)) {
+      throw new Error("Invalid post ID.");
+    }
+
+    const post = await Post.findById(req.params.postId);
+
+    if (!post) {
+      return res.status(404).json({ msg: "Post not found." });
+    }
+
+    res.status(200).json(post);
+  } catch (err) {
+    next(err);
+  }
+};
+
 // create a post
 exports.createPost = async (req, res, next) => {
   const errors = validationResult(req);
@@ -155,7 +174,6 @@ exports.updatePost = async (req, res, next) => {
     if (seoSlug !== undefined) post.seo.slug = seoSlug;
 
     if (image) {
-
       if (oldImageUrl) {
         await deleteImageFromS3(oldImageUrl);
       }
@@ -166,7 +184,9 @@ exports.updatePost = async (req, res, next) => {
 
     const updatedPost = await post.save();
 
-    res.json({ msg: "Post updated successfully", data: updatedPost });
+    res
+      .status(200)
+      .json({ msg: "Post updated successfully", data: updatedPost });
   } catch (err) {
     next(err);
   }
@@ -191,7 +211,39 @@ exports.deletePost = async (req, res, next) => {
 
     await post.deleteOne();
 
-    res.status(200).json({msg: 'Post removed.'});
+    res.status(200).json({ msg: "Post removed." });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// hanlde like count on a post
+exports.updateLikeCount = async (req, res, next) => {
+  try {
+    if (!mongoose.isValidObjectId(req.params.postId)) {
+      throw new Error("Invalid post ID.");
+    }
+
+    const post = await Post.findById(req.params.postId);
+
+    if (!post) {
+      return res.status(404).json({ msg: "Post not found." });
+    }
+
+    const userIndex = post.likes.indexOf(req.user);
+
+    if (userIndex === -1) {
+      post.likes.push(req.user);
+    } else {
+      post.likes.splice(userIndex, 1);
+    }
+
+    await post.save();
+
+    res.status(200).json({
+      success: true,
+      likesCount: post.likes.length,
+    });
   } catch (err) {
     next(err);
   }
