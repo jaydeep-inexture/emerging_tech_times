@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Placeholder from "@/assets/placeholder.jpg";
 import DeletePopup from "@/common/DeletePopup";
+import Spinner from "@/common/Spinner";
 import { deletePost } from "@/helpers/api";
 import { setNotification } from "@/redux/notificationSlice";
 import {
@@ -35,7 +36,7 @@ import {
 
 const Posts = ({ setActiveTab }) => {
   const dispatch = useDispatch();
-  const { posts, selectedPost, page, limit, hasMore, dataFetched } =
+  const { posts, selectedPost, page, limit, hasMore, dataFetched, loading } =
     useSelector((state) => state.post);
 
   const [openDialog, setOpenDialog] = useState(false);
@@ -126,187 +127,203 @@ const Posts = ({ setActiveTab }) => {
   }, [page, dataFetched]);
 
   return (
-    <Box sx={{ p: 2 }}>
-      <Typography variant="h4" gutterBottom>
-        Posts
-      </Typography>
-      {posts?.length > 0 ? (
-        <Grid container spacing={2}>
-          {posts?.map((post) => (
-            <Grid item xs={12} sm={6} md={3} key={post._id}>
-              <Card
-                sx={{
-                  maxWidth: 345,
-                  display: "flex",
-                  flexDirection: "column",
-                  height: "100%",
-                  border: "1px solid #e0e0e0",
-                  boxShadow: 3,
-                  "&:hover": {
-                    boxShadow: 6,
-                  },
-                }}
-              >
-                <CardMedia
-                  component="img"
-                  alt={post.title}
-                  height="140"
-                  image={post.imageUrl ? post.imageUrl : Placeholder}
-                  sx={{ objectFit: "cover", width: "100%" }}
-                />
-
-                <CardHeader
-                  title={post.title}
-                  subheader={`By ${post.author.name} on ${new Date(
-                    post.createdAt,
-                  ).toLocaleDateString()}`}
+    <>
+      {loading && <Spinner />}
+      <Box sx={{ p: 2 }}>
+        <Typography variant="h4" gutterBottom>
+          Posts
+        </Typography>
+        {posts?.length > 0 ? (
+          <Grid container spacing={2}>
+            {posts?.map((post) => (
+              <Grid item xs={12} sm={6} md={3} key={post._id}>
+                <Card
                   sx={{
-                    backgroundColor: "#f5f5f5",
-                    borderBottom: "1px solid #e0e0e0",
+                    maxWidth: 345,
+                    display: "flex",
+                    flexDirection: "column",
+                    height: "100%",
+                    border: "1px solid #e0e0e0",
+                    boxShadow: 3,
+                    "&:hover": {
+                      boxShadow: 6,
+                    },
                   }}
-                />
-                <CardContent sx={{ flexGrow: 1 }}>
-                  <Typography variant="body2" color="text.secondary" paragraph>
-                    {post.description}
-                  </Typography>
-                  <Box sx={{ mt: 2 }}>
-                    <Typography variant="subtitle2" color="text.primary">
-                      Author Details:
-                    </Typography>
-                    {post.author.description && (
-                      <Typography variant="body2" color="text.secondary">
-                        {post.author.description}
-                      </Typography>
-                    )}
-                    {post.category && (
-                      <Chip
-                        sx={{
-                          mt: 2,
-                          p: "20px 0",
-                          fontSize: "16px",
-                          textTransform: "capitalize",
-                        }}
-                        label={post.category}
-                        variant="outlined"
-                      />
-                    )}
-                    <Box
-                      sx={{
-                        display: "flex",
-                        mt: 2,
-                        gap: 2,
-                      }}
+                >
+                  <CardMedia
+                    component="img"
+                    alt={post.title}
+                    height="140"
+                    image={post.imageUrl ? post.imageUrl : Placeholder}
+                    sx={{ objectFit: "cover", width: "100%" }}
+                  />
+
+                  <CardHeader
+                    title={post.title}
+                    subheader={`By ${post.author.name} on ${new Date(
+                      post.createdAt,
+                    ).toLocaleDateString()}`}
+                    sx={{
+                      backgroundColor: "#f5f5f5",
+                      borderBottom: "1px solid #e0e0e0",
+                    }}
+                  />
+                  <CardContent sx={{ flexGrow: 1 }}>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      paragraph
                     >
-                      {post.author.socials.instagram && (
-                        <IconButton
+                      {post.description}
+                    </Typography>
+                    <Box sx={{ mt: 2 }}>
+                      <Typography variant="subtitle2" color="text.primary">
+                        Author Details:
+                      </Typography>
+                      {post.author.description && (
+                        <Typography variant="body2" color="text.secondary">
+                          {post.author.description}
+                        </Typography>
+                      )}
+                      {post.category && (
+                        <Chip
                           sx={{
-                            borderRadius: "8px",
-                            height: "40px",
-                            width: "40px",
-                            border: "1px solid #0F172A",
+                            mt: 2,
+                            p: "20px 0",
+                            fontSize: "16px",
+                            textTransform: "capitalize",
                           }}
-                        >
-                          <Link
-                            className="link"
-                            href={post.author.socials.instagram}
-                            target="_blank"
+                          label={post.category}
+                          variant="outlined"
+                        />
+                      )}
+                      <Box
+                        sx={{
+                          display: "flex",
+                          mt: 2,
+                          gap: 2,
+                        }}
+                      >
+                        {post.author.socials.instagram && (
+                          <IconButton
                             sx={{
-                              lineHeight: "0",
+                              borderRadius: "8px",
+                              height: "40px",
+                              width: "40px",
+                              border: "1px solid #0F172A",
                             }}
                           >
-                            <InstagramIcon />
-                          </Link>
-                        </IconButton>
-                      )}
-                      {post.author.socials.twitter && (
-                        <IconButton
-                          sx={{
-                            borderRadius: "8px",
-                            height: "40px",
-                            width: "40px",
-                            border: "1px solid #0F172A",
-                          }}
-                        >
-                          <Link
-                            className="link"
-                            href={post.author.socials.twitter}
-                            target="_blank"
+                            <Link
+                              className="link"
+                              href={post.author.socials.instagram}
+                              target="_blank"
+                              sx={{
+                                lineHeight: "0",
+                              }}
+                            >
+                              <InstagramIcon />
+                            </Link>
+                          </IconButton>
+                        )}
+                        {post.author.socials.twitter && (
+                          <IconButton
                             sx={{
-                              lineHeight: "0",
+                              borderRadius: "8px",
+                              height: "40px",
+                              width: "40px",
+                              border: "1px solid #0F172A",
                             }}
                           >
-                            <TwitterIcon />
-                          </Link>
-                        </IconButton>
-                      )}
-                      {post.author.socials.linkedin && (
-                        <IconButton
-                          sx={{
-                            borderRadius: "8px",
-                            height: "40px",
-                            width: "40px",
-                            border: "1px solid #0F172A",
-                          }}
-                        >
-                          <Link
-                            className="link"
-                            href={post.author.socials.linkedin}
-                            target="_blank"
+                            <Link
+                              className="link"
+                              href={post.author.socials.twitter}
+                              target="_blank"
+                              sx={{
+                                lineHeight: "0",
+                              }}
+                            >
+                              <TwitterIcon />
+                            </Link>
+                          </IconButton>
+                        )}
+                        {post.author.socials.linkedin && (
+                          <IconButton
                             sx={{
-                              lineHeight: "0",
+                              borderRadius: "8px",
+                              height: "40px",
+                              width: "40px",
+                              border: "1px solid #0F172A",
                             }}
                           >
-                            <LinkedInIcon />
-                          </Link>
-                        </IconButton>
-                      )}
+                            <Link
+                              className="link"
+                              href={post.author.socials.linkedin}
+                              target="_blank"
+                              sx={{
+                                lineHeight: "0",
+                              }}
+                            >
+                              <LinkedInIcon />
+                            </Link>
+                          </IconButton>
+                        )}
+                      </Box>
                     </Box>
-                  </Box>
-                </CardContent>
-                <CardActions sx={{ justifyContent: "space-between", p: 2 }}>
-                  <IconButton color="primary" onClick={() => handleEdit(post)}>
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton color="error" onClick={() => handleDelete(post)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </CardActions>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      ) : (
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            height: "60vh",
-            textAlign: "center",
-          }}
-        >
-          <Typography variant="h6" color="text.secondary">
-            No Data to show
-          </Typography>
-        </Box>
-      )}
+                  </CardContent>
+                  <CardActions sx={{ justifyContent: "space-between", p: 2 }}>
+                    <IconButton
+                      color="primary"
+                      onClick={() => handleEdit(post)}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      color="error"
+                      onClick={() => handleDelete(post)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </CardActions>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        ) : (
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "60vh",
+              textAlign: "center",
+            }}
+          >
+            <Typography variant="h6" color="text.secondary">
+              No Data to show
+            </Typography>
+          </Box>
+        )}
 
-      {hasMore && (
-        <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-          <Button variant="contained" onClick={() => dispatch(incrementPage())}>
-            Load More
-          </Button>
-        </Box>
-      )}
+        {hasMore && (
+          <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+            <Button
+              variant="contained"
+              onClick={() => dispatch(incrementPage())}
+            >
+              Load More
+            </Button>
+          </Box>
+        )}
 
-      <DeletePopup
-        open={openDialog}
-        onClose={handleCloseDialog}
-        title={selectedPost?.title}
-        handleClose={handleCloseDialog}
-        handleDelete={confirmDelete}
-      />
-    </Box>
+        <DeletePopup
+          open={openDialog}
+          onClose={handleCloseDialog}
+          title={selectedPost?.title}
+          handleClose={handleCloseDialog}
+          handleDelete={confirmDelete}
+        />
+      </Box>
+    </>
   );
 };
 

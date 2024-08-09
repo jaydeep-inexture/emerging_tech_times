@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 import CommonDialog from "@/common/CommonDialog";
+import Spinner from "@/common/Spinner";
 import { login, logout, signup } from "@/helpers/api";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { setNotification } from "@/redux/notificationSlice";
@@ -16,7 +17,7 @@ const Login = ({ setFlag }) => {
   const { isMobile } = useIsMobile();
   const dispatch = useDispatch();
 
-  const { user } = useSelector((state) => state.user);
+  const { user, loading } = useSelector((state) => state.user);
 
   const [loginBtnOpen, setLoginBtnOpen] = useState(false);
   const [signupBtnOpen, setSignupBtnOpen] = useState(false);
@@ -206,6 +207,7 @@ const Login = ({ setFlag }) => {
 
   return (
     <>
+      {loading && <Spinner />}
       {user ? (
         <Link className="link" to="/profile">
           <Button

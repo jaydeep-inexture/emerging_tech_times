@@ -2,11 +2,10 @@ import { createTheme, ThemeProvider } from "@mui/material";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 import NotificationSnackbar from "@/common/NotificationSnackbar";
-import Spinner from "@/common/Spinner";
 import Profile from "@/components/Profile";
 import MainLayout from "@/layout/MainLayout";
 import { setNotification } from "@/redux/notificationSlice";
-import { loadLoggedInUser, setLoading } from "@/redux/userSlice";
+import { loadLoggedInUser } from "@/redux/userSlice";
 
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -53,7 +52,6 @@ const App = () => {
   return (
     <>
       <NotificationSnackbar />
-      <Spinner />
       <ThemeProvider theme={theme}>
         <Router>
           <Routes>
@@ -62,7 +60,7 @@ const App = () => {
               <Route path="/news" element={<News />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
-              <Route path="/article/:title" element={<ArticleDetails />} />
+              <Route path="/article/:id" element={<ArticleDetails />} />
               <Route path="/profile" element={<Profile />} />
             </Route>
 

@@ -13,6 +13,7 @@ import TableRow from "@mui/material/TableRow";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+import Spinner from "@/common/Spinner";
 import { fetchUsers, grantAdminPermission } from "@/helpers/api";
 import { setNotification } from "@/redux/notificationSlice";
 import { setLoading, setUsers } from "@/redux/userSlice";
@@ -39,7 +40,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export default function UsersTable() {
   const dispatch = useDispatch();
-  const users = useSelector((state) => state.user.users);
+  const { users, loading } = useSelector((state) => state.user);
 
   const fetchUsersList = async () => {
     try {
@@ -98,62 +99,65 @@ export default function UsersTable() {
   };
 
   return (
-    <Box sx={{ p: 2, mt: 4 }}>
-      <Typography variant="h4" gutterBottom>
-        Users
-      </Typography>
-      {users?.length > 0 ? (
-        <TableContainer component={Paper} sx={{ mt: 6 }}>
-          <Table sx={{ minWidth: 700 }} aria-label="customized table">
-            <TableHead>
-              <TableRow>
-                <StyledTableCell>Id</StyledTableCell>
-                <StyledTableCell>Email</StyledTableCell>
-                <StyledTableCell align="right">Username</StyledTableCell>
-                <StyledTableCell align="right">IsAdmin</StyledTableCell>
-                <StyledTableCell align="right">Change</StyledTableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {users?.map((user) => (
-                <StyledTableRow key={user._id}>
-                  <StyledTableCell align="left">{user._id}</StyledTableCell>
-                  <StyledTableCell scope="user">{user.email}</StyledTableCell>
-                  <StyledTableCell align="right">
-                    {user.username}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    {user.isAdmin ? (
-                      <CheckIcon color="success" />
-                    ) : (
-                      <ClearIcon color="info" />
-                    )}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    <IconButton onClick={() => handlePermission(user._id)}>
-                      <AdminPanelSettings sx={{ color: "#0F172A" }} />
-                    </IconButton>
-                  </StyledTableCell>
-                </StyledTableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      ) : (
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            height: "60vh",
-            textAlign: "center",
-          }}
-        >
-          <Typography variant="h6" color="text.secondary">
-            No Data to show
-          </Typography>
-        </Box>
-      )}
-    </Box>
+    <>
+      {loading && <Spinner />}
+      <Box sx={{ p: 2, mt: 4 }}>
+        <Typography variant="h4" gutterBottom>
+          Users
+        </Typography>
+        {users?.length > 0 ? (
+          <TableContainer component={Paper} sx={{ mt: 6 }}>
+            <Table sx={{ minWidth: 700 }} aria-label="customized table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell>Id</StyledTableCell>
+                  <StyledTableCell>Email</StyledTableCell>
+                  <StyledTableCell align="right">Username</StyledTableCell>
+                  <StyledTableCell align="right">IsAdmin</StyledTableCell>
+                  <StyledTableCell align="right">Change</StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {users?.map((user) => (
+                  <StyledTableRow key={user._id}>
+                    <StyledTableCell align="left">{user._id}</StyledTableCell>
+                    <StyledTableCell scope="user">{user.email}</StyledTableCell>
+                    <StyledTableCell align="right">
+                      {user.username}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {user.isAdmin ? (
+                        <CheckIcon color="success" />
+                      ) : (
+                        <ClearIcon color="info" />
+                      )}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      <IconButton onClick={() => handlePermission(user._id)}>
+                        <AdminPanelSettings sx={{ color: "#0F172A" }} />
+                      </IconButton>
+                    </StyledTableCell>
+                  </StyledTableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        ) : (
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "60vh",
+              textAlign: "center",
+            }}
+          >
+            <Typography variant="h6" color="text.secondary">
+              No Data to show
+            </Typography>
+          </Box>
+        )}
+      </Box>
+    </>
   );
 }

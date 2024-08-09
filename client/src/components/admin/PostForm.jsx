@@ -10,6 +10,7 @@ import {
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+import Spinner from "@/common/Spinner";
 import { createPost, updatePost } from "@/helpers/api";
 import { CONSTANTS } from "@/helpers/constants";
 import { setNotification } from "@/redux/notificationSlice";
@@ -17,7 +18,7 @@ import { resetPosts, setLoading, setSelectedPost } from "@/redux/postSlice";
 
 const PostForm = ({ setActiveTab }) => {
   const dispatch = useDispatch();
-  const { selectedPost } = useSelector((state) => state.post);
+  const { selectedPost, loading } = useSelector((state) => state.post);
 
   const [errors, setErrors] = useState({});
   const [existingImageFileName, setExistingImageFileName] = useState("");
@@ -228,186 +229,189 @@ const PostForm = ({ setActiveTab }) => {
   };
 
   return (
-    <Box sx={{ p: 2, mt: 4 }}>
-      <Typography variant="h4" gutterBottom>
-        Create a New Post
-      </Typography>
-      <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Title"
-              name="title"
-              value={formData.title}
-              onChange={handleChange}
-              error={Boolean(errors.title)}
-              helperText={errors.title}
-              required
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Description"
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              error={Boolean(errors.description)}
-              helperText={errors.description}
-              required
-              multiline
-              rows={4}
-            />
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <TextField
-              select
-              fullWidth
-              label="Category"
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-              error={Boolean(errors.category)}
-              helperText={errors.category}
-              required
-            >
-              {CONSTANTS.CATEGORIES.map((cat) => (
-                <MenuItem key={cat.name} value={cat.name}>
-                  {cat.name}
-                </MenuItem>
-              ))}
-            </TextField>
-          </Grid>
+    <>
+      {loading && <Spinner />}
+      <Box sx={{ p: 2, mt: 4 }}>
+        <Typography variant="h4" gutterBottom>
+          Create a New Post
+        </Typography>
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Title"
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
+                error={Boolean(errors.title)}
+                helperText={errors.title}
+                required
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Description"
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                error={Boolean(errors.description)}
+                helperText={errors.description}
+                required
+                multiline
+                rows={4}
+              />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                select
+                fullWidth
+                label="Category"
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+                error={Boolean(errors.category)}
+                helperText={errors.category}
+                required
+              >
+                {CONSTANTS.CATEGORIES.map((cat) => (
+                  <MenuItem key={cat.name} value={cat.name}>
+                    {cat.name}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
 
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Image"
-              name="imageFile"
-              value={
-                formData.imageFile
-                  ? formData.imageFile.name
-                  : existingImageFileName || ""
-              }
-              onChange={handleChange}
-              error={Boolean(errors.imageFile)}
-              helperText={errors.imageFile}
-              InputProps={{
-                endAdornment: (
-                  <Button
-                    variant="contained"
-                    component="label"
-                    size="small"
-                    sx={{ ml: 1 }}
-                  >
-                    Upload
-                    <Input
-                      type="file"
-                      hidden
-                      onChange={handleFileChange}
-                      inputProps={{ accept: "image/*" }}
-                      sx={{ display: "none" }}
-                    />
-                  </Button>
-                ),
-              }}
-              inputProps={{ readOnly: true }}
-            />
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Image"
+                name="imageFile"
+                value={
+                  formData.imageFile
+                    ? formData.imageFile.name
+                    : existingImageFileName || ""
+                }
+                onChange={handleChange}
+                error={Boolean(errors.imageFile)}
+                helperText={errors.imageFile}
+                InputProps={{
+                  endAdornment: (
+                    <Button
+                      variant="contained"
+                      component="label"
+                      size="small"
+                      sx={{ ml: 1 }}
+                    >
+                      Upload
+                      <Input
+                        type="file"
+                        hidden
+                        onChange={handleFileChange}
+                        inputProps={{ accept: "image/*" }}
+                        sx={{ display: "none" }}
+                      />
+                    </Button>
+                  ),
+                }}
+                inputProps={{ readOnly: true }}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="h6" gutterBottom>
+                SEO Details
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                fullWidth
+                label="SEO Title"
+                name="seoTitle"
+                value={formData.seoTitle}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                fullWidth
+                label="SEO Description"
+                name="seoDescription"
+                value={formData.seoDescription}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                fullWidth
+                label="SEO Slug"
+                name="seoSlug"
+                value={formData.seoSlug}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="h6" gutterBottom>
+                Author Details
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                fullWidth
+                label="Author Name"
+                name="authorName"
+                value={formData.authorName}
+                onChange={handleChange}
+                error={Boolean(errors.authorName)}
+                helperText={errors.authorName}
+                required
+              />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                fullWidth
+                label="Author Description"
+                name="authorDescription"
+                value={formData.authorDescription}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                fullWidth
+                label="Twitter"
+                name="twitter"
+                value={formData.twitter}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                fullWidth
+                label="Instagram"
+                name="instagram"
+                value={formData.instagram}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                fullWidth
+                label="LinkedIn"
+                name="linkedin"
+                value={formData.linkedin}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Button type="submit" variant="contained" color="primary">
+                Submit
+              </Button>
+            </Grid>
           </Grid>
-          <Grid item xs={12}>
-            <Typography variant="h6" gutterBottom>
-              SEO Details
-            </Typography>
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <TextField
-              fullWidth
-              label="SEO Title"
-              name="seoTitle"
-              value={formData.seoTitle}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <TextField
-              fullWidth
-              label="SEO Description"
-              name="seoDescription"
-              value={formData.seoDescription}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <TextField
-              fullWidth
-              label="SEO Slug"
-              name="seoSlug"
-              value={formData.seoSlug}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Typography variant="h6" gutterBottom>
-              Author Details
-            </Typography>
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <TextField
-              fullWidth
-              label="Author Name"
-              name="authorName"
-              value={formData.authorName}
-              onChange={handleChange}
-              error={Boolean(errors.authorName)}
-              helperText={errors.authorName}
-              required
-            />
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <TextField
-              fullWidth
-              label="Author Description"
-              name="authorDescription"
-              value={formData.authorDescription}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <TextField
-              fullWidth
-              label="Twitter"
-              name="twitter"
-              value={formData.twitter}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <TextField
-              fullWidth
-              label="Instagram"
-              name="instagram"
-              value={formData.instagram}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <TextField
-              fullWidth
-              label="LinkedIn"
-              name="linkedin"
-              value={formData.linkedin}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Button type="submit" variant="contained" color="primary">
-              Submit
-            </Button>
-          </Grid>
-        </Grid>
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 };
 
