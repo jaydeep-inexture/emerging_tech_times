@@ -9,7 +9,7 @@ const isAdmin = require("../../middleware/isAdmin");
 // @route   GET /api/subscribers
 // @desc    Get the list of Subscribers
 // @access  Private and admin only
-router.get("/", auth, isAdmin, subscribeController.getSubscribers);
+router.get("/", auth(), isAdmin, subscribeController.getSubscribers);
 
 // @route   POST /api/subscribers
 // @desc    Subscribe to newsletter

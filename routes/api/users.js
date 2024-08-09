@@ -9,12 +9,12 @@ const isAdmin = require('../../middleware/isAdmin');
 // @route   GET /api/users/me
 // @desc    Get logged in user
 // @access  Private
-router.get('/me', auth, userController.getLoggedInUser);
+router.get('/me', auth(), userController.getLoggedInUser);
 
 // @route   PUT /api/users
 // @desc    Update user
 // @access  Private
-router.put('/', auth, userController.updateUser);
+router.put('/', auth(), userController.updateUser);
 
 // @route   POST /api/users/register
 // @desc    Register the users
@@ -56,18 +56,18 @@ router.post(
 // @route   POST /api/users/logout
 // @desc    Logout the user
 // @access  Private
-router.post('/logout', auth, userController.logout);
+router.post('/logout', auth(), userController.logout);
 
 // ************  Admin routes  ************//
 
 // @route   GET /api/users/admin
 // @desc    Grant the user admin access
 // @access  Private
-router.post('/:id', auth, isAdmin, userController.grantAdminAccess);
+router.post('/:id', auth(), isAdmin, userController.grantAdminAccess);
 
 // @route   GET /api/users
 // @desc    Get all users
 // @access  Private
-router.get('/', auth, isAdmin, userController.getAllUsers);
+router.get('/', auth(), isAdmin, userController.getAllUsers);
 
 module.exports = router;

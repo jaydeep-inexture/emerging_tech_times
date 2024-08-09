@@ -1,9 +1,10 @@
-const {validationResult} = require('express-validator');
-const mongoose = require('mongoose');
+const { validationResult } = require("express-validator");
+const mongoose = require("mongoose");
 
-const Post = require('../models/Post');
-const {uploadImageToS3, deleteImageFromS3} = require('../helpers/utils');
-const CONSTANTS = require('../helpers/constants');
+const Post = require("../models/Post");
+const Like = require("../models/Like");
+const { uploadImageToS3, deleteImageFromS3 } = require("../helpers/utils");
+const CONSTANTS = require("../helpers/constants");
 
 // get all posts
 exports.getAllPosts = async (req, res, next) => {
@@ -55,7 +56,20 @@ exports.getPostDetails = async (req, res, next) => {
       return res.status(404).json({ msg: "Post not found." });
     }
 
-    res.status(200).json(post);
+    const isLiked = await Like.exists({
+      userId: req.user,
+      postId: req.params.postId,
+    });
+
+    const likesCount = await Like.countDocuments({ postId: req.params.postId });
+
+    const newPost = { ...post.toObject() };
+
+    res.status(200).json({
+      ...newPost,
+      isLiked: !!isLiked,
+      likesCount,
+    });
   } catch (err) {
     next(err);
   }
@@ -65,7 +79,7 @@ exports.getPostDetails = async (req, res, next) => {
 exports.createPost = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({errors: errors.array()});
+    return res.status(400).json({ errors: errors.array() });
   }
 
   const {
@@ -235,25 +249,24 @@ exports.updateLikeCount = async (req, res, next) => {
       throw new Error("Invalid post ID.");
     }
 
-    const post = await Post.findById(req.params.postId);
+    const existingLike = await Like.findOne({
+      userId: req.user,
+      postId: req.params.postId,
+    });
 
-    if (!post) {
-      return res.status(404).json({ msg: "Post not found." });
-    }
-
-    const userIndex = post.likes.indexOf(req.user);
-
-    if (userIndex === -1) {
-      post.likes.push(req.user);
+    if (existingLike) {
+      await Like.deleteOne({ _id: existingLike._id });
     } else {
-      post.likes.splice(userIndex, 1);
+      await Like.create({ userId: req.user, postId: req.params.postId });
     }
 
-    await post.save();
+    const likesCount = await Like.countDocuments({ postId: req.params.postId });
+    const isLiked = !existingLike;
 
     res.status(200).json({
       success: true,
-      likesCount: post.likes.length,
+      isLiked,
+      likesCount,
     });
   } catch (err) {
     next(err);
