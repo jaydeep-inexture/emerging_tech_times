@@ -52,12 +52,13 @@ const ArticleDetails = () => {
 
   return (
     <>
-      {/* {loading && <Spinner />} */}
+      {loading && <Spinner />}
       <Box
         sx={{
           paddingX: "10%",
           marginBottom: isMobile ? "10%" : "5%",
           marginTop: "2%",
+          minHeight: "70vh",
         }}
       >
         <Box>

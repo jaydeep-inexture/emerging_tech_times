@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import Placeholder from "@/assets/placeholder.jpg";
 import Spinner from "@/common/Spinner";
@@ -23,6 +23,7 @@ import { fetchPostList, resetPosts, setLoading } from "@/redux/postSlice";
 import ArticleCard from "./ArticleCard";
 
 const Home = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { posts, page, loading } = useSelector((state) => state.post);
 
@@ -31,7 +32,7 @@ const Home = () => {
       dispatch(setLoading(true));
 
       try {
-        dispatch(fetchPostList({ page, limit: 3 }));
+        dispatch(fetchPostList({ page, limit: 4 }));
       } catch (error) {
         const errMessage =
           error.response?.data?.msg ||
@@ -53,6 +54,10 @@ const Home = () => {
       dispatch(resetPosts());
     };
   }, []);
+
+  const handleClick = (article) => {
+    navigate(`/article/${article._id}`, { state: { article } });
+  };
 
   return (
     <>
@@ -109,11 +114,13 @@ const Home = () => {
                 <Grid container spacing={2}>
                   <Grid item xs={12} md={6}>
                     <Card
+                      onClick={() => handleClick(posts[0])}
                       sx={{
                         display: "flex",
                         flexDirection: "column",
                         height: "100%",
                         boxShadow: "none",
+                        cursor: "pointer",
                       }}
                     >
                       <CardMedia
@@ -173,9 +180,11 @@ const Home = () => {
                       gap: "20px",
                     }}
                   >
-                    {posts.map((article, index) => (
-                      <ArticleCard key={index} {...article} />
-                    ))}
+                    {posts
+                      .filter((post, index) => index !== 0)
+                      .map((article, index) => (
+                        <ArticleCard key={index} {...article} />
+                      ))}
                   </Grid>
                 </Grid>
               </Box>

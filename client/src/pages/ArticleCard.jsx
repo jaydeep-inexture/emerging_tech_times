@@ -28,9 +28,7 @@ const ArticleCard = (article) => {
         flexDirection: isMobile ? "column" : "row",
         height: "auto",
         boxShadow: "none",
-        ":hover": {
-          cursor: "pointer",
-        },
+        cursor: "pointer",
       }}
       onClick={handleClick}
     >
