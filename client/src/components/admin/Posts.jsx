@@ -45,7 +45,7 @@ const Posts = ({ setActiveTab }) => {
     dispatch(setLoading(true));
 
     try {
-      dispatch(fetchPostList({ page, limit }));
+      dispatch(fetchPostList({ page, limit, sortBy: "updatedAt" }));
     } catch (error) {
       const errMessage =
         error.response?.data?.msg ||

@@ -4,9 +4,9 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const fetchPostList = createAsyncThunk(
   "post/fetchPosts",
-  async ({ page, limit }, { rejectWithValue }) => {
+  async ({ page, limit, sortBy }, { rejectWithValue }) => {
     try {
-      const data = await fetchPosts(page, limit);
+      const data = await fetchPosts(page, limit, sortBy);
 
       return { posts: data.data.posts, total: data.data.total };
     } catch (error) {

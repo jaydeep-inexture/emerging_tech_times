@@ -60,9 +60,20 @@ export const fetchUsers = async () => {
 export const fetchPosts = async (
   page = 0,
   limit = CONSTANTS.PAGINATION_LIMIT,
+  sortBy = "createdAt",
+  category,
+  title,
 ) => {
+  const params = {
+    page,
+    limit,
+    sortBy,
+    ...(category && { category }),
+    ...(title && { title }),
+  };
+
   const response = await axiosInstance.get("/posts", {
-    params: { page, limit },
+    params,
   });
   return response.data;
 };

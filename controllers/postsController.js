@@ -9,11 +9,22 @@ const CONSTANTS = require('../helpers/constants');
 exports.getAllPosts = async (req, res, next) => {
   let page = parseInt(req.query.page) || 0;
   let limit = parseInt(req.query.limit) || CONSTANTS.PAGINATION_LIMIT;
+  let sortKey = req.query.sortBy || "updatedAt";
+  let filter = {};
+
+  if (req.query.title) {
+    filter.title = { $regex: req.query.title, $options: "i" };
+  }
+
+  if (req.query.category) {
+    filter.category = req.query.category;
+  }
 
   try {
-    const totalPosts = await Post.countDocuments();
-    const posts = await Post.find()
-      .sort({ updatedAt: -1 }) // desc
+    const totalPosts = await Post.countDocuments(filter);
+
+    const posts = await Post.find(filter)
+      .sort({ [sortKey]: -1 }) // desc
       .skip(page * limit)
       .limit(limit);
 
