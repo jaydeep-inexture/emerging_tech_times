@@ -7,8 +7,13 @@ const SubscriberSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    username: {
+      type: String,
+      required: true,
+      unique: true,
+    },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 module.exports = Subscriber = mongoose.model("Subscriber", SubscriberSchema);

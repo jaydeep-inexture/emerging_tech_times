@@ -108,7 +108,8 @@ const Nav = () => {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: isMobile ? "10px 7% 10px 5%" : "20px 10%",
+          padding: isMobile ? "10px 7% 10px 5%" : "15px 8%",
+          borderBottom: "1px solid gray",
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center" }}>

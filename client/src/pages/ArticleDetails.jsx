@@ -35,7 +35,7 @@ const ArticleDetails = () => {
           setNotification({
             type: "error",
             message: errMessage,
-          }),
+          })
         );
         dispatch(setLoading(false));
       }
@@ -77,7 +77,7 @@ const ArticleDetails = () => {
               <Person sx={{ mr: 1 }} />
               <Typography color="text.secondary" fontSize={20}>
                 {`By ${selectedPost?.author.name} on ${new Date(
-                  selectedPost?.createdAt,
+                  selectedPost?.createdAt
                 ).toLocaleDateString()}`}
               </Typography>
             </Box>
@@ -91,7 +91,7 @@ const ArticleDetails = () => {
               src={selectedPost?.imageUrl}
               alt={selectedPost?.title}
               style={{
-                width: isMobile ? "100%" : "65%",
+                width: isMobile ? "100%" : "30%",
                 height: "100%",
                 float: isMobile ? "none" : "right",
                 padding: isMobile ? "8px 0" : "8px",

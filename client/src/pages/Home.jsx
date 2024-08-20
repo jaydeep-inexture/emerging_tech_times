@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import Placeholder from "@/assets/placeholder.jpg";
 import Spinner from "@/common/Spinner";
@@ -42,7 +42,7 @@ const Home = () => {
           setNotification({
             type: "error",
             message: errMessage,
-          }),
+          })
         );
         dispatch(setLoading(false));
       }
@@ -58,7 +58,9 @@ const Home = () => {
   const handleClick = (article) => {
     navigate(`/article/${article._id}`, { state: { article } });
   };
-
+  const handleNavigateToNews = (tabValue, category) => {
+    navigate("/news", { state: { tabValue, name: category } });
+  };
   return (
     <>
       {loading && <Spinner />}
@@ -83,8 +85,7 @@ const Home = () => {
                   Latest News
                 </Typography>
                 <Button
-                  component={Link}
-                  to="/news"
+                  onClick={() => handleNavigateToNews("1")}
                   variant="text"
                   color="primary"
                   sx={{
@@ -153,7 +154,7 @@ const Home = () => {
                             component="div"
                           >
                             {`By ${posts[0].author.name} on ${new Date(
-                              posts[0].createdAt,
+                              posts[0].createdAt
                             ).toLocaleDateString()}`}
                           </Typography>
                           <Typography
@@ -203,8 +204,7 @@ const Home = () => {
                 Trending News
               </Typography>
               <Button
-                component={Link}
-                to="/news"
+                onClick={() => handleNavigateToNews("2")}
                 variant="text"
                 color="primary"
                 sx={{
@@ -257,9 +257,8 @@ const Home = () => {
               <Typography variant="h5" fontWeight={700}>
                 Browse by Category
               </Typography>
-              <Button
-                component={Link}
-                to="/news"
+              {/* <Button
+                onClick={() => handleNavigateToNews("3", "Technology")}
                 variant="text"
                 color="primary"
                 sx={{
@@ -278,11 +277,11 @@ const Home = () => {
               >
                 More
                 <KeyboardArrowRightIcon />
-              </Button>
+              </Button> */}
             </Box>
 
             <Grid container spacing={2}>
-              {CONSTANTS.CATEGORIES.slice(0, 4).map((category) => (
+              {CONSTANTS.CATEGORIES.map((category) => (
                 <Grid item xs={12} sm={6} md={3} key={category.name}>
                   <CategoryCard {...category} />
                 </Grid>

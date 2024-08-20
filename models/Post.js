@@ -15,8 +15,8 @@ const PostSchema = new mongoose.Schema(
       type: String,
     },
     category: {
-      type: String,
       unique: true,
+      type: String,
     },
     seo: {
       title: {
@@ -28,6 +28,8 @@ const PostSchema = new mongoose.Schema(
       slug: {
         type: String,
         unique: true,
+        default: "",
+        sparse: true,
       },
     },
     author: {
@@ -50,7 +52,7 @@ const PostSchema = new mongoose.Schema(
       required: true,
     },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("Post", PostSchema);

@@ -14,7 +14,7 @@ const Footer = () => {
           backgroundColor: "#0F172A",
           color: "white",
           width: "100%",
-          py: 10,
+          py: 2,
         }}
       >
         <Grid
@@ -22,7 +22,7 @@ const Footer = () => {
           spacing={4}
           justifyContent="center"
           alignItems="center"
-          paddingX={"100px"}
+          paddingX={"70px"}
         >
           <Grid item xs={12} sm={3} display="flex" justifyContent="center">
             <img
