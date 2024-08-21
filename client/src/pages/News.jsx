@@ -1,5 +1,5 @@
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-import { Box, Tab } from "@mui/material";
+import { Box, Tab, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import NewsData from "./NewsData";
@@ -120,28 +120,58 @@ const News = () => {
             </TabList>
           </Box>
           <TabPanel value={"1"}>
-            <NewsData
-              pageTitle={"Latest News"}
-              setActiveTab={setTabValue}
-              posts={posts}
-              loading={loading}
-            />
+            {posts.length > 0 ? (
+              <NewsData
+                pageTitle={"Latest News"}
+                setActiveTab={setTabValue}
+                posts={posts}
+                loading={loading}
+              />
+            ) : (
+              <Typography
+                variant="h6"
+                sx={{ color: "#555" }}
+                textAlign={"center"}
+              >
+                No Data Found
+              </Typography>
+            )}
           </TabPanel>
           <TabPanel value={"2"}>
-            <NewsData
-              setActiveTab={setTabValue}
-              pageTitle={"Trending News"}
-              posts={posts}
-              loading={loading}
-            />
+            {posts.length > 0 ? (
+              <NewsData
+                setActiveTab={setTabValue}
+                pageTitle={"Trending News"}
+                posts={posts}
+                loading={loading}
+              />
+            ) : (
+              <Typography
+                variant="h6"
+                sx={{ color: "#555" }}
+                textAlign={"center"}
+              >
+                No Data Found
+              </Typography>
+            )}
           </TabPanel>
           <TabPanel value={"3"}>
-            <NewsData
-              setActiveTab={setTabValue}
-              pageTitle={category}
-              posts={posts}
-              loading={loading}
-            />
+            {posts.length > 0 ? (
+              <NewsData
+                setActiveTab={setTabValue}
+                pageTitle={category}
+                posts={posts}
+                loading={loading}
+              />
+            ) : (
+              <Typography
+                variant="h6"
+                sx={{ color: "#555" }}
+                textAlign={"center"}
+              >
+                No Data Found
+              </Typography>
+            )}
           </TabPanel>
         </TabContext>
       </Box>

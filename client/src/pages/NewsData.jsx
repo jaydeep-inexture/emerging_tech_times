@@ -33,7 +33,15 @@ const NewsData = ({ posts, loading }) => {
         <Grid container spacing={4}>
           {displayedData.map((item) => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={item._id}>
-              <Card sx={{ height: "300px" }}>
+              <Card
+                sx={{
+                  height: "300px",
+                  transition: "transform 0.3s ease-in-out",
+                  "&:hover": {
+                    transform: "translateY(-8px)",
+                  },
+                }}
+              >
                 <CardMedia
                   component="img"
                   height="140"
@@ -44,7 +52,9 @@ const NewsData = ({ posts, loading }) => {
                 <CardContent>
                   <Typography variant="h6">{item.title}</Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {item.description}
+                    {item.description.length > 130
+                      ? `${item.description.slice(0, 150)}...`
+                      : item.description}
                   </Typography>
                 </CardContent>
               </Card>

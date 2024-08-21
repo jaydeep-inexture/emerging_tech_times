@@ -90,7 +90,7 @@ const Login = ({ setFlag }) => {
         setNotification({
           type: "success",
           message: data.msg,
-        }),
+        })
       );
       dispatch(setLoading(false));
 
@@ -107,7 +107,7 @@ const Login = ({ setFlag }) => {
         setNotification({
           type: "error",
           message: errMessage,
-        }),
+        })
       );
       dispatch(setLoading(false));
     }
@@ -138,7 +138,7 @@ const Login = ({ setFlag }) => {
         setNotification({
           type: "success",
           message: data.msg,
-        }),
+        })
       );
       dispatch(setLoading(false));
 
@@ -157,7 +157,7 @@ const Login = ({ setFlag }) => {
         setNotification({
           type: "error",
           message: errMessage,
-        }),
+        })
       );
       dispatch(setLoading(false));
     }
@@ -177,7 +177,7 @@ const Login = ({ setFlag }) => {
         setNotification({
           type: "success",
           message: data.msg,
-        }),
+        })
       );
     } catch (error) {
       const errMessage =
@@ -188,7 +188,7 @@ const Login = ({ setFlag }) => {
         setNotification({
           type: "error",
           message: errMessage,
-        }),
+        })
       );
     }
     dispatch(setLoading(false));
@@ -214,13 +214,12 @@ const Login = ({ setFlag }) => {
             variant="outlined"
             startIcon={<PersonIcon />}
             sx={{
-              ml: 3,
-              border: 0,
+              ml: 1,
               fontWeight: 800,
               fontSize: "18px",
               textTransform: "none",
               "&:hover": {
-                border: 0,
+                border: 1,
                 backgroundColor: "transparent",
               },
 
@@ -312,7 +311,7 @@ const Login = ({ setFlag }) => {
         </>
       )}
       {user && (
-        <IconButton onClick={handleLogout} className="logout" sx={{ ml: 2 }}>
+        <IconButton onClick={handleLogout} className="logout" sx={{ ml: 10 }}>
           <LogoutIcon sx={{ fontSize: "30px", color: "gray" }} />
         </IconButton>
       )}

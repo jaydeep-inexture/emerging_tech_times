@@ -55,7 +55,7 @@ const Posts = ({ setActiveTab }) => {
         setNotification({
           type: "error",
           message: errMessage,
-        }),
+        })
       );
       dispatch(setLoading(false));
     }
@@ -80,7 +80,7 @@ const Posts = ({ setActiveTab }) => {
         setNotification({
           type: "success",
           message: data.msg,
-        }),
+        })
       );
       dispatch(resetPosts());
       setOpenDialog(false);
@@ -94,7 +94,7 @@ const Posts = ({ setActiveTab }) => {
         setNotification({
           type: "error",
           message: errMessage,
-        }),
+        })
       );
       dispatch(setLoading(false));
     }
@@ -161,7 +161,7 @@ const Posts = ({ setActiveTab }) => {
                   <CardHeader
                     title={post.title}
                     subheader={`By ${post.author.name} on ${new Date(
-                      post.createdAt,
+                      post.createdAt
                     ).toLocaleDateString()}`}
                     sx={{
                       backgroundColor: "#f5f5f5",
@@ -184,7 +184,9 @@ const Posts = ({ setActiveTab }) => {
                       </Typography>
                       {post.author.description && (
                         <Typography variant="body2" color="text.secondary">
-                          {post.author.description}
+                          {post.author.description.length > 155
+                            ? `${post.author.description.slice(0, 155)}...`
+                            : post.author.description}
                         </Typography>
                       )}
                       {post.category && (

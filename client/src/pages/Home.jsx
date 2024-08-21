@@ -162,7 +162,9 @@ const Home = () => {
                             color="text.secondary"
                             sx={{ mt: 1.5 }}
                           >
-                            {posts[0].description}
+                            {posts[0].description.length > 155
+                              ? `${posts[0].description.slice(0, 155)}...`
+                              : posts[0].description}
                           </Typography>
                         </CardContent>
                         <Box sx={{ p: 1 }}>

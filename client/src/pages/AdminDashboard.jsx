@@ -20,7 +20,7 @@ const Main = styled("main")(({ theme }) => ({
   flexGrow: 1,
   padding: `0 ${theme.spacing(3)}`,
   marginLeft: `${drawerWidth}px`,
-  backgroundColor: "#f0f2f5",
+  // backgroundColor: "#f0f2f5",
 }));
 
 const Sidebar = styled(Box)(({ theme }) => ({
