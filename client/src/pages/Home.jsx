@@ -28,6 +28,7 @@ const Home = () => {
   const { posts, page, loading } = useSelector((state) => state.post);
 
   useEffect(() => {
+    dispatch(resetPosts());
     const fetchPosts = async () => {
       dispatch(setLoading(true));
 
@@ -65,7 +66,7 @@ const Home = () => {
     <>
       {loading && <Spinner />}
       <Box sx={{ width: "100%" }}>
-        <Box sx={{ height: "400px", position: "relative" }}>
+        <Box sx={{ height: "300px", position: "relative" }}>
           <Banner />
         </Box>
 

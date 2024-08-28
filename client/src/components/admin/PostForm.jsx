@@ -9,13 +9,19 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
+import { Colorize } from "@mui/icons-material";
 import Spinner from "@/common/Spinner";
 import { createPost, updatePost } from "@/helpers/api";
 import { CONSTANTS } from "@/helpers/constants";
 import { setNotification } from "@/redux/notificationSlice";
 import { resetPosts, setLoading, setSelectedPost } from "@/redux/postSlice";
-
+import { RichTextEditor, Link } from "@mantine/tiptap";
+import { useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Underline from "@tiptap/extension-underline";
+import { Color } from "@tiptap/extension-color";
+import TextStyle from "@tiptap/extension-text-style";
+import Highlight from "@tiptap/extension-highlight";
 const PostForm = ({ setActiveTab }) => {
   const dispatch = useDispatch();
   const { selectedPost, loading } = useSelector((state) => state.post);
@@ -36,6 +42,16 @@ const PostForm = ({ setActiveTab }) => {
     seoSlug: "",
     category: "",
   });
+  const editor = useEditor({
+    extensions: [StarterKit, Underline, Link, TextStyle, Color, Highlight],
+
+    onUpdate: ({ editor }) => {
+      setFormData((prevData) => ({
+        ...prevData,
+        description: editor.getText().trim() === "" ? "" : editor.getText(),
+      }));
+    },
+  });
 
   useEffect(() => {
     return () => {
@@ -43,6 +59,7 @@ const PostForm = ({ setActiveTab }) => {
     };
   }, [dispatch]);
 
+  console.log("selectedpost", selectedPost);
   useEffect(() => {
     if (selectedPost) {
       setFormData({
@@ -123,7 +140,7 @@ const PostForm = ({ setActiveTab }) => {
         setNotification({
           type: "success",
           message: data.msg,
-        }),
+        })
       );
       dispatch(setLoading(false));
       // Clear form data
@@ -151,7 +168,7 @@ const PostForm = ({ setActiveTab }) => {
         setNotification({
           type: "error",
           message: errMessage,
-        }),
+        })
       );
       dispatch(setLoading(false));
     }
@@ -167,7 +184,7 @@ const PostForm = ({ setActiveTab }) => {
         setNotification({
           type: "success",
           message: data.msg,
-        }),
+        })
       );
       dispatch(setLoading(false));
       // Clear form data
@@ -195,7 +212,7 @@ const PostForm = ({ setActiveTab }) => {
         setNotification({
           type: "error",
           message: errMessage,
-        }),
+        })
       );
       dispatch(setLoading(false));
     }
@@ -250,18 +267,93 @@ const PostForm = ({ setActiveTab }) => {
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Description"
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                error={Boolean(errors.description)}
-                helperText={errors.description}
-                required
-                multiline
-                rows={4}
-              />
+              <RichTextEditor editor={editor}>
+                <RichTextEditor.Toolbar>
+                  <RichTextEditor.ControlsGroup>
+                    <RichTextEditor.Bold />
+                    <RichTextEditor.Italic />
+                    <RichTextEditor.Underline />
+                    <RichTextEditor.Strikethrough />
+                    <RichTextEditor.ClearFormatting />
+                    <RichTextEditor.Highlight />
+                    <RichTextEditor.Code />
+                  </RichTextEditor.ControlsGroup>
+
+                  <RichTextEditor.ControlsGroup>
+                    <RichTextEditor.H1 />
+                    <RichTextEditor.H2 />
+                    <RichTextEditor.H3 />
+                    <RichTextEditor.H4 />
+                  </RichTextEditor.ControlsGroup>
+                  <RichTextEditor.ColorPicker
+                    colors={[
+                      "#25262b",
+                      "#868e96",
+                      "#fa5252",
+                      "#e64980",
+                      "#be4bdb",
+                      "#7950f2",
+                      "#4c6ef5",
+                      "#228be6",
+                      "#15aabf",
+                      "#12b886",
+                      "#40c057",
+                      "#82c91e",
+                      "#fab005",
+                      "#fd7e14",
+                    ]}
+                  />
+
+                  <RichTextEditor.ControlsGroup>
+                    <RichTextEditor.Control interactive={false}>
+                      <Colorize size="1rem" />
+                    </RichTextEditor.Control>
+                    <RichTextEditor.Color color="#F03E3E" />
+                    <RichTextEditor.Color color="#7048E8" />
+                    <RichTextEditor.Color color="#1098AD" />
+                    <RichTextEditor.Color color="#37B24D" />
+                    <RichTextEditor.Color color="#F59F00" />
+                  </RichTextEditor.ControlsGroup>
+
+                  <RichTextEditor.UnsetColor />
+
+                  <RichTextEditor.ControlsGroup>
+                    <RichTextEditor.Blockquote />
+                    <RichTextEditor.Hr />
+                    <RichTextEditor.BulletList />
+                    <RichTextEditor.OrderedList />
+                  </RichTextEditor.ControlsGroup>
+                  <RichTextEditor.ControlsGroup>
+                    <RichTextEditor.Link />
+                    <RichTextEditor.Unlink />
+                  </RichTextEditor.ControlsGroup>
+                  <RichTextEditor.ControlsGroup>
+                    <RichTextEditor.Undo />
+                    <RichTextEditor.Redo />
+                  </RichTextEditor.ControlsGroup>
+                </RichTextEditor.Toolbar>
+
+                <RichTextEditor.Content
+                  style={{
+                    overflowY: "auto",
+                    overflowX: "hidden",
+                    height: "100%",
+                    maxHeight: "220px",
+                    scrollbarWidth: "thin",
+                    scrollBehavior: "smooth",
+                  }}
+                  content={formData?.description}
+                  fullWidth
+                  // label="Description"
+
+                  // value={}
+                  onChange={handleChange}
+                  error={Boolean(errors.description)}
+                  helperText={errors.description}
+                  required
+                />
+              </RichTextEditor>
+              {/* <TextField /> */}
             </Grid>
             <Grid item xs={12} sm={4}>
               <TextField

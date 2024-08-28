@@ -9,7 +9,7 @@ const axiosInstance = axios.create({
 // request interceptor
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = JSON.parse(localStorage.getItem("user"))?.accessToken;
+    const token = JSON.parse(sessionStorage.getItem("user"))?.accessToken;
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;
     }
@@ -17,7 +17,7 @@ axiosInstance.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  },
+  }
 );
 
 // response interceptor
@@ -30,20 +30,20 @@ axiosInstance.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const storedUser = JSON.parse(localStorage.getItem("user"));
+        const storedUser = JSON.parse(sessionStorage.getItem("user"));
         if (!storedUser || !storedUser.refreshToken) {
           throw new Error("No refresh token found");
         }
 
         const data = await refreshToken(storedUser.refreshToken);
 
-        localStorage.setItem(
+        sessionStorage.setItem(
           "user",
           JSON.stringify({
             ...storedUser,
             accessToken: data.accessToken,
             refreshToken: data.refreshToken,
-          }),
+          })
         );
 
         // Set the new token in the headers
@@ -54,13 +54,13 @@ axiosInstance.interceptors.response.use(
         // Retry the original request
         return axiosInstance(originalRequest);
       } catch (refreshError) {
-        localStorage.removeItem("user");
+        sessionStorage.removeItem("user");
         return Promise.reject("refreshError");
       }
     }
 
     return Promise.reject(error);
-  },
+  }
 );
 
 export default axiosInstance;

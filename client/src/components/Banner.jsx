@@ -1,5 +1,6 @@
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import BannerImage from "@/assets/Banner.jpg";
 
 const Banner = () => {
   const { isMobile } = useIsMobile();
@@ -8,9 +9,11 @@ const Banner = () => {
     <Box
       sx={{
         width: "100%",
-        height: isMobile ? "500px" : "400px",
-        background:
-          "url(https://t3.ftcdn.net/jpg/05/08/74/68/360_F_508746888_tl2EUHrIm1NpPBcwLufaAzbMqNO2kqwR.jpg) no-repeat center/cover",
+        height: isMobile ? "500px" : "300px",
+        backgroundImage: `url(${BannerImage})`,
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+        backgroundSize: "cover",
         position: "relative",
         color: "white",
         display: "flex",
@@ -24,8 +27,8 @@ const Banner = () => {
           width: "100%",
           maxWidth: "1200px",
           padding: "16px",
-          backgroundColor: "rgba(0, 0, 0, 0.3)",
-          borderRadius: "12px",
+          // backgroundColor: "rgba(0, 0, 0, 0.3)",
+          // borderRadius: "12px",
         }}
       >
         <Typography

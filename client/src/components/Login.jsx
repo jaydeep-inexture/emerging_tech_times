@@ -81,7 +81,7 @@ const Login = ({ setFlag }) => {
       const data = await login(loginFormData);
 
       if (data.user) {
-        localStorage.setItem("user", JSON.stringify(data.user));
+        sessionStorage.setItem("user", JSON.stringify(data.user));
       }
 
       dispatch(loadLoggedInUser());
@@ -129,7 +129,7 @@ const Login = ({ setFlag }) => {
       const data = await signup(signUpFormData);
 
       if (data.user) {
-        localStorage.setItem("user", JSON.stringify(data.user));
+        sessionStorage.setItem("user", JSON.stringify(data.user));
       }
 
       dispatch(loadLoggedInUser());
@@ -170,7 +170,7 @@ const Login = ({ setFlag }) => {
       const data = await logout();
       dispatch(setUser(null));
 
-      localStorage.removeItem("user");
+      sessionStorage.removeItem("user");
       dispatch(setUser(null));
 
       dispatch(

@@ -9,16 +9,21 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
+import Placeholder from "@/assets/placeholder.jpg";
+import { useNavigate } from "react-router-dom";
 
 const NewsData = ({ posts, loading }) => {
   const [visibleItems, setVisibleItems] = useState(10);
-
+  const navigate = useNavigate();
   const loadMore = () => {
     setVisibleItems((prevVisibleItems) => prevVisibleItems + 10);
   };
 
   const displayedData = posts.slice(0, visibleItems);
-
+  const handleClick = (article) => {
+    console.log(article);
+    navigate(`/article/${article._id}`, { state: { article } });
+  };
   return (
     <>
       <Box sx={{ paddingX: "5%" }}>
@@ -41,13 +46,22 @@ const NewsData = ({ posts, loading }) => {
                     transform: "translateY(-8px)",
                   },
                 }}
+                onClick={() => handleClick(posts[0])}
               >
                 <CardMedia
                   component="img"
                   height="140"
-                  image={item.imageUrl}
+                  image={item.imageUrl ? item.imageUrl : Placeholder}
                   alt={item.title}
-                  sx={{ objectFit: "contain" }}
+                  sx={{
+                    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
+                    borderRadius: "16px",
+                    objectFit: "contain",
+                    transition: "transform 0.3s ease-in-out",
+                    "&:hover": {
+                      transform: "translateY(-8px)",
+                    },
+                  }}
                 />
                 <CardContent>
                   <Typography variant="h6">{item.title}</Typography>

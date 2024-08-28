@@ -62,7 +62,7 @@ export const fetchPosts = async (
   limit = CONSTANTS.PAGINATION_LIMIT,
   sortBy = "createdAt",
   category,
-  title,
+  title
 ) => {
   const params = {
     page,
@@ -102,6 +102,16 @@ export const updatePost = async (id, postData) => {
 
 export const deletePost = async (id) => {
   const response = await axiosInstance.delete(`/posts/${id}`);
+
+  return response.data;
+};
+export const likedPost = async (id) => {
+  console.log("id", id);
+  const response = await axiosInstance.post(`/posts/${id}/like`, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 
   return response.data;
 };

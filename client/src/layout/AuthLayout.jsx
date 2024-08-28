@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
 
 const AuthLayout = () => {
-  const isAuth = JSON.parse(localStorage.getItem("user"));
+  const isAuth = JSON.parse(sessionStorage.getItem("user"));
   const { user } = useSelector((state) => state.user);
 
   const isNotAdmin = user && !user.isAdmin;

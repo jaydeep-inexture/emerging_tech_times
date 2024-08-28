@@ -16,6 +16,9 @@ import ArticleDetails from "./pages/ArticleDetails";
 import Contact from "./pages/Contact";
 import Home from "./pages/Home";
 import News from "./pages/News";
+import { MantineProvider } from "@mantine/core";
+import "@mantine/core/styles.css";
+import "@mantine/tiptap/styles.css";
 
 const theme = createTheme({
   palette: {
@@ -29,7 +32,7 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
+    const user = JSON.parse(sessionStorage.getItem("user"));
 
     if (user) {
       try {
@@ -43,7 +46,7 @@ const App = () => {
           setNotification({
             type: "error",
             message: errMessage,
-          }),
+          })
         );
       }
     }
@@ -51,25 +54,27 @@ const App = () => {
 
   return (
     <>
-      <NotificationSnackbar />
-      <ThemeProvider theme={theme}>
-        <Router>
-          <Routes>
-            <Route element={<MainLayout />}>
-              <Route path="/" element={<Home />} />
-              <Route path="/news" element={<News />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/article/:id" element={<ArticleDetails />} />
-              <Route path="/profile" element={<Profile />} />
-            </Route>
+      <MantineProvider>
+        <NotificationSnackbar />
+        <ThemeProvider theme={theme}>
+          <Router>
+            <Routes>
+              <Route element={<MainLayout />}>
+                <Route path="/" element={<Home />} />
+                <Route path="/news" element={<News />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/article/:id" element={<ArticleDetails />} />
+                <Route path="/profile" element={<Profile />} />
+              </Route>
 
-            <Route element={<AuthLayout />}>
-              <Route path="/admin" element={<AdminDashboard />} />
-            </Route>
-          </Routes>
-        </Router>
-      </ThemeProvider>
+              <Route element={<AuthLayout />}>
+                <Route path="/admin" element={<AdminDashboard />} />
+              </Route>
+            </Routes>
+          </Router>
+        </ThemeProvider>
+      </MantineProvider>
     </>
   );
 };
