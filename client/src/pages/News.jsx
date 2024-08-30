@@ -62,7 +62,6 @@ const News = () => {
       dispatch(setLoading(false));
     }
   };
-  console.log(location.state.tabValue, typeof location.state.tabValue);
   useEffect(() => {
     if (tabValue) {
       dispatch(resetPosts());
@@ -129,7 +128,7 @@ const News = () => {
               />
             ) : (
               <Typography
-                variant="h6"
+                variant="h4"
                 sx={{ color: "#555" }}
                 textAlign={"center"}
               >
@@ -147,7 +146,7 @@ const News = () => {
               />
             ) : (
               <Typography
-                variant="h6"
+                variant="h4"
                 sx={{ color: "#555" }}
                 textAlign={"center"}
               >
@@ -165,7 +164,7 @@ const News = () => {
               />
             ) : (
               <Typography
-                variant="h6"
+                variant="h4"
                 sx={{ color: "#555" }}
                 textAlign={"center"}
               >

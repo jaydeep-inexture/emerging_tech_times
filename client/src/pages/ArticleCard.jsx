@@ -34,7 +34,15 @@ const ArticleCard = (article) => {
     >
       <CardMedia
         component="img"
-        sx={{ width: isMobile ? "100%" : 200 }}
+        sx={{
+          width: isMobile ? "100%" : 200,
+          height: isMobile ? "100%" : "100%",
+          transition: "transform 0.3s ease-in-out",
+          "&:hover": {
+            transform: "translateY(-8px)",
+          },
+          // objectFit: "cover",
+        }}
         image={imageUrl ? imageUrl : Placeholder}
         alt={title}
       />
@@ -43,10 +51,10 @@ const ArticleCard = (article) => {
           <Typography
             component="div"
             variant="h5"
-            fontWeight={900}
+            fontWeight={600}
             textTransform={"capitalize"}
           >
-            {title}
+            {title.length > 25 ? `${title.substring(0, 25)}...` : title}
           </Typography>
           <Typography
             variant="subtitle1"
@@ -56,9 +64,15 @@ const ArticleCard = (article) => {
             {`By ${author.name} on ${new Date(createdAt).toLocaleDateString()}`}
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mt: 1.5 }}>
-            {description.length > 155
-              ? `${description.substring(0, 155)}...`
-              : description}
+            <div
+              dangerouslySetInnerHTML={{
+                __html:
+                  description.length > 175
+                    ? `${description.substring(0, 175)}...`
+                    : description,
+              }}
+            />
+            {}
           </Typography>
         </CardContent>
         {category && (

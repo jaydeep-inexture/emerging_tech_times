@@ -5,6 +5,7 @@ import {
   CardContent,
   CardMedia,
   Grid,
+  IconButton,
   Stack,
   Typography,
 } from "@mui/material";
@@ -14,7 +15,7 @@ import { setLoading } from "@/redux/postSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { fetchPostDetails } from "@/helpers/api";
 import Spinner from "@/common/Spinner";
 import {
@@ -22,6 +23,10 @@ import {
   Visibility,
   Favorite,
   FavoriteBorder,
+  // Instagram,
+  Telegram,
+  Twitter,
+  Facebook,
 } from "@mui/icons-material";
 import Placeholder from "@/assets/placeholder.jpg";
 import { red } from "@mui/material/colors";
@@ -65,8 +70,25 @@ const ArticleDetails = () => {
       dispatch(setSelectedPost(null));
     };
   }, [id]);
+  const previousRandomNumber =
+    parseInt(localStorage.getItem("randomNumber")) || 1000;
 
-  const randomNumber = Math.floor(Math.random() * (1500 - 1000 + 1)) + 1000;
+  // Generate a new random number that's at least 10 greater than the previous one
+  const randomNumber =
+    Math.floor(Math.random() * (1500 - previousRandomNumber - 10 + 1)) +
+    previousRandomNumber +
+    10;
+
+  const [randomNumbers, setRandomNumbers] = useState(randomNumber);
+
+  useEffect(() => {
+    // Store the new random number in local storage
+    localStorage.setItem("randomNumber", randomNumber);
+    setRandomNumbers(randomNumber);
+    fetchLatestPosts(); // Assuming fetchLatestPosts is defined somewhere in your code
+  }, []);
+
+  console.log(randomNumber);
 
   const fetchLatestPosts = async () => {
     dispatch(resetPosts());
@@ -88,9 +110,6 @@ const ArticleDetails = () => {
     }
   };
 
-  useEffect(() => {
-    fetchLatestPosts();
-  }, []);
   const navigate = useNavigate();
   const handleClick = (article) => {
     navigate(`/article/${article._id}`, { state: { article } });
@@ -123,6 +142,43 @@ const ArticleDetails = () => {
   const handleUnlike = () => {
     likedData();
   };
+  const [toc, setToc] = useState([]);
+  const [updatedPost, setUpdatedPost] = useState(selectedPost);
+  useEffect(() => {
+    if (selectedPost?.description) {
+      // Parse the HTML string
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(selectedPost.description, "text/html");
+      console.log("doc", doc);
+      // Select all heading tags from h1 to h6
+      const headings = doc.querySelectorAll(" h2, h3, h4");
+
+      // Loop through each heading and add a dynamic id (if not already present)
+      headings.forEach((heading, index) => {
+        if (!heading.id) {
+          heading.id = `${heading.tagName.toLowerCase()}-${index}`;
+        }
+      });
+
+      // Generate Table of Contents
+      const tocItems = Array.from(headings).map((heading) => ({
+        id: heading.id,
+        text: heading.innerText,
+        level: parseInt(heading.tagName.replace("H", ""), 10),
+      }));
+
+      setToc(tocItems);
+
+      const updatedDescription = doc.body.innerHTML;
+
+      // Clone selectedPost and update the description
+      setUpdatedPost((prev) => ({
+        ...prev,
+        description: updatedDescription,
+      }));
+    }
+  }, [selectedPost]);
+  console.log("toc", selectedPost?.description);
   return (
     <>
       {loading && <Spinner />}
@@ -136,7 +192,7 @@ const ArticleDetails = () => {
         }}
       >
         <Typography
-          variant={isMobile ? "h6" : "h4"}
+          variant={isMobile ? "h4" : "h2"}
           fontWeight={800}
           textAlign={"center"}
           color={"white"}
@@ -154,13 +210,13 @@ const ArticleDetails = () => {
             border: "1px solild black",
             position: "absolute",
             top: "40%",
-            left: "22%",
+            left: isMobile ? 0 : "22%",
             boxShadow: "0 6px 20px rgba(0, 0, 0, 0.1)",
           }}
         />
       </Box>
 
-      <Box mt="20vh" mx={10}>
+      <Box mt="20vh" mx={isMobile ? 5 : 10}>
         <Stack
           direction="row"
           justifyContent="space-between"
@@ -168,7 +224,7 @@ const ArticleDetails = () => {
           spacing={2}
           sx={{
             borderBottom: "1px solid #e0e0e0",
-            pb: 2,
+            pb: isMobile ? 1 : 2,
             mb: 3,
           }}
         >
@@ -203,7 +259,7 @@ const ArticleDetails = () => {
               }}
             >
               <Visibility sx={{ fontSize: 20, mr: 1 }} />
-              {randomNumber}
+              {randomNumbers}
             </Typography>
             <Typography
               sx={{
@@ -232,47 +288,173 @@ const ArticleDetails = () => {
         </Stack>
 
         {/* Article Description */}
-        <Typography fontSize={20} mt={1} whiteSpace="pre-wrap">
-          {selectedPost?.description}
-        </Typography>
-
-        {/* Author Information Box */}
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            border: "1px solid #e0e0e0",
-            borderRadius: "10px",
-            p: "10px",
-            mt: "5vh",
-            boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-            backgroundColor: "#f9f9f9",
-          }}
-        >
-          <Stack direction="row" spacing={2}>
-            <Avatar
+        <Grid container spacing={2}>
+          {/* Left Side - Table of Contents */}
+          <Grid item xs={12} md={4}>
+            <Box
               sx={{
-                width: 60,
-                height: 60,
-                backgroundColor: "#f5f5f5",
-                marginRight: "1rem",
+                position: "sticky",
+                top: "20px",
               }}
             >
-              <Person sx={{ fontSize: 30 }} />
-            </Avatar>
-            <Stack>
-              <Typography variant="h6" color="black">
-                Written by
-              </Typography>
-              <Typography variant="subtitle1" color="orange">
-                {selectedPost?.author.name}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {selectedPost?.author.description}
-              </Typography>
-            </Stack>
-          </Stack>
-        </Box>
+              {/* Table of Contents Box */}
+              <Box
+                sx={{
+                  border: "1px solid #ccc",
+                  borderRadius: "8px",
+                  padding: "16px",
+                  backgroundColor: "#ffffff", // A clean white background for a modern look
+                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", // Subtle shadow for depth
+                }}
+              >
+                <Typography
+                  variant={isMobile ? "h6" : "h5"}
+                  textAlign="center"
+                  sx={{ color: "#333" }} // Darker color for better readability
+                >
+                  On This Page:
+                </Typography>
+                <ul
+                  style={{
+                    padding: "0",
+                    margin: "16px 0 0 0", // Better spacing for the list
+                    // listStyleType: "none", // Remove default bullets
+                  }}
+                >
+                  {toc.map((item) => (
+                    <li
+                      key={item.id}
+                      style={{
+                        marginLeft: `${(item.level - 1) * 10}px`,
+                        marginBottom: "8px",
+                      }}
+                    >
+                      <a
+                        href={`#${item.id}`}
+                        style={{
+                          textDecoration: "none",
+                          color: "#007bff", // A subtle blue color for links
+                          fontWeight: 500,
+                        }}
+                      >
+                        {item.text}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </Box>
+
+              {/* Social Media Sharing Box */}
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  border: "1px solid #ccc",
+                  borderRadius: "8px",
+                  padding: "12px 16px", // Balanced padding for content
+                  backgroundColor: "#ffffff",
+                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", // Same shadow as above for consistency
+                  marginTop: "16px", // Space between the two boxes
+                }}
+              >
+                <Typography
+                  variant="body1"
+                  sx={{ color: "#333", fontWeight: 500 }}
+                >
+                  Don&apos;t forget to share:
+                </Typography>
+                <Box sx={{ display: "flex", gap: "8px" }}>
+                  <IconButton href="https://facebook.com" color="inherit">
+                    <Facebook
+                      sx={{
+                        fontSize: 30,
+                        color: "#3b5998",
+                        "&:hover": {
+                          backgroundColor: "#f0f2f5",
+                        },
+                      }}
+                    />
+                  </IconButton>
+                  <IconButton href="https://twitter.com" color="inherit">
+                    <Twitter
+                      sx={{
+                        fontSize: 30,
+                        color: "#1DA1F2",
+                        "&:hover": {
+                          backgroundColor: "#e8f5fe",
+                        },
+                      }}
+                    />
+                  </IconButton>
+                  <IconButton href="https://telegram.com" color="inherit">
+                    <Telegram
+                      sx={{
+                        fontSize: 30,
+                        color: "#0088cc",
+                        "&:hover": {
+                          backgroundColor: "#e0f4fc",
+                        },
+                      }}
+                    />
+                  </IconButton>
+                </Box>
+              </Box>
+            </Box>
+          </Grid>
+
+          {/* Right Side - Article Description */}
+          <Grid item xs={12} md={8}>
+            <Typography
+              fontSize={isMobile ? 15 : 20}
+              mt={1}
+              whiteSpace="pre-wrap"
+            >
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: updatedPost?.description,
+                }}
+              />
+            </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                border: "1px solid #e0e0e0",
+                borderRadius: "10px",
+                p: "10px",
+                mt: "5vh",
+                boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+                backgroundColor: "#f9f9f9",
+              }}
+            >
+              <Stack direction="row" spacing={2}>
+                <Avatar
+                  sx={{
+                    width: 60,
+                    height: 60,
+                    backgroundColor: "#f5f5f5",
+                    marginRight: "1rem",
+                  }}
+                >
+                  <Person sx={{ fontSize: 30 }} />
+                </Avatar>
+                <Stack>
+                  <Typography variant="h5" color="black">
+                    Written by
+                  </Typography>
+                  <Typography variant="subtitle1" color="orange">
+                    {selectedPost?.author.name}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {selectedPost?.author.description}
+                  </Typography>
+                </Stack>
+              </Stack>
+            </Box>
+          </Grid>
+        </Grid>
+        {/* Author Information Box */}
 
         {/* Recommended Blogs */}
         <Box my={5}>
@@ -319,7 +501,7 @@ const ArticleDetails = () => {
                     >
                       <Typography
                         gutterBottom
-                        variant="h6"
+                        variant="h4"
                         component="div"
                         sx={{
                           fontWeight: 700,
@@ -343,7 +525,15 @@ const ArticleDetails = () => {
                           WebkitBoxOrient: "vertical",
                         }}
                       >
-                        {post.description}
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html:
+                              post.description.length > 175
+                                ? `${post.description.substring(0, 175)}...`
+                                : post.description,
+                          }}
+                        />
+                        {/* {post.description} */}
                       </Typography>
                     </CardContent>
                   </Card>

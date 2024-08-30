@@ -6,7 +6,7 @@ import { useIsMobile } from "@/hooks/useIsMobile";
 
 const Footer = () => {
   const { isMobile } = useIsMobile();
-
+  console.log("jaydeep", isMobile);
   return (
     <>
       <Box
@@ -19,10 +19,10 @@ const Footer = () => {
       >
         <Grid
           container
-          spacing={4}
+          spacing={isMobile ? 2 : 4}
           justifyContent="center"
           alignItems="center"
-          paddingX={"70px"}
+          paddingX={isMobile ? 10 : "70px"}
         >
           <Grid item xs={12} sm={3} display="flex" justifyContent="center">
             <img
@@ -45,7 +45,7 @@ const Footer = () => {
             alignItems="center"
           >
             <Typography
-              variant={isMobile ? "p" : "h6"}
+              variant={isMobile ? "p" : "h5"}
               fontWeight={800}
               fontSize={isMobile && 20}
               marginBottom={"10px"}
@@ -68,7 +68,7 @@ const Footer = () => {
               flexDirection="column"
               alignItems="center"
             >
-              <Typography variant="h6" fontWeight={800}>
+              <Typography variant="h5" fontWeight={800}>
                 Connect
               </Typography>
               <Link
@@ -110,21 +110,55 @@ const Footer = () => {
             flexDirection="column"
             alignItems="center"
           >
-            <Typography variant="h6" fontWeight={800} marginBottom={"20px"}>
+            <Typography variant="h5" fontWeight={800} marginBottom={"20px"}>
               Follow Us
             </Typography>
             <Box sx={{ display: "flex" }}>
-              <IconButton href="https://facebook.com" color="inherit">
-                <Facebook sx={{ fontSize: 30 }} />
+              <IconButton
+                href="https://facebook.com"
+                color="inherit"
+                sx={{
+                  fontSize: 30,
+                }}
+              >
+                <Facebook
+                  sx={{
+                    fontSize: 30,
+                    "&:hover": {
+                      color: "#1877F2", // Facebook Blue
+                    },
+                  }}
+                />
               </IconButton>
               <IconButton href="https://twitter.com" color="inherit">
-                <Twitter sx={{ fontSize: 30 }} />
+                <Twitter
+                  sx={{
+                    fontSize: 30,
+                    "&:hover": {
+                      color: "#1DA1F2", // Twitter Blue
+                    },
+                  }}
+                />
               </IconButton>
               <IconButton href="https://instagram.com" color="inherit">
-                <Instagram sx={{ fontSize: 30 }} />
+                <Instagram
+                  sx={{
+                    fontSize: 30,
+                    "&:hover": {
+                      color: "#E1306C", // Instagram Pink
+                    },
+                  }}
+                />
               </IconButton>
               <IconButton href="https://telegram.com" color="inherit">
-                <Telegram sx={{ fontSize: 30 }} />
+                <Telegram
+                  sx={{
+                    fontSize: 30,
+                    "&:hover": {
+                      color: "#0088cc", // Telegram Blue
+                    },
+                  }}
+                />
               </IconButton>
             </Box>
           </Grid>

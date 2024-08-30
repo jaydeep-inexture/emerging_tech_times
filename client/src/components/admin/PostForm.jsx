@@ -44,11 +44,11 @@ const PostForm = ({ setActiveTab }) => {
   });
   const editor = useEditor({
     extensions: [StarterKit, Underline, Link, TextStyle, Color, Highlight],
-
+    content: formData.description,
     onUpdate: ({ editor }) => {
       setFormData((prevData) => ({
         ...prevData,
-        description: editor.getText().trim() === "" ? "" : editor.getText(),
+        description: editor.getHTML(),
       }));
     },
   });
@@ -87,9 +87,12 @@ const PostForm = ({ setActiveTab }) => {
         category: selectedPost?.category ? selectedPost.category : "",
       });
     }
+    if (editor) {
+      editor.commands.setContent(selectedPost?.description || "");
+    }
     const imageUrl = selectedPost?.imageUrl || "";
     setExistingImageFileName(imageUrl ? imageUrl.split("/").pop() : "");
-  }, [selectedPost]);
+  }, [selectedPost, editor]);
 
   const validate = () => {
     const newErrors = {};
@@ -217,7 +220,6 @@ const PostForm = ({ setActiveTab }) => {
       dispatch(setLoading(false));
     }
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -234,7 +236,7 @@ const PostForm = ({ setActiveTab }) => {
         }
       });
 
-      console.log({ formData });
+      
       if (selectedPost) {
         await updateSinglePost(data);
       } else {
@@ -280,10 +282,12 @@ const PostForm = ({ setActiveTab }) => {
                   </RichTextEditor.ControlsGroup>
 
                   <RichTextEditor.ControlsGroup>
-                    <RichTextEditor.H1 />
+                    {/* <RichTextEditor.H1 /> */}
                     <RichTextEditor.H2 />
                     <RichTextEditor.H3 />
                     <RichTextEditor.H4 />
+                    <RichTextEditor.H5 />
+                    <RichTextEditor.H6 />
                   </RichTextEditor.ControlsGroup>
                   <RichTextEditor.ColorPicker
                     colors={[
@@ -411,7 +415,7 @@ const PostForm = ({ setActiveTab }) => {
               />
             </Grid>
             <Grid item xs={12}>
-              <Typography variant="h6" gutterBottom>
+              <Typography variant="h5" gutterBottom>
                 SEO Details
               </Typography>
             </Grid>
@@ -443,7 +447,7 @@ const PostForm = ({ setActiveTab }) => {
               />
             </Grid>
             <Grid item xs={12}>
-              <Typography variant="h6" gutterBottom>
+              <Typography variant="h5" gutterBottom>
                 Author Details
               </Typography>
             </Grid>

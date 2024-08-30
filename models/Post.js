@@ -17,6 +17,7 @@ const PostSchema = new mongoose.Schema(
     category: {
       unique: true,
       type: String,
+      sparse: true,
     },
     seo: {
       title: {
@@ -33,6 +34,7 @@ const PostSchema = new mongoose.Schema(
       },
     },
     author: {
+    
       name: {
         type: String,
         required: true,

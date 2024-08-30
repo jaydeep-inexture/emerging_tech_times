@@ -45,17 +45,18 @@ const NewsData = ({ posts, loading }) => {
                   "&:hover": {
                     transform: "translateY(-8px)",
                   },
+                  cursor: "pointer",
                 }}
                 onClick={() => handleClick(posts[0])}
               >
                 <CardMedia
                   component="img"
-                  height="140"
+                  // height="140"
                   image={item.imageUrl ? item.imageUrl : Placeholder}
                   alt={item.title}
                   sx={{
                     boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
-                    borderRadius: "16px",
+                    // borderRadius: "16px",
                     objectFit: "contain",
                     transition: "transform 0.3s ease-in-out",
                     "&:hover": {
@@ -64,11 +65,20 @@ const NewsData = ({ posts, loading }) => {
                   }}
                 />
                 <CardContent>
-                  <Typography variant="h6">{item.title}</Typography>
+                  <Typography variant="h5" fontWeight={700}>
+                    {item.title.length > 20
+                      ? `${item.title.substring(0, 20)}...`
+                      : item.title}
+                  </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {item.description.length > 130
-                      ? `${item.description.slice(0, 150)}...`
-                      : item.description}
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          item.description.length > 130
+                            ? `${item.description.slice(0, 150)}...`
+                            : item.description,
+                      }}
+                    />
                   </Typography>
                 </CardContent>
               </Card>

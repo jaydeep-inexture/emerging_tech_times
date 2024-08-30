@@ -39,7 +39,7 @@ const Profile = () => {
         setNotification({
           type: "success",
           message: data.msg,
-        }),
+        })
       );
       dispatch(setLoading(false));
     } catch (error) {
@@ -51,7 +51,7 @@ const Profile = () => {
         setNotification({
           type: "error",
           message: errMessage,
-        }),
+        })
       );
       dispatch(setLoading(false));
     }
@@ -103,13 +103,13 @@ const Profile = () => {
               }}
             />
           </Box>
-          <Typography variant="h6" gutterBottom>
+          <Typography variant="h3" gutterBottom>
             Profile
           </Typography>
 
           <Box sx={{ width: "100%" }}>
             <Typography
-              variant="h4"
+              variant="h5"
               gutterBottom
               fontWeight={800}
               textAlign={"center"}

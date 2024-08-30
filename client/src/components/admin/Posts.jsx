@@ -174,9 +174,15 @@ const Posts = ({ setActiveTab }) => {
                       color="text.secondary"
                       paragraph
                     >
-                      {post.description.length > 155
-                        ? `${post.description.substring(0, 155)}...`
-                        : post.description}
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html:
+                            post.description.length > 155
+                              ? `${post.description.substring(0, 155)}...`
+                              : post.description,
+                        }}
+                      />
+                      {}
                     </Typography>
                     <Box sx={{ mt: 2 }}>
                       <Typography variant="subtitle2" color="text.primary">

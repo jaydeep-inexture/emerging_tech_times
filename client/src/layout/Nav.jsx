@@ -44,8 +44,8 @@ const Nav = () => {
     }
   }, [flag]);
 
-  const handleRedirect = (tabValue) => {
-    navigate("/news", { state: { tabValue } }); // Navigate with state
+  const handleRedirect = () => {
+    navigate("/news"); // Navigate with state
   };
 
   const drawerList = (
@@ -145,7 +145,7 @@ const Nav = () => {
                 to="/about"
                 style={{ textDecoration: "none", marginLeft: "70px" }}
               >
-                <Typography variant="h6" sx={{ color: "black" }}>
+                <Typography variant="h5" sx={{ color: "black" }}>
                   About Us
                 </Typography>
               </Link>
@@ -153,7 +153,7 @@ const Nav = () => {
                 to="/news"
                 style={{ textDecoration: "none", marginLeft: "70px" }}
               >
-                <Typography variant="h6" sx={{ color: "black" }}>
+                <Typography variant="h5" sx={{ color: "black" }}>
                   News
                 </Typography>
               </Link>
@@ -161,7 +161,7 @@ const Nav = () => {
                 to="/contact"
                 style={{ textDecoration: "none", marginLeft: "70px" }}
               >
-                <Typography variant="h6" sx={{ color: "black" }}>
+                <Typography variant="h5" sx={{ color: "black" }}>
                   Contact
                 </Typography>
               </Link>

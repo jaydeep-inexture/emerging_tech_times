@@ -26,6 +26,28 @@ const theme = createTheme({
       main: "#0F172A",
     },
   },
+  typography: {
+    h2: {
+      fontSize: "2rem",
+      fontWeight: 600,
+    },
+    h3: {
+      fontSize: "1.75rem", // Adjust the size as needed
+      fontWeight: 500,
+    },
+    h4: {
+      fontSize: "1.50rem", // Adjust the size as needed
+      fontWeight: 400,
+    },
+    h5: {
+      fontSize: "1.25rem", // Adjust the size as needed
+      fontWeight: 300,
+    },
+    h6: {
+      fontSize: "1.00rem", // Adjust the size as needed
+      fontWeight: 200,
+    },
+  },
 });
 
 const App = () => {

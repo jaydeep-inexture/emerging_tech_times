@@ -106,7 +106,6 @@ export const deletePost = async (id) => {
   return response.data;
 };
 export const likedPost = async (id) => {
-  console.log("id", id);
   const response = await axiosInstance.post(`/posts/${id}/like`, {
     headers: {
       "Content-Type": "multipart/form-data",

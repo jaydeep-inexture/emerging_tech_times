@@ -48,7 +48,7 @@ const CategoryCard = ({ name, imageUrl }) => {
           // },
         }}
       >
-        <Typography variant="h6" component="div" textAlign="center">
+        <Typography variant="h5" component="div" textAlign="center">
           {name}
         </Typography>
       </Box>

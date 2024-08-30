@@ -21,10 +21,13 @@ import { CONSTANTS } from "@/helpers/constants";
 import { setNotification } from "@/redux/notificationSlice";
 import { fetchPostList, resetPosts, setLoading } from "@/redux/postSlice";
 import ArticleCard from "./ArticleCard";
+import { useIsMobile } from "@/hooks/useIsMobile";
+// import TextEditor from "../common/TextEditor";
 
 const Home = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { isMobile } = useIsMobile();
   const { posts, page, loading } = useSelector((state) => state.post);
 
   useEffect(() => {
@@ -70,10 +73,10 @@ const Home = () => {
           <Banner />
         </Box>
 
-        <Box sx={{ padding: "20px 10%" }}>
+        <Box sx={{ padding: isMobile ? "10px 5%" : "20px 10%" }}>
           {/* Latest news */}
           {posts.length > 0 && (
-            <Box sx={{ paddingX: 2, marginTop: 6 }}>
+            <Box sx={{ paddingX: 2, marginTop: isMobile ? 0 : 6 }}>
               <Box
                 sx={{
                   display: "flex",
@@ -82,7 +85,7 @@ const Home = () => {
                   marginBottom: 2,
                 }}
               >
-                <Typography variant="h5" fontWeight={700}>
+                <Typography variant="h4" fontWeight={700}>
                   Latest News
                 </Typography>
                 <Button
@@ -127,7 +130,15 @@ const Home = () => {
                     >
                       <CardMedia
                         component="img"
-                        sx={{ width: "100%", height: "100%" }}
+                        sx={{
+                          width: "100%",
+                          height: "100%",
+
+                          transition: "transform 0.3s ease-in-out",
+                          "&:hover": {
+                            transform: "translateY(-8px)",
+                          },
+                        }}
                         image={
                           posts[0].imageUrl ? posts[0].imageUrl : Placeholder
                         }
@@ -147,7 +158,10 @@ const Home = () => {
                             fontWeight={900}
                             textTransform={"capitalize"}
                           >
-                            {posts[0].title}
+                            {posts[0].title.length > 25
+                              ? `${posts[0].title.substring(0, 25)}...`
+                              : posts[0].title}
+                            {/* {posts[0].title} */}
                           </Typography>
                           <Typography
                             variant="subtitle1"
@@ -163,9 +177,16 @@ const Home = () => {
                             color="text.secondary"
                             sx={{ mt: 1.5 }}
                           >
-                            {posts[0].description.length > 155
-                              ? `${posts[0].description.slice(0, 155)}...`
-                              : posts[0].description}
+                            {}
+                            {/* <TextEditor value={posts[0].description} /> */}
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html:
+                                  posts[0].description.length > 500
+                                    ? `${posts[0].description.slice(0, 500)}...`
+                                    : posts[0].description,
+                              }}
+                            />
                           </Typography>
                         </CardContent>
                         <Box sx={{ p: 1 }}>
@@ -203,7 +224,7 @@ const Home = () => {
                 marginBottom: 2,
               }}
             >
-              <Typography variant="h5" fontWeight={700}>
+              <Typography variant="h4" fontWeight={700}>
                 Trending News
               </Typography>
               <Button
@@ -257,7 +278,7 @@ const Home = () => {
                 marginBottom: 2,
               }}
             >
-              <Typography variant="h5" fontWeight={700}>
+              <Typography variant="h4" fontWeight={700}>
                 Browse by Category
               </Typography>
               {/* <Button
