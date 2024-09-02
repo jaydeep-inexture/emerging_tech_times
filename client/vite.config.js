@@ -21,4 +21,9 @@ export default defineConfig({
       "@/redux": "/src/redux",
     },
   },
+  build: {
+    rollupOptions: {
+      external: ["react-redux"],
+    },
+  },
 });

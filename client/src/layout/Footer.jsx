@@ -6,7 +6,7 @@ import { useIsMobile } from "@/hooks/useIsMobile";
 
 const Footer = () => {
   const { isMobile } = useIsMobile();
-  console.log("jaydeep", isMobile);
+
   return (
     <>
       <Box

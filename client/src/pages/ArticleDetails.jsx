@@ -428,12 +428,12 @@ const ArticleDetails = () => {
                 backgroundColor: "#f9f9f9",
               }}
             >
-              <Stack direction="row" spacing={2}>
+              <Stack direction="row" spacing={2} my={3}>
                 <Avatar
                   sx={{
                     width: 60,
                     height: 60,
-                    backgroundColor: "#f5f5f5",
+                    // backgroundColor: "#f5f5f5",
                     marginRight: "1rem",
                   }}
                 >
@@ -443,10 +443,10 @@ const ArticleDetails = () => {
                   <Typography variant="h5" color="black">
                     Written by
                   </Typography>
-                  <Typography variant="subtitle1" color="orange">
+                  <Typography variant="subtitle1" color={"#0F172A"}>
                     {selectedPost?.author.name}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2">
                     {selectedPost?.author.description}
                   </Typography>
                 </Stack>
