@@ -23,7 +23,7 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
-      external: ["/node_modules/"],
+      external: ["react", "react-dom", "react-redux", "@reduxjs/toolkit"],
     },
   },
 });
