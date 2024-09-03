@@ -7,9 +7,9 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Colorize } from "@mui/icons-material";
+import { PhotoAlbumOutlined } from "@mui/icons-material";
 import Spinner from "@/common/Spinner";
 import { createPost, updatePost } from "@/helpers/api";
 import { CONSTANTS } from "@/helpers/constants";
@@ -23,6 +23,7 @@ import { Color } from "@tiptap/extension-color";
 import TextStyle from "@tiptap/extension-text-style";
 import Highlight from "@tiptap/extension-highlight";
 const PostForm = ({ setActiveTab }) => {
+  const fileimageref = useRef(null);
   const dispatch = useDispatch();
   const { selectedPost, loading } = useSelector((state) => state.post);
 
@@ -236,7 +237,6 @@ const PostForm = ({ setActiveTab }) => {
         }
       });
 
-      
       if (selectedPost) {
         await updateSinglePost(data);
       } else {
@@ -246,7 +246,21 @@ const PostForm = ({ setActiveTab }) => {
       setErrors(validationErrors);
     }
   };
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        editor.chain().focus().setImage({ src: reader.result }).run();
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
+  const handlePhotoIconClick = () => {
+    fileimageref.current.click();
+  };
+  // const handleDesImage = () => {};
   return (
     <>
       {loading && <Spinner />}
@@ -280,7 +294,21 @@ const PostForm = ({ setActiveTab }) => {
                     <RichTextEditor.Highlight />
                     <RichTextEditor.Code />
                   </RichTextEditor.ControlsGroup>
-
+                  <RichTextEditor.ControlsGroup>
+                    <RichTextEditor.Control
+                      interactive={true}
+                      onClick={handlePhotoIconClick}
+                    >
+                      <PhotoAlbumOutlined size="1rem" />
+                    </RichTextEditor.Control>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      style={{ display: "none" }}
+                      ref={fileimageref}
+                      onChange={handleImageUpload}
+                    />
+                  </RichTextEditor.ControlsGroup>
                   <RichTextEditor.ControlsGroup>
                     {/* <RichTextEditor.H1 /> */}
                     <RichTextEditor.H2 />
@@ -309,9 +337,9 @@ const PostForm = ({ setActiveTab }) => {
                   />
 
                   <RichTextEditor.ControlsGroup>
-                    <RichTextEditor.Control interactive={false}>
+                    {/* <RichTextEditor.Control interactive={false}>
                       <Colorize size="1rem" />
-                    </RichTextEditor.Control>
+                    </RichTextEditor.Control> */}
                     <RichTextEditor.Color color="#F03E3E" />
                     <RichTextEditor.Color color="#7048E8" />
                     <RichTextEditor.Color color="#1098AD" />
