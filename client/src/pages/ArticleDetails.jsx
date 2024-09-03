@@ -23,7 +23,6 @@ import {
   Visibility,
   Favorite,
   FavoriteBorder,
-  // Instagram,
   Telegram,
   Twitter,
   Facebook,
@@ -70,22 +69,10 @@ const ArticleDetails = () => {
       dispatch(setSelectedPost(null));
     };
   }, [id]);
-  const previousRandomNumber =
-    parseInt(localStorage.getItem("randomNumber")) || 1000;
-
-  // Generate a new random number that's at least 10 greater than the previous one
-  const randomNumber =
-    Math.floor(Math.random() * (1500 - previousRandomNumber - 10 + 1)) +
-    previousRandomNumber +
-    10;
-
-  const [randomNumbers, setRandomNumbers] = useState(randomNumber);
+  const randomNumber = Math.floor(Math.random() * (1500 - 1000 + 1)) + 1000;
 
   useEffect(() => {
-    // Store the new random number in local storage
-    localStorage.setItem("randomNumber", randomNumber);
-    setRandomNumbers(randomNumber);
-    fetchLatestPosts(); // Assuming fetchLatestPosts is defined somewhere in your code
+    fetchLatestPosts();
   }, []);
 
   console.log(randomNumber);
@@ -178,7 +165,7 @@ const ArticleDetails = () => {
       }));
     }
   }, [selectedPost]);
-  console.log("toc", selectedPost?.description);
+
   return (
     <>
       {loading && <Spinner />}
@@ -259,7 +246,7 @@ const ArticleDetails = () => {
               }}
             >
               <Visibility sx={{ fontSize: 20, mr: 1 }} />
-              {randomNumbers}
+              {randomNumber}
             </Typography>
             <Typography
               sx={{
@@ -425,7 +412,7 @@ const ArticleDetails = () => {
                 p: "10px",
                 mt: "5vh",
                 boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-                backgroundColor: "#f9f9f9",
+                // backgroundColor: "#f9f9f9",
               }}
             >
               <Stack direction="row" spacing={2} my={3}>
