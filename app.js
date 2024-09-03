@@ -47,13 +47,13 @@ app.use("/api/subscribers", require("./routes/api/subscribers"));
 
 app.use(errorHandler);
 
-// if (process.env.NODE_ENV === "production") {
-app.use(express.static(path.join(__dirname, "client/dist")));
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "client/dist")));
 
-app.get("*", (_, res) => {
-  res.sendFile(path.join(__dirname, "client/dist", "index.html"));
-});
-// }
+  app.get("*", (_, res) => {
+    res.sendFile(path.join(__dirname, "client/dist", "index.html"));
+  });
+}
 
 app.listen(port, (err) => {
   if (err) throw err;
