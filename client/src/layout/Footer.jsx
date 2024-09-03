@@ -1,6 +1,6 @@
 import { Facebook, Instagram, Telegram, Twitter } from "@mui/icons-material";
-import { Box, Grid, IconButton, Link, Typography } from "@mui/material";
-
+import { Box, Grid, IconButton, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
 import White_Logo from "@/assets/White_Logo.png";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
@@ -14,12 +14,12 @@ const Footer = () => {
           backgroundColor: "#0F172A",
           color: "white",
           width: "100%",
-          py: 2,
+          py: 1,
         }}
       >
         <Grid
           container
-          spacing={isMobile ? 2 : 4}
+          spacing={isMobile ? 1 : 4}
           justifyContent="center"
           alignItems="center"
           paddingX={isMobile ? 10 : "70px"}
@@ -71,34 +71,40 @@ const Footer = () => {
               <Typography variant="h5" fontWeight={800}>
                 Connect
               </Typography>
-              <Link
-                href="/about"
-                color="inherit"
-                sx={{ textDecoration: "none", mt: 2, mb: 1 }}
+              <Typography
+                variant="h6"
+                sx={{ color: "white", textDecoration: "none", mt: 1 }}
+                component={Link}
+                to="/about"
               >
                 About Us
-              </Link>
-              <Link
-                href="/subscribe"
-                color="inherit"
-                sx={{ textDecoration: "none", mb: 1 }}
+              </Typography>
+              <Typography
+                variant="h6"
+                sx={{ color: "white", textDecoration: "none", mt: 1 }}
+                component={Link}
+                to="/subscribe"
               >
                 Subscribe
-              </Link>
-              <Link
-                href="/news"
-                color="inherit"
-                sx={{ textDecoration: "none", mb: 1 }}
+              </Typography>
+              <Typography
+                variant="h6"
+                sx={{ color: "white", textDecoration: "none", mt: 1 }}
+                component={Link}
+                to="/news"
+                state={{ value: "1" }}
               >
-                News
-              </Link>
-              <Link
-                href="/contact"
-                color="inherit"
-                sx={{ textDecoration: "none", mb: 1 }}
+                news
+              </Typography>
+
+              <Typography
+                variant="h6"
+                sx={{ color: "white", textDecoration: "none", mt: 1 }}
+                component={Link}
+                to="/contact"
               >
-                Contact Us
-              </Link>
+                Contact
+              </Typography>
             </Grid>
           )}
 

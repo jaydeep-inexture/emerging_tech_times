@@ -16,16 +16,12 @@ const News = () => {
   const { posts, page, limit, loading } = useSelector((state) => state.post);
   useEffect(() => {
     if (location.state?.name) {
-      console.log("Inside If Condition");
       setTabValue("3");
       setCategory(location.state.name);
-    } else if (location.state.tabValue) {
-      setTabValue(location.state.tabValue);
+    } else if (location.state?.value) {
+      setTabValue("1");
     }
   }, [location.state]);
-
-  console.log("location", location);
-
   const fetchLatestPosts = async () => {
     dispatch(setLoading(true));
     try {
@@ -65,17 +61,13 @@ const News = () => {
   useEffect(() => {
     if (tabValue) {
       dispatch(resetPosts());
-      if (tabValue === "3" && location.state.tabValue !== "3") {
+      if (tabValue === "3") {
         fetchFilteredPosts();
-      } else if (
-        tabValue === "1" ||
-        tabValue === "2" ||
-        location.state.tabValue === "3"
-      ) {
+      } else if (tabValue === "1" || tabValue === "2") {
         fetchLatestPosts();
       }
     }
-  }, [tabValue, location.state.tabValue]);
+  }, [tabValue]);
 
   return (
     <>

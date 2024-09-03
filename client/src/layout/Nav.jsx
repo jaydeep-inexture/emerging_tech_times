@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import Close from "@mui/icons-material/Close";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -22,8 +22,6 @@ import { useIsMobile } from "@/hooks/useIsMobile";
 
 const Nav = () => {
   const { isMobile } = useIsMobile();
-  const navigate = useNavigate(); // Use useNavigate for navigation
-
   const [language, setLanguage] = useState("ENG");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [flag, setFlag] = useState(false);
@@ -43,10 +41,6 @@ const Nav = () => {
       setDrawerOpen(false);
     }
   }, [flag]);
-
-  const handleRedirect = () => {
-    navigate("/news"); // Navigate with state
-  };
 
   const drawerList = (
     <>
@@ -90,7 +84,6 @@ const Nav = () => {
               }}
               onClick={() => {
                 toggleDrawer(false)(); // Close drawer
-                handleRedirect("1"); // Redirect to news with tabValue "1"
               }}
             >
               <ListItemText primary="News" />
@@ -151,6 +144,7 @@ const Nav = () => {
               </Link>
               <Link
                 to="/news"
+                state={{ value: 1 }}
                 style={{ textDecoration: "none", marginLeft: "70px" }}
               >
                 <Typography variant="h5" sx={{ color: "black" }}>
