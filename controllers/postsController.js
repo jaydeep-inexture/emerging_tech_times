@@ -3,7 +3,11 @@ const mongoose = require("mongoose");
 
 const Post = require("../models/Post");
 const Like = require("../models/Like");
-const { uploadImageToS3, deleteImageFromS3 } = require("../helpers/utils");
+const {
+  uploadImageToS3,
+  deleteImageFromS3,
+  generatePresignedUrl,
+} = require("../helpers/utils");
 const CONSTANTS = require("../helpers/constants");
 
 // get all posts
@@ -12,6 +16,7 @@ exports.getAllPosts = async (req, res, next) => {
   let limit = parseInt(req.query.limit) || CONSTANTS.PAGINATION_LIMIT;
   let sortKey = req.query.sortBy || "updatedAt";
   let filter = {};
+  // console.log("getAllPosts cslled");
 
   if (req.query.title) {
     filter.title = { $regex: req.query.title, $options: "i" };
@@ -28,11 +33,31 @@ exports.getAllPosts = async (req, res, next) => {
       .sort({ [sortKey]: -1 }) // desc
       .skip(page * limit)
       .limit(limit);
+    const updatedPosts = await Promise.all(
+      posts.map(async (post) => {
+        const image_url = post.imageUrl.split("/").pop();
+        const tempUrl = await generatePresignedUrl(image_url);
+        // console.log("tempUrl", image_url);
+        return {
+          ...post._doc, // Spread post object to avoid mutation
+          imageUrl: tempUrl, // Override imageUrl with tempUrl
+        };
+      })
+    );
+    // console.log("updatedPosts", updatedPosts);
+    // const tempUrl = await generatePresignedUrl(posts[0]?.imageUrl);
+    // console.log("tempUrl", tempUrl);
+    // // console.log("posts", posts);
+
+    // posts.map((post) => {
+    //   posts.imageUrl = tempUrl;
+    //   console.log("posts", post);
+    // });
 
     res.status(200).json({
       msg: "Posts fetched successfully",
       data: {
-        posts,
+        posts: updatedPosts,
         total: totalPosts,
         page,
         totalPages: Math.ceil(totalPosts / limit),
@@ -44,34 +69,52 @@ exports.getAllPosts = async (req, res, next) => {
 };
 
 // get post details
+
 exports.getPostDetails = async (req, res, next) => {
   try {
+    // Validate post ID
     if (!mongoose.isValidObjectId(req.params.postId)) {
-      throw new Error("Invalid post ID.");
+      return res.status(400).json({ msg: "Invalid post ID." });
     }
 
+    // Find the post by ID
     const post = await Post.findById(req.params.postId);
 
     if (!post) {
       return res.status(404).json({ msg: "Post not found." });
     }
 
+    // Extract the file name from the image URL and generate a presigned URL
+    const image_url = post.imageUrl.split("/").pop();
+    const tempUrl = await generatePresignedUrl(image_url);
+    // console.log("Generated presigned URL:", tempUrl);
+
+    // Check if the post is liked by the user
     const isLiked = await Like.exists({
-      userId: req.user,
+      userId: req.user._id, // Assuming `req.user._id` is available
       postId: req.params.postId,
     });
 
+    // Count the number of likes for the post
     const likesCount = await Like.countDocuments({ postId: req.params.postId });
 
-    const newPost = { ...post.toObject() };
-
-    res.status(200).json({
-      ...newPost,
-      isLiked: !!isLiked,
+    // Create a new post object with updated image URL and other details
+    const newPost = {
+      ...post.toObject(),
+      imageUrl: tempUrl, // Override the original imageUrl with the presigned URL
+      isLiked: !!isLiked, // Convert to boolean to avoid null values
       likesCount,
+    };
+
+    // console.log("New post details:", newPost);
+
+    // Send the response
+    res.status(200).json({
+      msg: "Post fetched successfully.",
+      data: newPost,
     });
   } catch (err) {
-    next(err);
+    next(err); // Forward error to error handling middleware
   }
 };
 
@@ -93,21 +136,21 @@ exports.createPost = async (req, res, next) => {
     seoTitle,
     seoDescription,
     seoSlug,
-    category
+    category,
   } = req.body;
   const image = req.file;
 
   try {
-    const isDuplicateTitle = await Post.findOne({title});
+    const isDuplicateTitle = await Post.findOne({ title });
 
     if (isDuplicateTitle) {
-      throw new Error('Title must be unique');
+      throw new Error("Title must be unique");
     }
 
     if (seoSlug) {
-      const isDuplicateSeoSlug = await Post.findOne({['seo.slug']: seoSlug});
+      const isDuplicateSeoSlug = await Post.findOne({ ["seo.slug"]: seoSlug });
       if (isDuplicateSeoSlug) {
-        throw new Error('Seo slug must be unique');
+        throw new Error("Seo slug must be unique");
       }
     }
 
@@ -118,17 +161,17 @@ exports.createPost = async (req, res, next) => {
       category,
       author: {
         name: authorName,
-        description: authorDescription ?? '',
+        description: authorDescription ?? "",
         socials: {
-          twitter: twitter ?? '',
-          instagram: instagram ?? '',
-          linkedin: linkedin ?? '',
+          twitter: twitter ?? "",
+          instagram: instagram ?? "",
+          linkedin: linkedin ?? "",
         },
       },
       seo: {
-        title: seoTitle ?? '',
-        description: seoDescription ?? '',
-        slug: seoSlug ?? '',
+        title: seoTitle ?? "",
+        description: seoDescription ?? "",
+        slug: seoSlug ?? "",
       },
     };
 
@@ -142,7 +185,7 @@ exports.createPost = async (req, res, next) => {
 
     const post = await newPost.save();
 
-    res.status(201).json({msg: 'Post created successfully', data: post});
+    res.status(201).json({ msg: "Post created successfully", data: post });
   } catch (err) {
     next(err);
   }
@@ -161,13 +204,13 @@ exports.updatePost = async (req, res, next) => {
     seoTitle,
     seoDescription,
     seoSlug,
-    category
+    category,
   } = req.body;
   const image = req.file;
 
   try {
     if (!mongoose.isValidObjectId(req.params.postId)) {
-      throw new Error('Invalid post ID.');
+      throw new Error("Invalid post ID.");
     }
 
     let post;
@@ -176,7 +219,7 @@ exports.updatePost = async (req, res, next) => {
     const foundPost = await Post.findById(req.params.postId);
 
     if (!foundPost) {
-      return res.status(404).json({msg: 'Post not found'});
+      return res.status(404).json({ msg: "Post not found" });
     }
 
     post = foundPost;
@@ -221,13 +264,13 @@ exports.updatePost = async (req, res, next) => {
 exports.deletePost = async (req, res, next) => {
   try {
     if (!mongoose.isValidObjectId(req.params.postId)) {
-      throw new Error('Invalid post ID.');
+      throw new Error("Invalid post ID.");
     }
 
     const post = await Post.findById(req.params.postId);
 
     if (!post) {
-      return res.status(404).json({msg: 'Post not found.'});
+      return res.status(404).json({ msg: "Post not found." });
     }
 
     if (post.imageUrl) {

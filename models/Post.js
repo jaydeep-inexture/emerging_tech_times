@@ -16,9 +16,8 @@ const PostSchema = new mongoose.Schema(
     },
     category: {
       type: String,
-      unique: true,
       default: "",
-      sparse: true,
+      // sparse: true,
     },
     seo: {
       title: {

@@ -60,7 +60,7 @@ const PostForm = ({ setActiveTab }) => {
     };
   }, [dispatch]);
 
-  console.log("selectedpost", selectedPost);
+  // console.log("selectedpost", selectedPost);
   useEffect(() => {
     if (selectedPost) {
       setFormData({
