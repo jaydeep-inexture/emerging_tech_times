@@ -22,7 +22,6 @@ import { setNotification } from "@/redux/notificationSlice";
 import { fetchPostList, resetPosts, setLoading } from "@/redux/postSlice";
 import ArticleCard from "./ArticleCard";
 import { useIsMobile } from "@/hooks/useIsMobile";
-// import TextEditor from "../common/TextEditor";
 
 const Home = () => {
   const navigate = useNavigate();
