@@ -75,6 +75,8 @@ const ArticleDetails = () => {
     fetchLatestPosts();
   }, []);
 
+  console.log(randomNumber);
+
   const fetchLatestPosts = async () => {
     dispatch(resetPosts());
     dispatch(setLoading(true));
@@ -103,9 +105,10 @@ const ArticleDetails = () => {
     dispatch(resetPosts());
     dispatch(setLoading(true));
     try {
-      await likedPost(selectedPost?.data._id);
+      const response = await likedPost(selectedPost?._id);
       fetchPostInfo();
       dispatch(setLoading(false));
+      console.log({ response });
     } catch (error) {
       const errMessage =
         error.response?.data?.msg ||
@@ -129,19 +132,22 @@ const ArticleDetails = () => {
   const [toc, setToc] = useState([]);
   const [updatedPost, setUpdatedPost] = useState(selectedPost);
   useEffect(() => {
-    if (selectedPost?.data.description) {
+    if (selectedPost?.description) {
       // Parse the HTML string
       const parser = new DOMParser();
-      const doc = parser.parseFromString(
-        selectedPost.data.description,
-        "text/html"
-      );
+      const doc = parser.parseFromString(selectedPost.description, "text/html");
+      console.log("doc", doc);
+      // Select all heading tags from h1 to h6
       const headings = doc.querySelectorAll(" h2, h3, h4");
+
+      // Loop through each heading and add a dynamic id (if not already present)
       headings.forEach((heading, index) => {
         if (!heading.id) {
           heading.id = `${heading.tagName.toLowerCase()}-${index}`;
         }
       });
+
+      // Generate Table of Contents
       const tocItems = Array.from(headings).map((heading) => ({
         id: heading.id,
         text: heading.innerText,
@@ -151,12 +157,15 @@ const ArticleDetails = () => {
       setToc(tocItems);
 
       const updatedDescription = doc.body.innerHTML;
+
+      // Clone selectedPost and update the description
       setUpdatedPost((prev) => ({
         ...prev,
         description: updatedDescription,
       }));
     }
   }, [selectedPost]);
+
   return (
     <>
       {loading && <Spinner />}
@@ -176,15 +185,11 @@ const ArticleDetails = () => {
           color={"white"}
           py={"5%"}
         >
-          {selectedPost?.data.title}
+          {selectedPost?.title}
         </Typography>
         <img
-          src={
-            selectedPost?.data.imageUrl
-              ? selectedPost?.data.imageUrl
-              : Placeholder
-          }
-          alt={selectedPost?.data.title}
+          src={selectedPost?.imageUrl ? selectedPost?.imageUrl : Placeholder}
+          alt={selectedPost?.title}
           style={{
             width: isMobile ? "100%" : "55vw",
             height: "55vh",
@@ -219,8 +224,8 @@ const ArticleDetails = () => {
             }}
           >
             <Person sx={{ fontSize: 20, mr: 1 }} />
-            {`By ${selectedPost?.data.author.name} on ${new Date(
-              selectedPost?.data.createdAt
+            {`By ${selectedPost?.author.name} on ${new Date(
+              selectedPost?.createdAt
             ).toLocaleDateString()}`}
           </Typography>
 
@@ -251,7 +256,7 @@ const ArticleDetails = () => {
                 alignItems: "center",
               }}
             >
-              {!selectedPost?.data.isLiked ? (
+              {!selectedPost?.isLiked ? (
                 <FavoriteBorder
                   sx={{ fontSize: 30, mr: 1 }}
                   onClick={handleLike}
@@ -264,7 +269,7 @@ const ArticleDetails = () => {
               )}
             </Typography>
             <Typography sx={{ fontSize: 18, color: "gray" }}>
-              {selectedPost?.data.likesCount}
+              {selectedPost?.likesCount}
             </Typography>
           </Box>
         </Stack>
@@ -285,22 +290,22 @@ const ArticleDetails = () => {
                   border: "1px solid #ccc",
                   borderRadius: "8px",
                   padding: "16px",
-                  backgroundColor: "#ffffff", 
-                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", 
+                  backgroundColor: "#ffffff", // A clean white background for a modern look
+                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", // Subtle shadow for depth
                 }}
               >
                 <Typography
                   variant={isMobile ? "h6" : "h5"}
                   textAlign="center"
-                  sx={{ color: "#333" }} 
+                  sx={{ color: "#333" }} // Darker color for better readability
                 >
                   On This Page:
                 </Typography>
                 <ul
                   style={{
                     padding: "0",
-                    margin: "16px 0 0 0", 
-     
+                    margin: "16px 0 0 0", // Better spacing for the list
+                    // listStyleType: "none", // Remove default bullets
                   }}
                 >
                   {toc.map((item) => (
@@ -315,7 +320,7 @@ const ArticleDetails = () => {
                         href={`#${item.id}`}
                         style={{
                           textDecoration: "none",
-                          color: "#007bff", 
+                          color: "#007bff", // A subtle blue color for links
                           fontWeight: 500,
                         }}
                       >
@@ -426,10 +431,10 @@ const ArticleDetails = () => {
                     Written by
                   </Typography>
                   <Typography variant="subtitle1" color={"#0F172A"}>
-                    {selectedPost?.data.author.name}
+                    {selectedPost?.author.name}
                   </Typography>
                   <Typography variant="body2">
-                    {selectedPost?.data.author.description}
+                    {selectedPost?.author.description}
                   </Typography>
                 </Stack>
               </Stack>
@@ -445,7 +450,7 @@ const ArticleDetails = () => {
           </Typography>
           <Grid container spacing={4} py={2}>
             {(posts.length <= 5 ? posts : posts.slice(0, 4))
-              .filter((post) => post.title !== selectedPost?.data.title)
+              .filter((post) => post.title !== selectedPost?.title)
               .slice(0, 4)
               .map((post) => (
                 <Grid item xs={12} sm={6} md={4} lg={3} key={post.id}>

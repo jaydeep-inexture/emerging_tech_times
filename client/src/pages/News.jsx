@@ -20,8 +20,6 @@ const News = () => {
       setCategory(location.state.name);
     } else if (location.state?.value) {
       setTabValue("1");
-    } else if (location.state?.tabValue) {
-      setTabValue(location.state.tabValue);
     }
   }, [location.state]);
   const fetchLatestPosts = async () => {
@@ -65,10 +63,7 @@ const News = () => {
       dispatch(resetPosts());
       if (tabValue === "3") {
         fetchFilteredPosts();
-      } else if (
-        tabValue === "1" ||
-        tabValue === "2" 
-      ) {
+      } else if (tabValue === "1" || tabValue === "2") {
         fetchLatestPosts();
       }
     }

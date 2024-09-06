@@ -21,7 +21,7 @@ const NewsData = ({ posts, loading }) => {
 
   const displayedData = posts.slice(0, visibleItems);
   const handleClick = (article) => {
-    // console.log(article);
+    console.log(article);
     navigate(`/article/${article._id}`, { state: { article } });
   };
   return (

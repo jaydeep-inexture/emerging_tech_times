@@ -20,7 +20,7 @@ const TextEditor = ({ value = "" }) => {
   });
 
   useEffect(() => {
-    // console.log(value);
+    console.log(value);
     setDescription(value);
   }, [value]);
 
