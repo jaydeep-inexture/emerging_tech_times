@@ -102,7 +102,7 @@ const Home = () => {
                     alignItems: "center",
                     gap: 1,
                     "&:hover": {
-                      backgroundColor: "white !important",
+                      color: "#FF6600",
                     },
                   }}
                 >
@@ -161,7 +161,6 @@ const Home = () => {
                             {posts[0].title.length > 25
                               ? `${posts[0].title.substring(0, 25)}...`
                               : posts[0].title}
-                            {/* {posts[0].title} */}
                           </Typography>
                           <Typography
                             variant="subtitle1"
@@ -177,8 +176,6 @@ const Home = () => {
                             color="text.secondary"
                             sx={{ mt: 1.5 }}
                           >
-                            {}
-                            {/* <TextEditor value={posts[0].description} /> */}
                             <div
                               dangerouslySetInnerHTML={{
                                 __html:
@@ -241,7 +238,7 @@ const Home = () => {
                   alignItems: "center",
                   gap: 1,
                   "&:hover": {
-                    backgroundColor: "white !important",
+                    color: "#FF6600",
                   },
                 }}
               >
