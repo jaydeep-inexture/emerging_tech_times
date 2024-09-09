@@ -21,20 +21,11 @@ const NewsData = ({ posts, loading }) => {
 
   const displayedData = posts.slice(0, visibleItems);
   const handleClick = (article) => {
-    // console.log(article);
     navigate(`/article/${article._id}`, { state: { article } });
   };
   return (
     <>
       <Box sx={{ paddingX: "5%" }}>
-        {/* <Typography
-          variant={isMobile ? "h4" : "h6"}
-          gutterBottom
-          fontWeight={200}
-          fontStyle={"italic"}
-        >
-          {pageTitle}
-        </Typography> */}
         <Grid container spacing={4}>
           {displayedData.map((item) => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={item._id}>
@@ -47,7 +38,7 @@ const NewsData = ({ posts, loading }) => {
                   },
                   cursor: "pointer",
                 }}
-                onClick={() => handleClick(posts[0])}
+                onClick={() => handleClick(item)}
               >
                 <CardMedia
                   component="img"

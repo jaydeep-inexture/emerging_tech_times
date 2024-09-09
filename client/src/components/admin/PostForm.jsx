@@ -16,17 +16,21 @@ import { CONSTANTS } from "@/helpers/constants";
 import { setNotification } from "@/redux/notificationSlice";
 import { resetPosts, setLoading, setSelectedPost } from "@/redux/postSlice";
 import { RichTextEditor, Link } from "@mantine/tiptap";
-import { useEditor } from "@tiptap/react";
+import { BubbleMenu, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import { Color } from "@tiptap/extension-color";
 import TextStyle from "@tiptap/extension-text-style";
 import Highlight from "@tiptap/extension-highlight";
+import Subscript from "@tiptap/extension-subscript";
+import Superscript from "@tiptap/extension-superscript";
+import Image from "@tiptap/extension-image";
+import TextAlign from "@tiptap/extension-text-align";
 const PostForm = ({ setActiveTab }) => {
   const fileimageref = useRef(null);
   const dispatch = useDispatch();
   const { selectedPost, loading } = useSelector((state) => state.post);
-
+  const [base64IMG, setBase64IMG] = useState("");
   const [errors, setErrors] = useState({});
   const [existingImageFileName, setExistingImageFileName] = useState("");
   const [formData, setFormData] = useState({
@@ -43,8 +47,22 @@ const PostForm = ({ setActiveTab }) => {
     seoSlug: "",
     category: "",
   });
+  //For rich text-editor
   const editor = useEditor({
-    extensions: [StarterKit, Underline, Link, TextStyle, Color, Highlight],
+    extensions: [
+      Image.configure({
+        allowBase64: true,
+      }),
+      StarterKit,
+      Underline,
+      Link,
+      TextStyle,
+      Color,
+      Highlight,
+      Superscript,
+      Subscript,
+      TextAlign.configure({ types: ["heading", "paragraph"] }),
+    ],
     content: formData.description,
     onUpdate: ({ editor }) => {
       setFormData((prevData) => ({
@@ -60,7 +78,6 @@ const PostForm = ({ setActiveTab }) => {
     };
   }, [dispatch]);
 
-  // console.log("selectedpost", selectedPost);
   useEffect(() => {
     if (selectedPost) {
       setFormData({
@@ -223,12 +240,9 @@ const PostForm = ({ setActiveTab }) => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const validationErrors = validate();
-
     if (Object.keys(validationErrors).length === 0) {
       const data = new FormData();
-
       Object.keys(formData).forEach((key) => {
         if (key === "imageFile" && formData[key]) {
           data.append("image", formData[key]);
@@ -246,21 +260,30 @@ const PostForm = ({ setActiveTab }) => {
       setErrors(validationErrors);
     }
   };
+
+  const convertToBase64 = (file) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+
+    reader.onload = () => {
+      const base64String = reader.result;
+      setBase64IMG(base64String);
+      editor.commands.setImage({ src: base64IMG });
+    };
+
+    reader.onerror = (error) => {
+      console.error("Error converting to base64: ", error);
+    };
+  };
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        editor.chain().focus().setImage({ src: reader.result }).run();
-      };
-      reader.readAsDataURL(file);
+      convertToBase64(file);
     }
   };
-
   const handlePhotoIconClick = () => {
     fileimageref.current.click();
   };
-  // const handleDesImage = () => {};
   return (
     <>
       {loading && <Spinner />}
@@ -288,11 +311,18 @@ const PostForm = ({ setActiveTab }) => {
                   <RichTextEditor.ControlsGroup>
                     <RichTextEditor.Bold />
                     <RichTextEditor.Italic />
-                    <RichTextEditor.Underline />
+                    <RichTextEditor.Underline /> <RichTextEditor.Blockquote />
                     <RichTextEditor.Strikethrough />
                     <RichTextEditor.ClearFormatting />
                     <RichTextEditor.Highlight />
                     <RichTextEditor.Code />
+                    <BubbleMenu editor={editor}>
+                      {" "}
+                      <RichTextEditor.ControlsGroup>
+                        <RichTextEditor.Bold />
+                        <RichTextEditor.Italic /> <RichTextEditor.Link />{" "}
+                      </RichTextEditor.ControlsGroup>
+                    </BubbleMenu>
                   </RichTextEditor.ControlsGroup>
                   <RichTextEditor.ControlsGroup>
                     <RichTextEditor.Control
@@ -317,40 +347,35 @@ const PostForm = ({ setActiveTab }) => {
                     <RichTextEditor.H5 />
                     <RichTextEditor.H6 />
                   </RichTextEditor.ControlsGroup>
-                  <RichTextEditor.ColorPicker
-                    colors={[
-                      "#25262b",
-                      "#868e96",
-                      "#fa5252",
-                      "#e64980",
-                      "#be4bdb",
-                      "#7950f2",
-                      "#4c6ef5",
-                      "#228be6",
-                      "#15aabf",
-                      "#12b886",
-                      "#40c057",
-                      "#82c91e",
-                      "#fab005",
-                      "#fd7e14",
-                    ]}
-                  />
 
                   <RichTextEditor.ControlsGroup>
-                    {/* <RichTextEditor.Control interactive={false}>
-                      <Colorize size="1rem" />
-                    </RichTextEditor.Control> */}
+                    <RichTextEditor.ColorPicker
+                      colors={[
+                        "#25262b",
+                        "#868e96",
+                        "#fa5252",
+                        "#e64980",
+                        "#be4bdb",
+                        "#7950f2",
+                        "#4c6ef5",
+                        "#228be6",
+                        "#15aabf",
+                        "#12b886",
+                        "#40c057",
+                        "#82c91e",
+                        "#fab005",
+                        "#fd7e14",
+                      ]}
+                    />
                     <RichTextEditor.Color color="#F03E3E" />
                     <RichTextEditor.Color color="#7048E8" />
                     <RichTextEditor.Color color="#1098AD" />
                     <RichTextEditor.Color color="#37B24D" />
-                    <RichTextEditor.Color color="#F59F00" />
+                    <RichTextEditor.Color color="#F59F00" />{" "}
+                    <RichTextEditor.UnsetColor />
                   </RichTextEditor.ControlsGroup>
 
-                  <RichTextEditor.UnsetColor />
-
                   <RichTextEditor.ControlsGroup>
-                    <RichTextEditor.Blockquote />
                     <RichTextEditor.Hr />
                     <RichTextEditor.BulletList />
                     <RichTextEditor.OrderedList />
@@ -360,8 +385,18 @@ const PostForm = ({ setActiveTab }) => {
                     <RichTextEditor.Unlink />
                   </RichTextEditor.ControlsGroup>
                   <RichTextEditor.ControlsGroup>
+                    <RichTextEditor.Subscript />
+                    <RichTextEditor.Superscript />
+                  </RichTextEditor.ControlsGroup>
+                  <RichTextEditor.ControlsGroup>
                     <RichTextEditor.Undo />
                     <RichTextEditor.Redo />
+                  </RichTextEditor.ControlsGroup>
+                  <RichTextEditor.ControlsGroup>
+                    <RichTextEditor.AlignLeft />
+                    <RichTextEditor.AlignCenter />
+                    <RichTextEditor.AlignJustify />
+                    <RichTextEditor.AlignRight />
                   </RichTextEditor.ControlsGroup>
                 </RichTextEditor.Toolbar>
 
