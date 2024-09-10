@@ -36,11 +36,13 @@ exports.getAllPosts = async (req, res, next) => {
     const updatedPosts = await Promise.all(
       posts.map(async (post) => {
         const image_url = post.imageUrl.split("/").pop();
-        const tempUrl = await generatePresignedUrl(image_url);
-        // console.log("tempUrl", image_url);
+        let tempUrl = "";
+        if (image_url) {
+          tempUrl = await generatePresignedUrl(image_url);
+        }
         return {
-          ...post._doc, // Spread post object to avoid mutation
-          imageUrl: tempUrl, // Override imageUrl with tempUrl
+          ...post._doc,
+          imageUrl: tempUrl,
         };
       })
     );

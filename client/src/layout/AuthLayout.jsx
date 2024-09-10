@@ -1,5 +1,6 @@
 import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
+import Scrollup from "../common/Affix";
 
 const AuthLayout = () => {
   const isAuth = JSON.parse(sessionStorage.getItem("user"));
@@ -11,7 +12,14 @@ const AuthLayout = () => {
     return <Navigate to="/" replace={true} />;
   }
 
-  return user && <Outlet />;
+  return (
+    user && (
+      <>
+        <Scrollup />
+        <Outlet />;
+      </>
+    )
+  );
 };
 
 export default AuthLayout;

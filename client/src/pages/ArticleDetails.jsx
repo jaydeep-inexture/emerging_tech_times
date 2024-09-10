@@ -28,7 +28,6 @@ import {
   Facebook,
 } from "@mui/icons-material";
 import Placeholder from "@/assets/placeholder.jpg";
-import { red } from "@mui/material/colors";
 import { likedPost } from "../helpers/api";
 
 const ArticleDetails = () => {
@@ -258,7 +257,7 @@ const ArticleDetails = () => {
                 />
               ) : (
                 <Favorite
-                  sx={{ fontSize: 30, mr: 1, color: red[500] }}
+                  sx={{ fontSize: 30, mr: 1, color: "yellow" }}
                   onClick={handleUnlike}
                 />
               )}
@@ -285,22 +284,21 @@ const ArticleDetails = () => {
                   border: "1px solid #ccc",
                   borderRadius: "8px",
                   padding: "16px",
-                  backgroundColor: "#ffffff", 
-                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", 
+                  backgroundColor: "#ffffff",
+                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
                 }}
               >
                 <Typography
                   variant={isMobile ? "h6" : "h5"}
                   textAlign="center"
-                  sx={{ color: "#333" }} 
+                  sx={{ color: "#333" }}
                 >
                   On This Page:
                 </Typography>
                 <ul
                   style={{
                     padding: "0",
-                    margin: "16px 0 0 0", 
-     
+                    margin: "16px 0 0 0",
                   }}
                 >
                   {toc.map((item) => (
@@ -315,7 +313,7 @@ const ArticleDetails = () => {
                         href={`#${item.id}`}
                         style={{
                           textDecoration: "none",
-                          color: "#007bff", 
+                          color: "#007bff",
                           fontWeight: 500,
                         }}
                       >
