@@ -30,7 +30,6 @@ const PostForm = ({ setActiveTab }) => {
   const fileimageref = useRef(null);
   const dispatch = useDispatch();
   const { selectedPost, loading } = useSelector((state) => state.post);
-  const [base64IMG, setBase64IMG] = useState("");
   const [errors, setErrors] = useState({});
   const [existingImageFileName, setExistingImageFileName] = useState("");
   const [formData, setFormData] = useState({
@@ -267,8 +266,10 @@ const PostForm = ({ setActiveTab }) => {
 
     reader.onload = () => {
       const base64String = reader.result;
-      setBase64IMG(base64String);
-      editor.commands.setImage({ src: base64IMG });
+      // setBase64IMG(base64String);
+      editor.commands.setImage({
+        src: base64String,
+      });
     };
 
     reader.onerror = (error) => {
@@ -278,7 +279,14 @@ const PostForm = ({ setActiveTab }) => {
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
-      convertToBase64(file);
+      const fileTypes = ["image/jpeg", "image/png", "image/gif"];
+      if (fileTypes.includes(file.type)) {
+        convertToBase64(file);
+      } else
+        (prevErrors) => ({
+          ...prevErrors,
+          description: "Only image files are allowed",
+        });
     }
   };
   const handlePhotoIconClick = () => {
@@ -411,16 +419,12 @@ const PostForm = ({ setActiveTab }) => {
                   }}
                   content={formData?.description}
                   fullWidth
-                  // label="Description"
-
-                  // value={}
                   onChange={handleChange}
                   error={Boolean(errors.description)}
                   helperText={errors.description}
                   required
                 />
               </RichTextEditor>
-              {/* <TextField /> */}
             </Grid>
             <Grid item xs={12} sm={4}>
               <TextField
