@@ -65,10 +65,7 @@ const News = () => {
       dispatch(resetPosts());
       if (tabValue === "3") {
         fetchFilteredPosts();
-      } else if (
-        tabValue === "1" ||
-        tabValue === "2" 
-      ) {
+      } else if (tabValue === "1") {
         fetchLatestPosts();
       }
     }
@@ -111,7 +108,7 @@ const News = () => {
               }}
             >
               <Tab label="Latest News" value={"1"} />
-              <Tab label="Trending News" value={"2"} />
+              {/* <Tab label="Trending News" value={"2"} /> */}
               <Tab label={category} value={"3"} />
             </TabList>
           </Box>
@@ -133,7 +130,7 @@ const News = () => {
               </Typography>
             )}
           </TabPanel>
-          <TabPanel value={"2"}>
+          {/* <TabPanel value={"2"}>
             {posts.length > 0 ? (
               <NewsData
                 setActiveTab={setTabValue}
@@ -150,7 +147,7 @@ const News = () => {
                 No Data Found
               </Typography>
             )}
-          </TabPanel>
+          </TabPanel> */}
           <TabPanel value={"3"}>
             {posts.length > 0 ? (
               <NewsData

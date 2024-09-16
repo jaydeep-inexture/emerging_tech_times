@@ -77,9 +77,6 @@ const uploadImageToS3 = async (image) => {
   const command = new PutObjectCommand(params);
   const data = await s3Client.send(command);
   return {
-    // https://f2f-chat.s3.amazonaws.com/1725452608768.png
-    //  https://f2f-chat.s3.amazonaws.com/1725455745845.png
-    //  https://f2f-chat.s3.us-east-1.amazonaws.com/1725455640826.png
     Location: `https://${process.env.AWS_BUCKET_NAME}.s3.amazonaws.com/${imageName}`,
   };
 };

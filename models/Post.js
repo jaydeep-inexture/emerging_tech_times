@@ -35,7 +35,10 @@ const PostSchema = new mongoose.Schema(
       },
       description: {
         type: String,
-      },
+      }, 
+      authorImage: {
+      type: String,
+    },
       socials: {
         twitter: String,
         instagram: String,

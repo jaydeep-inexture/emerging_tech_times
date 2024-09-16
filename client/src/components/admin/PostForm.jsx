@@ -266,7 +266,6 @@ const PostForm = ({ setActiveTab }) => {
 
     reader.onload = () => {
       const base64String = reader.result;
-      // setBase64IMG(base64String);
       editor.commands.setImage({
         src: base64String,
       });

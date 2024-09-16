@@ -90,10 +90,10 @@ exports.getPostDetails = async (req, res, next) => {
     const image_url = post.imageUrl.split("/").pop();
     const tempUrl = await generatePresignedUrl(image_url);
     // console.log("Generated presigned URL:", tempUrl);
-
+    // console.log("post req. ", req.user, req.params.postId);
     // Check if the post is liked by the user
     const isLiked = await Like.exists({
-      userId: req.user._id, // Assuming `req.user._id` is available
+      userId: req.user, // Assuming `req.user._id` is available
       postId: req.params.postId,
     });
 

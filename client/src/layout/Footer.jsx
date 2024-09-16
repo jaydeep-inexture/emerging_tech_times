@@ -14,7 +14,7 @@ const Footer = () => {
           backgroundColor: "#0F172A",
           color: "white",
           width: "100%",
-          py: 1,
+          py: 4,
         }}
       >
         <Grid
@@ -78,14 +78,6 @@ const Footer = () => {
                 to="/about"
               >
                 About Us
-              </Typography>
-              <Typography
-                variant="h6"
-                sx={{ color: "white", textDecoration: "none", mt: 1 }}
-                component={Link}
-                to="/subscribe"
-              >
-                Subscribe
               </Typography>
               <Typography
                 variant="h6"

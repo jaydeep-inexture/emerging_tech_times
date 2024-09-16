@@ -68,8 +68,23 @@ const ArticleDetails = () => {
       dispatch(setSelectedPost(null));
     };
   }, [id]);
-  const randomNumber = Math.floor(Math.random() * (1500 - 1000 + 1)) + 1000;
+  const [number, setNumber] = useState(0);
 
+  useEffect(() => {
+    const previousNumber = localStorage.getItem("previousNumber") || 1000;
+    const newRandomNumber =
+      Math.floor(Math.random() * (1500 - 1000 + 1)) + 1000;
+
+    // Ensure the new random number is at least 10 greater than the previous number
+    const updatedNumber = Math.max(
+      newRandomNumber,
+      parseInt(previousNumber, 10) + 10
+    );
+
+    // Save the updated number to the state and localStorage
+    setNumber(updatedNumber);
+    localStorage.setItem("previousNumber", updatedNumber);
+  }, []);
   useEffect(() => {
     fetchLatestPosts();
   }, []);
@@ -102,8 +117,8 @@ const ArticleDetails = () => {
     dispatch(resetPosts());
     dispatch(setLoading(true));
     try {
-      await likedPost(selectedPost?.data._id);
-      fetchPostInfo();
+      const data = await likedPost(selectedPost?.data._id);
+      fetchPostInfo(data);
       dispatch(setLoading(false));
     } catch (error) {
       const errMessage =
@@ -156,6 +171,7 @@ const ArticleDetails = () => {
       }));
     }
   }, [selectedPost]);
+  // console.log(selectedPost);
   return (
     <>
       {loading && <Spinner />}
@@ -240,7 +256,7 @@ const ArticleDetails = () => {
               }}
             >
               <Visibility sx={{ fontSize: 20, mr: 1 }} />
-              {randomNumber}
+              {number}
             </Typography>
             <Typography
               sx={{
@@ -257,7 +273,7 @@ const ArticleDetails = () => {
                 />
               ) : (
                 <Favorite
-                  sx={{ fontSize: 30, mr: 1, color: "yellow" }}
+                  sx={{ fontSize: 30, mr: 1, color: "red" }}
                   onClick={handleUnlike}
                 />
               )}

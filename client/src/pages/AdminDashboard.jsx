@@ -1,4 +1,4 @@
-import { Add, Article, Group, Person } from "@mui/icons-material";
+import { Add, Article, Group, Person, Unsubscribe } from "@mui/icons-material";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
@@ -13,6 +13,7 @@ import PostForm from "@/components/admin/PostForm";
 import Posts from "@/components/admin/Posts";
 import UsersTable from "@/components/admin/UsersTable";
 import { resetPosts } from "@/redux/postSlice";
+import SubscriberTable from "@/components/admin/SubscriberTable";
 
 const drawerWidth = 240;
 
@@ -23,7 +24,7 @@ const Main = styled("main")(({ theme }) => ({
   // backgroundColor: "#f0f2f5",
 }));
 
-const Sidebar = styled(Box)(({ theme }) => ({
+const Sidebar = styled(Box)(() => ({
   width: drawerWidth,
   flexShrink: 0,
   backgroundColor: "#0F172A",
@@ -36,7 +37,7 @@ const Sidebar = styled(Box)(({ theme }) => ({
   flexDirection: "column",
 }));
 
-const Logo = styled("img")(({ theme }) => ({
+const Logo = styled("img")(() => ({
   width: "80%",
   height: "auto",
   margin: "16px auto",
@@ -60,6 +61,9 @@ const AdminDashboard = () => {
       break;
     case 3:
       content = <UsersTable />;
+      break;
+    case 4:
+      content = <SubscriberTable />;
       break;
     default:
       content = <Profile />;
@@ -100,6 +104,11 @@ const AdminDashboard = () => {
             <Tab label="posts" icon={<Article />} iconPosition="start" />
             <Tab label="create post" icon={<Add />} iconPosition="start" />
             <Tab label="users" icon={<Group />} iconPosition="start" />
+            <Tab
+              label="subscribers"
+              icon={<Unsubscribe />}
+              iconPosition="start"
+            />
           </Tabs>
         </Sidebar>
         {content}

@@ -114,3 +114,35 @@ export const likedPost = async (id) => {
 
   return response.data;
 };
+
+// //  *************** Subscribe **************** //
+// export const subscriber = async (subscriberData) => {
+//   const response = await axiosInstance.post("/subscribers", subscriberData, {
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//   });
+//   return response.data;
+// };
+//  *************** Subscribe **************** //
+export const subscriber = async (subscriberData) => {
+  try {
+    const response = await axiosInstance.post(
+      "/subscribers/subscriber",
+      subscriberData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Subscription failed");
+  }
+};
+
+export const fetchSubscriber = async () => {
+  const response = await axiosInstance.get("/subscribers");
+  return response.data;
+};
