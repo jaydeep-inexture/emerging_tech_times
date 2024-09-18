@@ -1,18 +1,18 @@
 import { Facebook, Instagram, Telegram, Twitter } from "@mui/icons-material";
-import { Box, Grid, IconButton, Typography } from "@mui/material";
+import { Box, Grid, IconButton, Typography, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
 import White_Logo from "@/assets/White_Logo.png";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
 const Footer = () => {
   const { isMobile } = useIsMobile();
-
+  const theme = useTheme();
   return (
     <>
       <Box
         sx={{
-          backgroundColor: "#0F172A",
-          color: "white",
+          backgroundColor: theme.palette.primary.main,
+          color: theme.font.main,
           width: "100%",
           py: 4,
         }}
@@ -32,7 +32,6 @@ const Footer = () => {
                 width: "200px",
                 height: "auto",
                 mixBlendMode: "lighten",
-                backgroundColor: "#0F172A",
               }}
             />
           </Grid>
@@ -73,7 +72,7 @@ const Footer = () => {
               </Typography>
               <Typography
                 variant="h6"
-                sx={{ color: "white", textDecoration: "none", mt: 1 }}
+                sx={{ color: theme.font.main, textDecoration: "none", mt: 1 }}
                 component={Link}
                 to="/about"
               >

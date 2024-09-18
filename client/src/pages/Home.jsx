@@ -211,7 +211,7 @@ const Home = () => {
               </Box>
             </Box>
           )}
-          <Box sx={{ paddingX: 2, marginTop: 6 }}>
+          {/* <Box sx={{ paddingX: 2, marginTop: 6 }}>
             <Box
               sx={{
                 display: "flex",
@@ -263,7 +263,7 @@ const Home = () => {
                 ))}
               </Grid>
             </Box>
-          </Box>
+          </Box> */}
           {/* Browse through categories */}
           <Box sx={{ paddingX: 2, margin: "32px 0" }}>
             <Box

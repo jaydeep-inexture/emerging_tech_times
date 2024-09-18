@@ -26,6 +26,10 @@ const theme = createTheme({
       main: "#0F172A",
     },
   },
+  font: {
+    main: "White",
+    second: "black",
+  },
   typography: {
     h2: {
       fontSize: "2rem",
